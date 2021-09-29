@@ -1,9 +1,11 @@
 class Board:
     """A board class that gives a nested which is the board"""
-    def __init__(self, x, y, default=''):
+    def __init__(self, x, y, default='', coordinates = [], replacment = ' '):
         self.x = x
         self.y = y
         self._default = default
+        self.coors = coordinates
+        self.replacment = replacment
 
     def __str__(self):
         lst = []
@@ -15,6 +17,9 @@ class Board:
             lst.append([f'{self._default}{i+1}'])
             for h in range(self.y):
                 lst[i+1].append(f"{self._default}")
+        if self.coors:
+            for x, y in self.coors:
+                lst[int(x)][int(y)] = f"{self._default}{self.replacment}"
         return str(lst)
 
     @property
@@ -30,16 +35,14 @@ class Board:
 
         return self._default
 
-def edit_board(board, x, y, replacment):
-    """TODO: fix this
-
-    Edits a coordinate on the board with whatever the replacment is"""
+def edit_board(board, coors, replacment):
+    """takes a list of coors and edits them to whatever replacment is"""
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
         return
     bord = eval(str(board))
-    bord[x][y] = f"{board.default}{replacment}"
+    bord = Board(len(bord)-1, len(bord[0])-1, board.default, coors, replacment)
     return bord
 
 def format_board(board):
