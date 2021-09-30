@@ -1,4 +1,4 @@
-from .Board import Board
+from .board import Board
 
 def edit_board(board, coors, replacment):
     """takes a list of coors and edits them to whatever replacment is"""
