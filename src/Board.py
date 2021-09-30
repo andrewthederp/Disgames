@@ -10,13 +10,11 @@ class Board:
 
     def __str__(self):
         lst = []
-        g = []
-        for i in range(self.x+1):
-            g.append(f'{self._default}{i}')
+        g = [f'{self._default}{i}' for i in range(self.x+1)]
         lst.append(g)
         for i in range(self.x):
             lst.append([f'{self._default}{i+1}'])
-            for h in range(self.y):
+            for _ in range(self.y):
                 lst[i+1].append(f"{self._default}")
         if self.coors:
             for x, i in enumerate(self.test):
@@ -45,7 +43,6 @@ def edit_board(board, coors, replacment):
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-        return
     bord = eval(str(board))
     bord = Board(len(bord)-1, len(bord[0])-1, board.default, coors, replacment, bord)
     return bord
@@ -54,7 +51,6 @@ def format_board(board):
     """Formats the nested list to make it look pwetty"""
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-        return
     lst = []
     bord = eval(str(board))
     for i in bord:
