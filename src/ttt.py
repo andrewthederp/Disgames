@@ -9,7 +9,7 @@ class TTT(commands.Cog):
 
 	def MakeMove(self, answer, board, turn):
 		bord = eval(str(board))
-		if answer not in ['11','12','13','21','22','23','31','32','32']:
+		if answer not in ['11','12','13','21','22','23','31','32','33']:
 			return (False, f'Invalid Syntax: {answer} isn\'t a valid place, Please try again')
 		else:
 			if bord[int(answer[0])][int(answer[1])] != board.seperator:
