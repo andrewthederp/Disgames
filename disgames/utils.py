@@ -1,13 +1,17 @@
 from .board import Board
 
+
 def edit_board(board, coors, replacment):
     """takes a list of coors and edits them to whatever replacment is"""
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
     bord = eval(str(board))
-    bord = Board(len(bord)-1, len(bord[0])-1, board.default, coors, replacment, bord)
+    bord = Board(
+        len(bord) - 1, len(bord[0]) - 1, board.default, coors, replacment, bord
+    )
     return bord
+
 
 def format_board(board):
     """Formats the nested list to make it look pwetty"""
@@ -19,8 +23,8 @@ def format_board(board):
         scn_lst = []
         for thing in i:
             if thing == f"{board.default}":
-                scn_lst.append(f'{board.default} ')
+                scn_lst.append(f"{board.default} ")
             else:
                 scn_lst.append(thing)
-        lst.append(''.join(scn_lst))
-    return '\n'.join(lst)
+        lst.append("".join(scn_lst))
+    return "\n".join(lst)

@@ -1,6 +1,9 @@
 class Board:
     """A board class that gives a nested which is the board"""
-    def __init__(self, x, y, default='', coordinates = [], replacment = ' ', test=[]):
+
+    def __init__(
+        self, x, y, default="", coordinates=[], replacment=" ", test=[]
+    ):
         self.x = x
         self.y = y
         self._default = default
@@ -10,12 +13,12 @@ class Board:
 
     def __str__(self):
         lst = []
-        g = [f'{self._default}{i}' for i in range(self.x+1)]
+        g = [f"{self._default}{i}" for i in range(self.x + 1)]
         lst.append(g)
         for i in range(self.x):
-            lst.append([f'{self._default}{i+1}'])
+            lst.append([f"{self._default}{i+1}"])
             for _ in range(self.y):
-                lst[i+1].append(f"{self._default}")
+                lst[i + 1].append(f"{self._default}")
         if self.coors:
             for x, i in enumerate(self.test):
                 for y, j in enumerate(i):
