@@ -1,11 +1,9 @@
 import discord
 from discord.ext import commands
-from .Board import Board
+from .board import Board
 from .utils import edit_board, format_board
 
-class TTT(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+class TicTacToe:
 
     def MakeMove(self, answer, board, turn):
         bord = eval(str(board))
@@ -42,8 +40,8 @@ class TTT(commands.Cog):
 
         return (False, 'h')
 
-    @commands.command(aliases=['ttt'])
-    async def tictactoe(self, ctx, member:discord.Member):
+    @commands.command("tictactoe", aliases=['ttt'])
+    async def command(self, ctx: commands.Context, member: discord.Member):
         if member.bot or member == ctx.author:
             return await ctx.send(f"Invalid Syntax: Can't play against {member.display_name}")
         turn = ctx.author
@@ -51,7 +49,7 @@ class TTT(commands.Cog):
         embed = discord.Embed(title='TicTacToe', description=f'turn: `{turn.display_name}`\n```{format_board(board)}\n```')
         msg = await ctx.send(embed=embed)
         while True:
-            inp = await self.bot.wait_for('message', check = lambda m: m.author == turn and m.channel == ctx.channel)
+            inp = await ctx.bot.wait_for('message', check = lambda m: m.author == turn and m.channel == ctx.channel)
             if inp.content == 'cancel':
                 return await ctx.send("Cancelled the game")
             outp = self.MakeMove(inp.content, board, 'x' if turn == ctx.author else 'o')
@@ -62,9 +60,10 @@ class TTT(commands.Cog):
                 continue
             h = self.HasWon(board, 'x' if turn == ctx.author else 'o')
             if h[0]:
-                return await ctx.send(embed=discord.Embed(title='TicTacToe', description=f'winnder: `{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}`\n```{format_board(board)}\n```'))
+                return await ctx.send(
+                    # embed=discord.Embed(
+                    #     title='TicTacToe', description=f'winnder: `{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}`\n```{format_board(board)}\n```'
+                    # )
+                )
             turn = member if turn == ctx.author else ctx.author
             await msg.edit(embed=discord.Embed(title='TicTacToe', description=f'turn: `{turn.display_name}`\n```{format_board(board)}\n```'))
-
-def setup(bot):
-    bot.add_cog(TTT(bot))
