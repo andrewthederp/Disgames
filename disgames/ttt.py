@@ -5,7 +5,7 @@ from .utils import edit_board, format_board
 
 
 class TicTacToe:
-    def MakeMove(self, answer, board, turn):
+    def make_move(self, answer, board, turn):
         bord = eval(str(board))
         if answer not in [
             "11",
@@ -31,7 +31,7 @@ class TicTacToe:
             else:
                 return (True, edit_board(board, [answer], turn))
 
-    def HasWon(self, board, turn):
+    def has_won(self, board, turn):
         BLANK = board.seperator
         bord = eval(str(board))
         h = 0
@@ -60,7 +60,7 @@ class TicTacToe:
 
         return (False, "h")
 
-    @commands.command("tictactoe", aliases=["ttt"])
+    @commands.command(name="tictactoe", aliases=["ttt"])
     async def command(self, ctx: commands.Context, member: discord.Member):
         if member.bot or member == ctx.author:
             return await ctx.send(
@@ -80,7 +80,7 @@ class TicTacToe:
             )
             if inp.content == "cancel":
                 return await ctx.send("Cancelled the game")
-            outp = self.MakeMove(
+            outp = self.make_move(
                 inp.content, board, "x" if turn == ctx.author else "o"
             )
             if outp[0]:
@@ -88,12 +88,19 @@ class TicTacToe:
             else:
                 await ctx.send(outp[1])
                 continue
-            h = self.HasWon(board, "x" if turn == ctx.author else "o")
+            h = self.has_won(board, "x" if turn == ctx.author else "o")
             if h[0]:
                 return await ctx.send(
-                    # embed=discord.Embed(
-                    #     title='TicTacToe', description=f'winnder: `{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}`\n```{format_board(board)}\n```'
-                    # )
+                    embed=discord.Embed(
+                        title="TicTacToe",
+                        description=(
+                            "winner: `"
+                            f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}"
+                            "\n"
+                            "```{format_board(board)}```"
+                            "\n"
+                        ),
+                    )
                 )
             turn = member if turn == ctx.author else ctx.author
             await msg.edit(
