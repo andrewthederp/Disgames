@@ -97,7 +97,7 @@ class TicTacToe:
                             "winner: `"
                             f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}"
                             "\n"
-                            "```{format_board(board)}```"
+                            f"```{format_board(board)}```"
                             "\n"
                         ),
                     )
