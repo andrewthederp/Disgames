@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from .utils import format_board, edit_board
-from .Board import Board
+from .board import Board
 
 class Hangman:
 	def make_hangman(self, errors):
