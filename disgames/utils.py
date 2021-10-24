@@ -5,7 +5,6 @@ def edit_board(board, coors, replacment):
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-        return
     bord = eval(str(board))
     bord = Board(len(bord)-1, len(bord[0])-1, board.seperator, coors, replacment, bord)
     return bord
@@ -14,7 +13,6 @@ def format_board(board):
     """Formats the nested list to make it look pwetty"""
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-        return
     lst = []
     bord = eval(str(board))
     for i in bord:
