@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="disgames",
-    version="1.0.0a",
+    version="1.0.1",
     description="A games module that can be used to instantly add games to your discord bot",
     long_description=None,
     author="andrew",
