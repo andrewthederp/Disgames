@@ -16,7 +16,7 @@ class Hangman:
             embed.add_field(name="Guesses", value=''.join(f':regional_indicator_{i}:' for i in guesses), inline=False)
 
     @commands.command("hangman", aliases=['hm'])
-    async def command(self, ctx: commands.Context):
+    async def command(self, ctx: commands.Context):  # sourcery no-metrics
         word = 'hello'
         word = list(word)
         guesses = []
