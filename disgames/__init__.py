@@ -3,11 +3,9 @@ from .ttt import TicTacToe
 from .hangman import Hangman
 from .madlib import MadLib
 
-all_games = [TicTacToe,Hangman,MadLib]
+ALL_GAMES = [TicTacToe,Hangman,MadLib]
 
 def register_commands(bot, *, ignore: list = []):
-    for cls in all_games:
-        if cls in ignore:
-            continue
-        else:
+    for cls in ALL_GAMES:
+        if cls not in ignore:
             bot.add_command(cls().command)
