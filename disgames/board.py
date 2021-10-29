@@ -1,5 +1,5 @@
 class Board:
-    """A board class that gives a nested which is the board"""
+    """A board class that gives a nested list which is the board"""
 
     def __init__(
         self, x, y, seperator="", coordinates=[], replacment=" ", test=[]
