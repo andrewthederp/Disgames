@@ -10,15 +10,16 @@ A python module made to make creating games easier and adds a bunch of game comm
 
 ## Installation
 
-To install this module, which is currently **NOT** released on [pypi](https://pypi.org) yet, you need
-[`git`](https://git-scm.com/downloads) installed and added to PATH.
+To install it from [pypi](https://pypi.org/project/disgames), run
 
-If you do have git installed, follow this to install the module
+```sh
+pip install disgames
+```
+
+To install the development version, you need [git](https://git-scm.com/downloads) installed. After installing it, run
 
 ```shell
-git clone https://github.com/andrewthederp/Disgames.git
-cd Disgames
-python setup.py install
+pip install git+https://github.com/andrewthederp/Disgames
 ```
 
 Note that this works with the now discontinued module [discord.py](https://pypi.org/project/discord) and we
