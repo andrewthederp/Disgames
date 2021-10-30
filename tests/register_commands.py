@@ -3,4 +3,4 @@ from discord.ext import commands
 
 bot = commands.Bot("!", help_command=None, case_insensitive=True)
 register_commands(bot)
-assert len(bot.commands) == 1  # only the tictactoe command
+assert len(bot.commands) == 3  # only the tictactoe command

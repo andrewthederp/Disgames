@@ -1,12 +1,12 @@
-from .board import Board
-from .ttt import TicTacToe
-from .hangman import Hangman
-from .madlib import MadLib
+from discord.ext import commands
+from .cog import *
 
-ALL_GAMES = [TicTacToe, Hangman, MadLib]
-
-
-def register_commands(bot, *, ignore: list = []):
-    for cls in ALL_GAMES:
-        if cls not in ignore:
-            bot.add_command(cls().command)
+def register_commands(
+    bot,
+    # *,
+    # ignore: list = []
+):
+    bot.add_cog(Games(bot))
+    # for cls in ALL_GAMES:
+    #     if cls not in ignore:
+    #         bot.add_command(cls().command)

@@ -1,10 +1,17 @@
 import discord
 from discord.ext import commands
-from .board import Board
-from .utils import edit_board, format_board
+from ..utils import Board
+from ..utils import edit_board, format_board
 
 
 class TicTacToe:
+    """
+    Tic Tac Toe command
+    """
+
+    def __init__(self, bot):
+        self.bot = bot
+
     def make_move(self, answer, board, turn):
         bord = eval(str(board))
         if answer not in [
@@ -60,8 +67,8 @@ class TicTacToe:
 
         return (False, "h")
 
-    @commands.command(name="tictactoe", aliases=["ttt"])
-    async def command(self, ctx: commands.Context, member: discord.Member):
+    @commands.command(aliases=["ttt"])
+    async def tictactoe(self, ctx: commands.Context, member: discord.Member):
         if member.bot or member == ctx.author:
             return await ctx.send(
                 f"Invalid Syntax: Can't play against {member.display_name}"

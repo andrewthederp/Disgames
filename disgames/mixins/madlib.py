@@ -4,8 +4,12 @@ import aiohttp
 
 
 class MadLib:
-    def __init__(self) -> None:
+    """
+    Madlib command
+    """
+    def __init__(self, bot) -> None:
         self._session = None
+        self.bot = bot
 
     @property
     def url(self):
@@ -22,8 +26,8 @@ class MadLib:
         response = self.session.get(self.url, params=params)
         return response.json()
 
-    @commands.command("madlib")
-    async def command(self, ctx, min: int = 5, max: int = 25):
+    @commands.command()
+    async def madlib(self, ctx, min: int = 5, max: int = 25):
         json = self.request(min, max)
         lst = []
         for question in json["blanks"]:
