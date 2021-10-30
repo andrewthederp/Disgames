@@ -7,6 +7,8 @@ A python module made to make creating games easier and adds a bunch of game comm
 - [Disgames](#disgames)
   - [Contents](#contents)
   - [Installation](#installation)
+  - [Usage](#usage)
+  - [Extra](#extra)
 
 ## Installation
 
@@ -22,5 +24,31 @@ To install the development version, you need [git](https://git-scm.com/downloads
 pip install git+https://github.com/andrewthederp/Disgames
 ```
 
-Note that this works with the now discontinued module [discord.py](https://pypi.org/project/discord) and we
+## Usage
+
+You can either load it as an extension by doing
+
+```py
+from discord.ext import commands
+
+bot = commands.Bot("YOUR_PREFIX_HERE")
+
+bot.load_extension("disgames")
+```
+
+or call the `register_commands` function manually. by doing
+
+```py
+from disgames import register_commands
+from discord.ext import commands
+
+bot = commands.Bot("YOUR_PREFIX_HERE")
+register_commands(bot)
+```
+
+And thats it! now your bot has the games implemented in [`disgames/mixins/`](./disgames/mixins/)
+
+## Extra
+
+Note that this works with the now discontinued module [discord.py](https://pypi.org/project/discord.py) and we
 will make it compatible with other modules as soon as possible
