@@ -8,7 +8,6 @@ class MadLib:
     Madlib command
     """
     def __init__(self, bot) -> None:
-        self._session = None
         self.bot = bot
 
     @property
@@ -17,14 +16,14 @@ class MadLib:
 
     @property
     def session(self):
-        if not self._session:
-            self._session = aiohttp.ClientSession()
+        self._session = aiohttp.ClientSession()
         return self._session
 
     async def request(self, min: int, max: int):
         params = {"minlength": min, "maxlength": max}
-        response = self.session.get(self.url, params=params)
-        return response.json()
+        response = await self.session.get(self.url, params=params)
+        response = await response.json()
+        return response
 
     @commands.command()
     async def madlib(self, ctx, min: int = 5, max: int = 25):
