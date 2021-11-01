@@ -28,7 +28,7 @@ class MadLib:
 
     @commands.command()
     async def madlib(self, ctx, min: int = 5, max: int = 25):
-        json = self.request(min, max)
+        json = await self.request(min, max)
         lst = []
         for question in json["blanks"]:
             await ctx.send(f"Please send: {question}")
