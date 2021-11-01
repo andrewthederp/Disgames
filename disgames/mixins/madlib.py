@@ -24,11 +24,11 @@ class MadLib:
     async def request(self, min: int, max: int):
         params = {"minlength": min, "maxlength": max}
         response = self.session.get(self.url, params=params)
-        return response.json()
+        return await response.json()
 
     @commands.command()
     async def madlib(self, ctx, min: int = 5, max: int = 25):
-        json = self.request(min, max)
+        json = await self.request(min, max)
         lst = []
         for question in json["blanks"]:
             await ctx.send(f"Please send: {question}")
@@ -44,5 +44,6 @@ class MadLib:
             for i in range(len(madlib) - 1)
         )
         # I dont understand this shit bruh - Marcus
+        # H good - Andreaw
 
         await ctx.send(string)
