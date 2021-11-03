@@ -3,12 +3,12 @@ from discord.ext import commands
 import aiohttp
 
 
-class MadLib:
+class MadLib(commands.Cog):
     """
     Madlib command
     """
     def __init__(self, bot) -> None:
-        self._session = None
+        self._session = aiohttp.ClientSession()
         self.bot = bot
 
     @property
@@ -17,13 +17,11 @@ class MadLib:
 
     @property
     def session(self):
-        if not self._session:
-            self._session = aiohttp.ClientSession()
         return self._session
 
     async def request(self, min: int, max: int):
         params = {"minlength": min, "maxlength": max}
-        response = self.session.get(self.url, params=params)
+        response = await self.session.get(self.url, params=params)
         return await response.json()
 
     @commands.command()
@@ -44,6 +42,5 @@ class MadLib:
             for i in range(len(madlib) - 1)
         )
         # I dont understand this shit bruh - Marcus
-        # H good - Andreaw
 
         await ctx.send(string)
