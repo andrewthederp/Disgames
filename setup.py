@@ -6,7 +6,7 @@ desc = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="disgames",
-    version="1.1.0",
+    version="1.2.0",
     description="A games module that can be used to instantly add games to your discord bot",
     long_description=desc,
     author="andrew",
