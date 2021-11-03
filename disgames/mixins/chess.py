@@ -3,7 +3,7 @@ from discord.ext import commands
 import chess
 
 
-class Chess:
+class Chess(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
