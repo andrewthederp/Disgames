@@ -4,7 +4,6 @@ import random
 from ..utils import Board
 from ..utils import edit_board, format_board
 
-
 class TicTacToe:
     """
     Tic Tac Toe command
@@ -24,65 +23,6 @@ class TicTacToe:
                 except IndexError:
                     pass
         return lst or 0
-
-    def pos_moves(self, board):
-        empty = self.get_empty(board)
-        pos_move =[]
-        board_copy = eval(str(board))
-        for square in empty:
-            bord = self.make_move(square, board, 'o')
-            pos_move.append([bord[1],square])
-            bord = self.make_move(square, board, board.seperator)[1]
-        return pos_move
-
-    def miniMax(self, board,depth,isMax):
-        maxScore = -2000
-        minScore = 2000
-        ai_score = {True:1, False:-1}
-        bord = eval(str(board))
-        empty = self.get_empty(board)
-        pos_move = self.pos_moves(board)
-        for i in pos_move:
-            won = self.has_won(i[0], 'o' if isMax else 'x')
-            if won[0]:
-                return ai_score[isMax]
-            elif empty == 0:
-                return 0
-            scr = self.miniMax(i[0],depth+1,not isMax)
-            if isMax and (scr > maxScore):
-                maxScore = scr
-            elif isMax == False and (scr < minScore):
-                minScore = scr
-        if isMax:
-            return maxScore
-        else:
-            return minScore
-
-    def make_perfect_move(self, board):
-        bestScore = -1000
-
-        cur_board = eval(str(board))
-        used = self.get_empty(board)
-
-        bord = board
-        for i in range(len(used)):
-
-            move = random.choice(used)
-            bord = self.make_move(move, board, 'o')
-            used.pop(used.index(move))
-
-            if has_won(bord[1],'o')[0]:
-                bestMove = move
-                break
-            
-            scr = miniMax(bord[1],0,False)
-            bord = self.make_move(move, board, board.seperator)
-
-            if scr > bestScore:
-                bestScore = scr
-                bestMove = move
-                
-        return self.make_move(board, [bestMove], 'o')
 
     def make_random_move(self, board):
         h = self.get_empty(board)
