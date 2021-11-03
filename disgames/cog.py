@@ -1,10 +1,11 @@
-from .mixins import TicTacToe, Hangman, MadLib
+from .mixins import TicTacToe, Hangman, MadLib, Chess
 from discord.ext import commands
 
 ALL_GAMES = [
     TicTacToe,
     Hangman,
-    MadLib
+    MadLib,
+    Chess
 ]
 
 class Games(commands.Cog, *ALL_GAMES):
