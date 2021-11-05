@@ -1,11 +1,17 @@
 import discord
 from discord.ext import commands
 import chess
+import os
+from stockfish import Stockfish
 
+class PathNeeded(Exception):
+    pass
 
-class Chess(commands.Cog):
+class Chess:
     def __init__(self, bot):
         self.bot = bot
+        h = os.getcwd().split('\\')[2]
+        self.stockfish_path = f"C:/Users/{h}/Desktop/stockfish-11-win/Windows/stockfish_20011801_32bit.exe"
 
     def create_chess_board(self, board, turn):
         fen = board.fen().split(" ")[0]
@@ -41,100 +47,32 @@ class Chess(commands.Cog):
         e.set_image(url=url)
         return e
 
-    def evaluation(self, board):
-        i = 0
-        evaluation = 0
-        x = True
-        try:
-            x = bool(board.piece_at(i).color)
-        except AttributeError as e:
-            x = x
-        while i < 63:
-            i += 1
-            evaluation = evaluation + (
-                self.getPieceValue(str(board.piece_at(i)))
-                if x
-                else -self.getPieceValue(str(board.piece_at(i)))
-            )
-        return evaluation
-
-    def minimax(self, depth, board, alpha, beta, is_maximizing):
-        if depth == 0:
-            return -self.evaluation(board)
-        possibleMoves = board.legal_moves
-        if is_maximizing:
-            bestMove = -9999
-            for x in possibleMoves:
-                move = chess.Move.from_uci(str(x))
-                board.push(move)
-                bestMove = max(
-                    bestMove,
-                    self.minimax(depth - 1, board, alpha, beta, not is_maximizing),
-                )
-                board.pop()
-                alpha = max(alpha, bestMove)
-                if beta <= alpha:
-                    return bestMove
-            return bestMove
-        else:
-            bestMove = 9999
-            for x in possibleMoves:
-                move = chess.Move.from_uci(str(x))
-                board.push(move)
-                bestMove = min(
-                    bestMove,
-                    self.minimax(depth - 1, board, alpha, beta, not is_maximizing),
-                )
-                board.pop()
-                beta = min(beta, bestMove)
-                if beta <= alpha:
-                    return bestMove
-            return bestMove
-
-    def minimaxRoot(self, depth, board, isMaximizing):
-        possibleMoves = board.legal_moves
-        bestMove = -9999
-        bestMoveFinal = None
-        for x in possibleMoves:
-            move = chess.Move.from_uci(str(x))
-            board.push(move)
-            value = max(
-                bestMove,
-                self.minimax(depth - 1, board, -10000, 10000, not isMaximizing),
-            )
-            board.pop()
-            if value > bestMove:
-                bestMove = value
-                bestMoveFinal = move
-        return bestMoveFinal
-
-    def getPieceValue(self, piece):
-        if piece == None:
-            return 0
-        if piece == "P" or piece == "p":
-            return 10
-        if piece == "N" or piece == "n":
-            return 30
-        if piece == "B" or piece == "b":
-            return 30
-        if piece == "R" or piece == "r":
-            return 50
-        if piece == "Q" or piece == "q":
-            return 90
-        if piece == "K" or piece == "k":
-            return 900
-        return 0
+    def get_best_move(self, board, smort_level):
+        if not os.path.isfile(self.stockfish_path):
+            raise PathNeeded("Couldn't find the path to your stockfish_20011801_32bit.exe")
+        stockfish = Stockfish(self.stockfish_path, parameters={'Skill Level':smort_level})
+        stockfish.set_fen_position(board.fen())
+        return stockfish.get_best_move()
 
     @commands.command("chess")
     async def command(self, ctx, member: discord.Member = None):
         if member == None:
+            await ctx.send("Please enter a a difficulty level from 0-20")
+            smort_level = await self.bot.wait_for('message', check=lambda m:m.author == ctx.author and m.channel == ctx.channel)
+            try:
+                smort_level = int(smort_level.content)
+            except ValueError:
+                return await ctx.send("That's not a number")
+            else:
+                if smort_level not in range(21):
+                    return await ctx.send("difficulty needs to be in 1-20")
             board = chess.Board()
             turn = ctx.author
             e = self.create_chess_board(board, turn)
             msg = await ctx.send(embed=e)
             while True:
                 if turn == ctx.author:
-                    inp = await bot.wait_for(
+                    inp = await self.bot.wait_for(
                         "message",
                         check=lambda m: m.author == ctx.author
                         and m.channel == ctx.channel,
@@ -159,7 +97,7 @@ class Chess(commands.Cog):
                         except discord.Forbidden:
                             pass
                 else:
-                    move = self.minimaxRoot(3, board, True)
+                    move = self.get_best_move(board, smort_level)
                     move = chess.Move.from_uci(str(move))
                     board.push(move)
                 e = self.create_chess_board(board, turn)
