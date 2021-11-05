@@ -1,12 +1,5 @@
-from .mixins import TicTacToe, Hangman, MadLib, Chess
 from discord.ext import commands
-
-ALL_GAMES = [
-    TicTacToe,
-    Hangman,
-    MadLib,
-    Chess
-]
+from .constants import ALL_GAMES
 
 class Games(commands.Cog, *ALL_GAMES):
     """
