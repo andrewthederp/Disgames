@@ -2,8 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 
-
-class MadLib(commands.Cog):
+class MadLib:
     """
     Madlib command
     """
@@ -42,5 +41,6 @@ class MadLib(commands.Cog):
             for i in range(len(madlib) - 1)
         )
         # I dont understand this shit bruh - Marcus
+        # H good - Andreaw
 
         await ctx.send(string)
