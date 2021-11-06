@@ -10,5 +10,6 @@ def register_commands(
     games = [
         game for game in ALL_GAMES if game not in ignore
     ]
-    class Games(commands.Cog, *games): ...
+    class Games(*games):
+        pass
     bot.add_cog(Games(bot))
