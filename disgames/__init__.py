@@ -1,5 +1,6 @@
 from .cog import *
 from .constants import *
+from discord.ext import commands
 
 def register_commands(
     bot,
@@ -9,5 +10,5 @@ def register_commands(
     games = [
         game for game in ALL_GAMES if game not in ignore
     ]
-    class Games(*games): ...
+    class Games(commands.Cog, *games): ...
     bot.add_cog(Games(bot))
