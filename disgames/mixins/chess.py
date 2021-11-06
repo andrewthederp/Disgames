@@ -7,7 +7,7 @@ from stockfish import Stockfish
 class PathNeeded(Exception):
     pass
 
-class Chess:
+class Chess(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         h = os.getcwd().split('\\')[2]
@@ -55,7 +55,7 @@ class Chess:
         return stockfish.get_best_move()
 
     @commands.command("chess")
-    async def command(self, ctx, member: discord.Member = None):
+    async def chess(self, ctx, member: discord.Member = None):
         if member == None:
             await ctx.send("Please enter a a difficulty level from 0-20")
             smort_level = await self.bot.wait_for('message', check=lambda m:m.author == ctx.author and m.channel == ctx.channel)
