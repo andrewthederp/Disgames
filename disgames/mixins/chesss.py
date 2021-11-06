@@ -4,6 +4,7 @@ import chess
 import os
 from stockfish import Stockfish
 
+
 class PathNeeded(Exception):
     pass
 
