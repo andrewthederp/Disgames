@@ -1,4 +1,3 @@
-from discord.ext import commands
 from .cog import *
 from .constants import *
 
