@@ -7,7 +7,6 @@ class MadLib:
     Madlib command
     """
     def __init__(self, bot) -> None:
-        self._session = aiohttp.ClientSession()
         self.bot = bot
 
     @property
@@ -16,7 +15,7 @@ class MadLib:
 
     @property
     def session(self):
-        return self._session
+        return self.bot.http._HTTPClient__session
 
     async def request(self, min: int, max: int):
         params = {"minlength": min, "maxlength": max}
