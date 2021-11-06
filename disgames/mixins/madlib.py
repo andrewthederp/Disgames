@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 
-class MadLib:
+class MadLib(commands.Cog):
     """
     Madlib command
     """

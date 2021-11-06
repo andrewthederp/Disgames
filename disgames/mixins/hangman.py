@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class Hangman:
+class Hangman(commands.Cog):
     """
     Hang man command
     """

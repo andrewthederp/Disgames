@@ -4,7 +4,7 @@ import random
 from ..utils import Board
 from ..utils import edit_board, format_board
 
-class TicTacToe:
+class TicTacToe(commands.Cog):
     """
     Tic Tac Toe command
     """
