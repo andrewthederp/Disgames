@@ -46,6 +46,26 @@ bot = commands.Bot("YOUR_PREFIX_HERE")
 register_commands(bot)
 ```
 
+If you want more control over what commands are added to your bot, you can use the ignore kwarg
+
+```py
+from disgames import register_commands, Chess
+from discord.ext import commands
+
+bot = commands.Bot("YOUR_PREFIX_HERE")
+register_commands(bot, ignore=[Chess])
+```
+
+If you instead want **only** one command, you can add the cog manually like this
+
+```py
+from disgames import Chess
+from discord.ext import commands
+
+bot = commands.Bot("YOUR_PREFIX_HERE")
+bot.add_cog(Chess(bot))
+```
+
 And thats it! now your bot has the games implemented in [`disgames/mixins/`](./disgames/mixins/)
 
 ## Extra
