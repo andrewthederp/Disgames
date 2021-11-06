@@ -36,7 +36,7 @@ bot = commands.Bot("YOUR_PREFIX_HERE")
 bot.load_extension("disgames")
 ```
 
-or call the `register_commands` function manually. by doing
+or call the `register_commands` function manually by doing
 
 ```py
 from disgames import register_commands
