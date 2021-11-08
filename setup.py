@@ -6,9 +6,10 @@ desc = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="disgames",
-    version="1.2.0",
+    version="1.3.1",
     description="A games module that can be used to instantly add games to your discord bot",
     long_description=desc,
+    long_description_content_type="text/markdown",
     author="andrew",
     maintainer="Marcus",
     url="https://github.com/andrewthederp/Disgames",
@@ -24,7 +25,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
-    install_requires=["discord.py","aiohttp", "chess"],
+    install_requires=["discord.py","aiohttp", "chess", "stockfish"],
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
 )
