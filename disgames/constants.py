@@ -4,5 +4,8 @@ ALL_GAMES = [
     TicTacToe,
     Hangman,
     MadLib,
-    Chess
+    Chess,
+    Minesweeper,
+    Sokoban,
+    RPS
 ]
