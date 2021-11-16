@@ -3,16 +3,16 @@ from discord.ext import commands
 import chess
 import os
 from stockfish import Stockfish
-
+from pathlib import Path
 
 class PathNeeded(Exception):
     pass
 
 class Chess(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bots
         h = os.getcwd().split('\\')[2]
-        self.stockfish_path = f"C:/Users/{h}/Desktop/stockfish-11-win/Windows/stockfish_20011801_32bit.exe"
+        self.stockfish_path = sorted(Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe"))
 
     def create_chess_board(self, board, turn):
         fen = board.fen().split(" ")[0]
@@ -49,14 +49,14 @@ class Chess(commands.Cog):
         return e
 
     def get_best_move(self, board, smort_level):
-        if not os.path.isfile(self.stockfish_path):
+        if not self.stockfish_path:
             raise PathNeeded("Couldn't find the path to your stockfish_20011801_32bit.exe")
-        stockfish = Stockfish(self.stockfish_path, parameters={'Skill Level':smort_level})
+        stockfish = Stockfish(str(self.stockfish_path[0]), parameters={'Skill Level':smort_level})
         stockfish.set_fen_position(board.fen())
         return stockfish.get_best_move()
 
     @commands.command("chess")
-    async def chess(self, ctx, member: discord.Member = None):
+    async def chess(self, ctx, member: discord.Member=None):
         if member == None:
             await ctx.send("Please enter a a difficulty level from 0-20")
             smort_level = await self.bot.wait_for('message', check=lambda m:m.author == ctx.author and m.channel == ctx.channel)
@@ -66,7 +66,7 @@ class Chess(commands.Cog):
                 return await ctx.send("That's not a number")
             else:
                 if smort_level not in range(21):
-                    return await ctx.send("difficulty needs to be in 1-20")
+                    return await ctx.send("difficulty needs to be in 0-20")
             board = chess.Board()
             turn = ctx.author
             e = self.create_chess_board(board, turn)
@@ -78,13 +78,13 @@ class Chess(commands.Cog):
                         check=lambda m: m.author == ctx.author
                         and m.channel == ctx.channel,
                     )
-                    if inp.content.lower() == "stop":
-                        return await ctx.send("Game ended", delete_after=10)
+                    if inp.content.lower() in ["stop","cancel","end"]:
+                        return await ctx.send("Game ended", delete_after=5)
                     elif inp.content.lower() == "back":
                         try:
                             board.pop()
                         except IndexError:
-                            await ctx.send("Can't go back", delete_after=10)
+                            await ctx.send("Can't go back", delete_after=5)
                             continue
                     else:
                         try:
@@ -101,9 +101,9 @@ class Chess(commands.Cog):
                     move = self.get_best_move(board, smort_level)
                     move = chess.Move.from_uci(str(move))
                     board.push(move)
+                turn = ctx.bot.user if turn == ctx.author else ctx.author
                 e = self.create_chess_board(board, turn)
                 await msg.edit(embed=e)
-                turn = ctx.bot.user if turn == ctx.author else ctx.author
         else:
             if member.bot or member == ctx.author:
                 return await ctx.send(
@@ -120,12 +120,12 @@ class Chess(commands.Cog):
                     and m.channel == ctx.channel,
                 )
                 if inp.content.lower() == "stop":
-                    return await ctx.send("Game ended", delete_after=10)
+                    return await ctx.send("Game ended", delete_after=5)
                 elif inp.content.lower() == "back":
                     try:
                         board.pop()
                     except IndexError:
-                        await ctx.send("Can't go back", delete_after=10)
+                        await ctx.send("Can't go back", delete_after=5)
                         continue
                 else:
                     if inp.author == turn:
@@ -139,6 +139,6 @@ class Chess(commands.Cog):
                             await inp.delete()
                         except discord.Forbidden:
                             pass
+                turn = member if turn == ctx.author else ctx.author
                 e = self.create_chess_board(board, turn)
                 await msg.edit(embed=e)
-                turn = member if turn == ctx.author else ctx.author
