@@ -4,12 +4,9 @@ from discord.ext import commands
 class RPS(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.scissors = '✂️'
-		self.rock = '🪨'
-		self.paper = '📜'
 
 	def won(self, inp1, inp2):
-		dct = {self.scissors:self.paper,self.rock:self.scissors,self.paper:self.paper}
+		dct = {'✂️':'📜','🪨':'✂️','📜':'📜'}
 		if inp1 == inp2:
 			return 'Draw'
 		elif dct[inp1] == inp2:
@@ -20,15 +17,15 @@ class RPS(commands.Cog):
 	async def rps(self, ctx, member:discord.Member=None):
 		if not member:
 			msg = await ctx.send("Please react with your choice:")
-			for i in [self.scissors,self.rock,self.paper]:
+			for i in ['✂️','🪨','📜']:
 				await msg.add_reaction(i)
 			reaction, _ = await self.bot.wait_for(
 					"reaction_add",
 					check=lambda r, u: u == ctx.author
 					and r.message == msg
-					and str(r) in [self.scissors, self.rock, self.paper],
+					and str(r) in ['✂️', '🪨', '📜'],
 				)
-			bot_choice = random.choice([self.rock, self.paper, self.scissors])
+			bot_choice = random.choice(['🪨', '📜', '✂️'])
 			win = self.won(str(reaction), bot_choice)
 			await ctx.send(f"{self.bot.user.display_name}: {bot_choice}\n{ctx.author.display_name}: {str(reaction)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else self.bot.user.mention)}")
 		elif member.bot or member == ctx.author:
@@ -36,39 +33,38 @@ class RPS(commands.Cog):
 		else:
 			try:
 				msg1 = await ctx.author.send("Please react with your choice:")
-				for i in [self.scissors,self.rock,self.paper]:
+				for i in ['✂️','🪨','📜']:
 					await msg1.add_reaction(i)
 			except discord.Forbidden:
-				await ctx.send(f"I couldnt dm {ctx.author.display_name}")
+				return await ctx.send(f"I couldnt dm {ctx.author.display_name}")
 			try:
 				msg2 = await member.send("Please react with your choice:")
-				for i in [self.scissors,self.rock,self.paper]:
+				for i in ['✂️','🪨','📜']:
 					await msg2.add_reaction(i)
 			except discord.Forbidden:
-				await ctx.send(f"I couldnt dm {member.display_name}")
-			reaction1, user = await self.bot.wait_for(
-					"reaction_add",
-					check=lambda r, u: u in [ctx.author,member]
-					and r.message in [msg1,msg2]
-					and str(r) in [self.scissors, self.rock, self.paper],
+				return await ctx.send(f"I couldnt dm {member.display_name}")
+
+			def check(payload):
+				return payload.message_id in [msg1.id,msg2.id] and str(payload.emoji) in ['✂️', '🪨', '📜']
+			payload = await self.bot.wait_for(
+					"raw_reaction_add",
+					check=check
 				)
-			if user == ctx.author:
+			if payload.user_id == ctx.author.id:
 				await ctx.send(f"Waiting for {member.display_name}")
-				reaction2, _ = await self.bot.wait_for(
-						"reaction_add",
-						check=lambda r, u: u == member
-						and r.message == msg2
-						and str(r) in [self.scissors, self.rock, self.paper],
+				payload2 = await self.bot.wait_for(
+						"raw_reaction_add",
+						check=lambda p: p.message_id == msg2.id
+						and str(payload.emoji) in ['✂️', '🪨', '📜'],
 					)
-				win = self.won(str(reaction1), str(reaction2))
-				await ctx.send(f"{member.display_name}: {str(reaction2)}\n{ctx.author.display_name}: {str(reaction1)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
+				win = self.won(str(payload.emoji), str(payload2.emoji))
+				await ctx.send(f"{member.display_name}: {str(payload2.emoji)}\n{ctx.author.display_name}: {str(payload.emoji)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
 			else:
 				await ctx.send(f"Waiting for {ctx.author.display_name}")
-				reaction2, _ = await self.bot.wait_for(
-						"reaction_add",
-						check=lambda r, u: u == ctx.author
-						and r.message == msg1
-						and str(r) in [self.scissors, self.rock, self.paper],
+				payload2 = await self.bot.wait_for(
+						"raw_reaction_add",
+						check=lambda p: p.message_id == msg1.id
+						and str(payload.emoji) in ['✂️', '🪨', '📜'],
 					)
-				win = self.won(str(reaction2), str(reaction1))
-				await ctx.send(f"{member.display_name}: {str(reaction1)}\n{ctx.author.display_name}: {str(reaction2)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
+				win = self.won(str(payload2.emoji), str(payload.emoji))
+				await ctx.send(f"{member.display_name}: {str(payload.emoji)}\n{ctx.author.display_name}: {str(payload2.emoji)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
