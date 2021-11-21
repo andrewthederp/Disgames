@@ -1,60 +1,57 @@
 import discord
 from discord.ext import commands
 import random
+import asyncio
 
 class Minesweeper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def create_boards(self, columns, rows, bombs):
-        grid = [[0 for _ in range(columns)] for _ in range(rows)]
-        num = 0
-        while num < bombs:
-            x = random.randint(0, columns - 1)
-            y = random.randint(0, rows - 1)
-            if grid[y][x] == 0:
-                grid[y][x] = "B"
-                num += 1
+    def create_boards(self):
+        board = [["b" if random.random() <= .1 else "n" for _ in range(10)] for _ in range(10)]
+        board[random.randint(0, 9)][random.randint(0, 9)] = "n"
+        for y, row in enumerate(board):
+            for x, cell in enumerate(row):
+                if cell == "n":
+                    bombs = 0
+                    for x_, y_ in self.get_neighbours(x, y):
+                        try:
+                            if board[y_][x_] == "b":
+                                bombs += 1
+                        except IndexError:
+                            pass
+                    board[y][x] = bombs
 
-        pos_x = 0
-        pos_y = 0
-        while pos_x * pos_y < columns * rows and pos_y < rows:
-            adj_sum = 0
-            for (adj_y, adj_x) in [
-                (0, 1),
-                (0, -1),
-                (1, 0),
-                (-1, 0),
-                (1, 1),
-                (-1, 1),
-                (1, -1),
-                (-1, -1),
-            ]:
-                try:
-                    if (
-                        grid[adj_y + pos_y][adj_x + pos_x] == "B"
-                        and adj_y + pos_y > -1
-                        and adj_x + pos_x > -1
-                    ):
-                        adj_sum += 1
-                except IndexError:
-                    pass
-            if grid[pos_y][pos_x] != "B":
-                grid[pos_y][pos_x] = adj_sum
-            if pos_x == columns - 1:
-                pos_x = 0
-                pos_y += 1
-            else:
-                pos_x += 1
+        visible_board = [[" " for _ in range(10)] for _ in range(10)]
+        return board, visible_board
 
-        visible_board = [[" " for _ in range(columns)] for _ in range(rows)]
-        return grid, visible_board
+    def get_coors(self, coordinate: str):
+        if len(coordinate) not in (2, 3):
+            raise commands.BadArgument("Invalid coordinate provided.")
+
+        coordinate = coordinate.lower()
+        if coordinate[0].isalpha():
+            digit = coordinate[1:]
+            letter = coordinate[0]
+        else:
+            digit = coordinate[:-1]
+            letter = coordinate[-1]
+
+        if not digit.isdecimal():
+            raise commands.BadArgument
+
+        x = int(digit) - 1
+        y = ord(letter) - ord("a")
+
+        if (not 0 <= x <= 10) or (not 0 <= y <= 10):
+            raise commands.BadArgument("Entered coordinates aren't on the board")
+        return x, y
 
     def format_board(self, board):
-        dct = {"B": "💣", "f": "🚩", " ": "🟦", "0": "⬛","10":":keycap_ten:"}
+        dct = {"b": "💣", "f": "🚩", " ": "🟦", "0": "⬛", '10':'🔟'}
         for i in range(1, 10):
             dct[str(i)] = f"{i}\N{variation selector-16}\N{combining enclosing keycap}"
-        lst = [f":stop_button:{''.join([dct[str(i+1)] for i in range(len(board[0]))])}"]
+        lst = [f":stop_button::regional_indicator_a::regional_indicator_b::regional_indicator_c::regional_indicator_d::regional_indicator_e::regional_indicator_f::regional_indicator_g::regional_indicator_h::regional_indicator_i::regional_indicator_j:"]
         for num, i in enumerate(board, start=1):
             scn_lst = [dct[str(num)]]
             for thing in i:
@@ -66,7 +63,7 @@ class Minesweeper(commands.Cog):
         lst = []
         for x in range(len(board)):
             for y in range(len(board[x])):
-                if board[x][y] == "B":
+                if board[x][y] == "b":
                     lst.append(f"{x}{y}")
         return lst
 
@@ -113,50 +110,20 @@ class Minesweeper(commands.Cog):
         return visible_board
 
     @commands.command(aliases=['ms'])
-    async def minesweeper(self, ctx, columns=None, rows=None, bombs=None):
-        if columns is None or rows is None and bombs is None:
-            if columns is not None or rows is not None or bombs is not None:
-                return await ctx.send(
-                    f"Invalid syntax: That is not formatted properly, the proper format is {ctx.prefix}minesweeper <columns> <rows> <bombs>\n\nYou can give me nothing for random columns, rows, bombs."
-                )
-            else:
-                columns = random.randint(4, 10)
-                rows = random.randint(4, 10)
-                bombs = round(random.randint(5, round(((columns * rows - 1) / 2.5))))
-        try:
-            columns = int(columns)
-            rows = int(rows)
-            bombs = int(bombs)
-        except ValueError:
-            return await ctx.send("The columns, rows, bombs have to be numbers")
-
-        if columns > 10 or rows > 10:
-            return await ctx.send("columns/rows cant be bigger than 10")
-        elif columns < 4 or rows < 4:
-            return await ctx.send("columns/rows cant be smaller than 4")
-        elif columns * rows > 10 * 10:
-            return await ctx.send("Board is too big")
-        elif columns * rows < 4 * 4:
-            return await ctx.send("Board is too small")
-        elif bombs >= rows * columns:
-            return await ctx.send(
-                "you lost :pensive: there were more bombs than indexes on the board"
-            )
-
-        grid, visible_board = self.create_boards(columns, rows, bombs)
+    async def minesweeper(self, ctx):
+        grid, visible_board = self.create_boards()
 
         em = discord.Embed(
             title="Minesweeper",
             description=self.format_board(visible_board),
             color=discord.Color.blurple(),
         )
+        m = await ctx.send("Send the coordinates, eg: `reveal 35 17 59`")
         msg = await ctx.send(embed=em)
         while True:
-            m = await ctx.send("Send the coordinates, eg: `reveal 35 17 59`")
             inp = await self.bot.wait_for(
                 "message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel
             )
-            await m.delete()
             try:
                 await inp.delete()
             except discord.Forbidden:
@@ -166,24 +133,14 @@ class Minesweeper(commands.Cog):
             lst = inp.content.split()
             type_ = lst[0]
             xy = lst[1:]
-            xy = tuple(xy)
-            for x, y in xy:
+            for coors in xy:
                 try:
-                    x, y = int(x) - 1, int(y) - 1
-                except ValueError:
-                    await ctx.send(
-                        f"Invalid syntax: either {x} or {y} wasnt a number, please use numbers next time",
-                        delete_after=5
-                    )
-                    continue
-                if x > len(grid) or x <= -1 or y > len(grid[0]) or y <= -1:
-                    await ctx.send(
-                        f"Invalid syntax: {x+1}{y+1} isnt a valid place on the board",
-                        delete_after=5,
-                    )
+                    x, y = self.get_coors(coors)
+                except Exception as e:
+                    await ctx.send(e)
                     continue
                 if type_.lower() in ["reveal", "r"]:
-                    if grid[x][y] == "B":
+                    if grid[x][y] == "b":
                         await ctx.send(
                             f"{ctx.author.mention} just lost Minesweeper! :pensive:",
                             embed=discord.Embed(
@@ -196,20 +153,24 @@ class Minesweeper(commands.Cog):
                         )
                         return
                     else:
-                        if visible_board[x][y] != " ":
+                        if visible_board[x][y] == "f":
                             await ctx.send(
-                                f"Invalid syntax: {x+1}{y+1} is already revealed or flagged",
+                                f"Invalid syntax: {coors} is already flagged",
                                 delete_after=5,
                             )
                             continue
+                        elif visible_board[x][y] != ' ':
+                            await ctx.send(f"Invalid Syntax: {coors} is already revealed")
                         visible_board[x][y] = str(grid[x][y])
                         if visible_board[x][y] == "0":
                             visible_board = self.reveal_zeros(visible_board, grid, x, y)
                         grid[x][y] = "r"
                 elif type_.lower() in ["flag", "f"]:
-                    if visible_board[x][y] != " ":
+                    if visible_board[x][y] == "f":
+                        visible_board[x][y] = " "
+                    elif visible_board[x][y] != ' ':
                         await ctx.send(
-                            f"Invalid syntax: {x+1}{y+1} is already revealed or flagged",
+                            f"Invalid syntax: {coors} is already revealed or flagged",
                             delete_after=5,
                         )
                         continue
@@ -239,3 +200,4 @@ class Minesweeper(commands.Cog):
                         color=discord.Color.blurple(),
                     )
                 )
+                await asyncio.sleep(1)
