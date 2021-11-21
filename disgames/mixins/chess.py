@@ -10,11 +10,15 @@ class PathNeeded(Exception):
 
 class Chess(commands.Cog):
     def __init__(self, bot):
-        self.bot = bots
-        h = os.getcwd().split('\\')[2]
-        self.stockfish_path = sorted(Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe"))
+        self.bot = bot
+        try:
+            h = os.getcwd().split('\\')[2]
+        except IndexError:
+            self.stockfish_path = None
+        else:
+            self.stockfish_path = sorted(Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe"))
 
-    def create_chess_board(self, board, turn):
+    def create_chess_board(self, board, turn, member):
         fen = board.fen().split(" ")[0]
         url = f"http://www.fen-to-image.com/image/64/double/coords/{fen}"
         e = discord.Embed(
@@ -41,7 +45,7 @@ class Chess(commands.Cog):
         elif board.can_claim_fifty_moves():
             value = "Tie - Fifty move rule"
         elif board.is_check() and not board.legal_moves:
-            value = f"{turn.mention} - CheckMate"
+            value = f"{member.mention} - CheckMate"
         if value:
             e.description = "GAME OVER"
             e.add_field(name="Winner", value=value)
@@ -69,7 +73,7 @@ class Chess(commands.Cog):
                     return await ctx.send("difficulty needs to be in 0-20")
             board = chess.Board()
             turn = ctx.author
-            e = self.create_chess_board(board, turn)
+            e = self.create_chess_board(board, turn, member if turn == ctx.author else ctx.author)
             msg = await ctx.send(embed=e)
             while True:
                 if turn == ctx.author:
@@ -102,7 +106,7 @@ class Chess(commands.Cog):
                     move = chess.Move.from_uci(str(move))
                     board.push(move)
                 turn = ctx.bot.user if turn == ctx.author else ctx.author
-                e = self.create_chess_board(board, turn)
+                e = self.create_chess_board(board, turn, ctx.bot.user if turn == ctx.author else ctx.author)
                 await msg.edit(embed=e)
         else:
             if member.bot or member == ctx.author:
@@ -111,7 +115,7 @@ class Chess(commands.Cog):
                 )
             board = chess.Board()
             turn = ctx.author
-            e = self.create_chess_board(board, turn)
+            e = self.create_chess_board(board, turn, member if turn == ctx.author else ctx.author)
             msg = await ctx.send(embed=e)
             while True:
                 inp = await ctx.bot.wait_for(
@@ -140,5 +144,5 @@ class Chess(commands.Cog):
                         except discord.Forbidden:
                             pass
                 turn = member if turn == ctx.author else ctx.author
-                e = self.create_chess_board(board, turn)
+                e = self.create_chess_board(board, turn, member if turn == ctx.author else ctx.author)
                 await msg.edit(embed=e)
