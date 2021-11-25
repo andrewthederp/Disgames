@@ -1,5 +1,6 @@
 import discord, random
 from discord.ext import commands
+import urllib.request
 
 class Hangman(commands.Cog):
     """
@@ -28,10 +29,10 @@ class Hangman(commands.Cog):
 
     @commands.command("hangman", aliases=["hm"])
     async def command(self, ctx: commands.Context):
-        h = self.make_hangman.__globals__['__file__'].split('\\')
-        h[-1] = 'words.txt'
-        with open('\\'.join(h), "r") as dictionary:
-            words = [s.lower() for s in dictionary.read().splitlines() if len(s) >= 4 and len(s) <= 6]
+        words = []
+        target_url = 'https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt'
+        for line in urllib.request.urlopen(target_url):
+            words.append(line)
         word = list(random.choice(words))
         guesses = []
         errors = 0
