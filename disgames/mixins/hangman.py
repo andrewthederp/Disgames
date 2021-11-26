@@ -1,6 +1,6 @@
 import discord, random
 from discord.ext import commands
-import urllib.request
+import aiohttp
 
 class Hangman(commands.Cog):
     """
@@ -29,11 +29,29 @@ class Hangman(commands.Cog):
 
     @commands.command("hangman", aliases=["hm"])
     async def command(self, ctx: commands.Context):
-        words = []
-        target_url = 'https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt'
-        for line in urllib.request.urlopen(target_url):
-            words.append(line)
-        word = list(random.choice(words))
+        try:
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                data = random.choice(data)                
+                words = data
+        except:
+            words = []
+            target_url = 'https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt'
+            async with aiohttp.ClientSession() as session:
+                async with session.get(target_url) as resp:
+                    data = await resp.text()
+                with open('./words.txt', 'w') as file:
+                    file.write(data)
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                data = random.choice(data)
+                words = data
+                
+        words = str(words).replace('\n', '')
+                
+        word = list(words)
+            
+        print(word)
         guesses = []
         errors = 0
         revealed_message = "🟦 " * len(word)
@@ -60,6 +78,7 @@ class Hangman(commands.Cog):
                 check=lambda m: m.author == ctx.author
                 and m.channel == ctx.channel,
             )
+            await ctx.channel.purge(limit=1)
             if len(message.content.lower()) > 1:
                 if message.content.lower() == "".join(word):
                     embed.add_field(
@@ -74,7 +93,8 @@ class Hangman(commands.Cog):
                     return await msg.edit(embed=embed)
                 else:
                     await ctx.send(
-                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself"
+                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself", 
+                        delete_after=5
                     )
             elif message.content.lower().isalpha():
                 guesses.append(message.content)
