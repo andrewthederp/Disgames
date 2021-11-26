@@ -51,7 +51,6 @@ class Hangman(commands.Cog):
                 
         word = list(words)
             
-        print(word)
         guesses = []
         errors = 0
         revealed_message = "🟦 " * len(word)
