@@ -119,7 +119,7 @@ class TicTacToe(commands.Cog):
                             title="TicTacToe",
                             description=(
                                 "winner: `"
-                                f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if turn == ctx.author else bot.user.display_name)}`"
+                                f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if turn == ctx.author else self.bot.user.display_name)}`"
                                 "\n"
                                 f"```{format_board(board)}```"
                                 "\n"
