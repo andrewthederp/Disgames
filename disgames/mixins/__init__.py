@@ -8,6 +8,7 @@ from .rps import RPS
 from .two048 import _2048
 from .connect4 import Connect4
 from .checkers import Checkers
+from .sudoko import Sudoko
 
 __all__ = (
     "Hangman",
@@ -19,5 +20,6 @@ __all__ = (
     "RPS",
     "_2048",
     "Connect4",
-    "Checkers"
+    "Checkers",
+    "Sudoko"
 )
