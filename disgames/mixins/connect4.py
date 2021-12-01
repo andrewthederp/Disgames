@@ -11,7 +11,8 @@ class Connect4(commands.Cog):
 		for y in range(6):
 			for x in range(6):
 				toDisplay+=dct[board[y][x]]
-			toDisplay+=board[y][6] + '\n'
+			toDisplay+=dct[board[y][6]] + '\n'
+		toDisplay += '1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣'
 		return toDisplay
 
 	def has_won(self, height, width, board):
@@ -85,6 +86,9 @@ class Connect4(commands.Cog):
 				await msg.edit(embed=e)
 				if turn == ctx.author:
 					inp = await self.bot.wait_for('message', check = lambda m:m.author == turn and m.channel == ctx.channel and len(m.content)==1)
+					await inp.delete()
+					if inp.content.lower() in ['stop','end','cancel']:
+						return await ctx.send("Ended the game")
 					try:
 						x = int(inp.content)-1
 					except ValueError:
@@ -125,7 +129,7 @@ class Connect4(commands.Cog):
 					e = discord.Embed(title='Connect4', description=self.format_board(won[1]), color=discord.Color.blurple())
 					await ctx.send(embed=e)
 					return
-				turn = bot.user if turn == ctx.author else ctx.author
+				turn = self.bot.user if turn == ctx.author else ctx.author
 		elif member.bot or member == ctx.author:
 			return await ctx.send(f"Invalid Syntax: Can't play against {member.display_name}")
 		else:

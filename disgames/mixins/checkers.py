@@ -60,10 +60,10 @@ class Checkers(commands.Cog):
 				await ctx.send("Invalid syntax: to play your turn select a token and the direction where it goes, eg: `22 dr`", delete_after=5)
 				continue
 			if direction not in opts:
-				await ctx.send(f"Invalid syntax: Correct directions `ul (up left), dl (down left), ur (up right), dr (down right)", delete_after=5)
+				await ctx.send(f"Invalid syntax: Correct directions ul (up left), dl (down left), ur (up right), dr (down right)", delete_after=5)
 				continue
 			elif not len(direction) == 2:
-				await ctx.send(f"Invalid syntax: Correct directions `ul (up left), dl (down left), ur (up right), dr (down right)", delete_after=5)
+				await ctx.send(f"Invalid syntax: Correct directions ul (up left), dl (down left), ur (up right), dr (down right)", delete_after=5)
 				continue
 			elif not len(coors) == 2:
 				await ctx.send(f"Invalid syntax: The coordinates entered are invalid", delete_after=5)
@@ -102,7 +102,7 @@ class Checkers(commands.Cog):
 						board[x+inc[1]][y+inc[0]] = turn+'k'
 					else:
 						if board[x+inc[1]*2][y+inc[0]*2]!=' ':
-							await ctx.send("Cant do that jump")
+							await ctx.send("Cant do that jump", delete_after=5)
 							continue
 						board[x][y] = ' '
 						board[x+inc[1]][y+inc[0]] = ' '
@@ -144,7 +144,7 @@ class Checkers(commands.Cog):
 						await ctx.send("Cant move there", delete_after=5)
 						continue
 			if self.has_won(board):
-				e = discord.Embed(title='Checkers', description=f"{ctx.author.mention if self.has_won(board) == 'r' else member.mention}\n{self.format_board(board)}", color=discord.Color.blurple())
+				e = discord.Embed(title='Checkers', description=f"Winner: {ctx.author.mention if self.has_won(board) == 'r' else member.mention}\n{self.format_board(board)}", color=discord.Color.blurple())
 				await ctx.send(embed=e)
 				return
 			turn = 'r' if turn == 'b' else 'b'

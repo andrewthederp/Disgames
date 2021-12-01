@@ -1,7 +1,7 @@
 import random, discord
 from discord.ext import commands
 
-class sudoko(commands.Cog):
+class Sudoko(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
@@ -88,16 +88,16 @@ class sudoko(commands.Cog):
 
 	@commands.command()
 	async def sudoko(self, ctx):
-		await ctx.send("Enter a difficulty level: 1,2,3")
+		await ctx.send("Enter a difficulty level: 1, 2, 3", delete_after=5)
 		difficulty = await self.bot.wait_for('message', check = lambda m: m.author == ctx.author and m.channel == ctx.channel)
 		try:
 			difficulty = int(difficulty.content)
 		except ValueError:
-			return await ctx.send("Invalid syntax: that's not a valid difficulty level")
+			return await ctx.send("Invalid syntax: that's not a valid difficulty level", delete_after=5)
 		if difficulty in range(1,4):
 			board = self.create_board(difficulty)
 		else:
-			return await ctx.send("Invalid syntax: that's not a valid difficulty level")
+			return await ctx.send("Invalid syntax: that's not a valid difficulty level", delete_after=5)
 		steps = []
 		msg = await ctx.send(embed=discord.Embed(title='Sudoko', description=self.format_board(board), color=discord.Color.blurple()))
 		while True:
@@ -110,25 +110,26 @@ class sudoko(commands.Cog):
 					steps.pop(-1)
 					continue
 				except IndexError:
-					await ctx.send("Invalid syntax: Cant go back any further")
+					await ctx.send("Invalid syntax: Cant go back any further", delete_after=5)
 					continue
 			elif inp.content in ['end','stop','cancel']:
-				await ctx.send("Ended the game")
+				await ctx.send("Ended the game", delete_after=5)
 				return
-			inp = inp.split(' ')
+			inp = inp.content.split(' ')
 			try:
 				x, y, num = int(inp[0][0])-1, int(inp[0][1])-1, int(inp[1])
 			except (IndexError,ValueError):
-				await ctx.send("You did not enter the coordinates correctly ")
+				await ctx.send("You did not enter the coordinates correctly", delete_after=5)
 				continue
-			if x in range(9) or y in range(9):
-				await ctx.send(f"Invalid syntax: {x+1}{y+1} is not a valid place on the board")
+			if x not in range(9) or y not in range(9):
+				await ctx.send(f"Invalid syntax: {x+1}{y+1} is not a valid place on the board", delete_after=5)
+				continue
 			steps.append((x,y))
 			if int(board[x][y]) != 0:
-				await ctx.send("Invalid syntax: Cant put there")
+				await ctx.send("Invalid syntax: Cant put there", delete_after=5)
 				continue
 			elif str(num) in board[x]:
-				await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same row")
+				await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same row", delete_after=5)
 				continue
 			else:
 				h = False
@@ -137,7 +138,7 @@ class sudoko(commands.Cog):
 						h = True
 						break
 				if h:
-					await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same column")
+					await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same column", delete_after=5)
 					continue
 				if x in range(3):
 					x_ = 0
@@ -154,7 +155,7 @@ class sudoko(commands.Cog):
 				lst = [board[x_][y_]]
 				lst += [board[x_+1][y_],board[x_+2][y_],board[x_][y_+1],board[x_][y_+2],board[x_+1][y_+1],board[x_+2][y_+2],board[x_+2][y_+1],board[x_+1][y_+2]]
 				if str(num) in lst:
-					await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same 3x3")
+					await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same 3x3", delete_after=5)
 					continue
 				board[x][y] = str(num)
 				if self.has_won(board):
