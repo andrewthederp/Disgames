@@ -7,5 +7,9 @@ ALL_GAMES = [
     Chess,
     Minesweeper,
     Sokoban,
-    RPS
+    RPS,
+    Connect4,
+    _2048,
+    Checkers,
+    Sudoko
 ]
