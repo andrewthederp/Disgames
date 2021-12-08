@@ -9,6 +9,35 @@ class Hangman(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        
+    @property
+    def _url(self):
+        return "https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt"
+    
+    @property
+    def _session(self):
+        return self.bot.http._HTTPClient__session
+    
+    async def _request(self):
+        response = await self._session.get(self._url)
+        return await response.text()
+    
+    async def _get_word(self):
+        try:
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                word = random.choice(data)                
+        except as Exception:
+            words = await self.request()
+            with open('./words.txt', 'w') as file:
+                file.write(words)    
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                word = random.choice(data)
+        finally:
+            return str(word)
+            
+        
 
     def make_hangman(self, errors):
         head = "()" if errors > 0 else "  "
@@ -29,26 +58,8 @@ class Hangman(commands.Cog):
 
     @commands.command("hangman", aliases=["hm"])
     async def command(self, ctx: commands.Context):
-        try:
-            with open('./words.txt', 'r') as file:
-                data = file.read().splitlines()
-                data = random.choice(data)                
-                words = data
-        except:
-            words = []
-            target_url = 'https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt'
-            async with aiohttp.ClientSession() as session:
-                async with session.get(target_url) as resp:
-                    data = await resp.text()
-                with open('./words.txt', 'w') as file:
-                    file.write(data)
-            with open('./words.txt', 'r') as file:
-                data = file.read().splitlines()
-                data = random.choice(data)
-                words = data
-                
+        words = await self._get_word()
         words = str(words).replace('\n', '')
-                
         word = list(words)
             
         guesses = []
