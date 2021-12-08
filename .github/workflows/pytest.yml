@@ -20,4 +20,4 @@ jobs:
         pip install pytest
     - name: Analysing the code with pytest
       run: |
-        python -m pytest disgames
+        python -m pytest
