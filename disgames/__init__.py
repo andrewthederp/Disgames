@@ -1,5 +1,6 @@
 from .cog import *
 from .constants import *
+from .errors import PathNotFound
 from discord.ext import commands
 
 def register_commands(
