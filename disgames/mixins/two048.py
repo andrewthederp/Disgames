@@ -5,7 +5,7 @@ class _2048(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	def format_board(self, board):
+	def format_2048_board(self, board):
 		h = []
 		for row in board:
 			h.append(''.join(str(row)))
@@ -149,28 +149,28 @@ class _2048(commands.Cog):
 		if zeroes == 0 and playsleft == False:
 			return False
 
-	def create_board(self, ):
+	def create_2048_board(self):
 		b = [[0 for _ in range(4)] for _ in range(4)]
 		b = self.add_number(b)
 		b = self.add_number(b)
 		return b
 
-
 	@commands.command('2048')
 	async def _2048_(self, ctx):
-		b = self.create_board()
-		e = discord.Embed(title='2048',description=self.format_board(b), color=discord.Color.blurple())
+		"""you combine like-numbered tiles numbered with powers of two until you get a tile with the value of 2048. Gameplay consists of swiping the tiles up, right, down and left, and any tiles that match in the direction and adjacent spot will combine in the direction swiped."""
+		b = self.create_2048_board()
+		e = discord.Embed(title='2048',description=self.format_2048_board(b), color=discord.Color.blurple()).set_footer(text='React with "⏹️" to end the game')
 		msg = await ctx.send(embed=e)
-		for emoji in ["➡️","⬆️", "⬇️", "⬅️", "⏹️"]:
+		for emoji in ["➡️","⬆️", "⏹️", "⬇️", "⬅️"]:
 			await msg.add_reaction(emoji)
 		while True:
-			e = discord.Embed(title='2048',description=self.format_board(b), color=discord.Color.blurple())
+			e = discord.Embed(title='2048',description=self.format_2048_board(b), color=discord.Color.blurple()).set_footer(text='React with "⏹️" to end the game')
 			await msg.edit(embed=e)
 			reaction, user = await self.bot.wait_for(
 					"reaction_add",
 					check=lambda r, u: u == ctx.author
 					and r.message == msg
-					and str(r) in ["⬆️", "⬇️", "➡️", "⬅️", "⏹️"],
+					and str(r) in ["⬆️", "➡️", "⏹️", "⬅️", "⬇️"],
 				)
 			try:
 				await msg.remove_reaction(str(reaction), user)
@@ -193,10 +193,10 @@ class _2048(commands.Cog):
 
 			res = self.get_result(b)
 			if res:
-				e = discord.Embed(title='2048',description=self.format_board(b), color=discord.Color.blurple())
+				e = discord.Embed(title='2048',description=self.format_2048_board(b), color=discord.Color.blurple())
 				await msg.edit(content='You won!!!', embed=e)
 				return
 			elif res == False:
-				e = discord.Embed(title='2048',description=self.format_board(b), color=discord.Color.blurple())
+				e = discord.Embed(title='2048',description=self.format_2048_board(b), color=discord.Color.blurple())
 				await msg.edit(content='You lost', embed=e)
 				return

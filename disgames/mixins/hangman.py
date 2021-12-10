@@ -28,15 +28,17 @@ class Hangman(commands.Cog):
 
     @commands.command("hangman", aliases=["hm"])
     async def command(self, ctx: commands.Context):
-        h = self.make_hangman.__globals__['__file__'].split('\\')
-        h[-1] = 'words.txt'
-        with open('\\'.join(h), "r") as dictionary:
-            words = [s.lower() for s in dictionary.read().splitlines() if len(s) >= 4 and len(s) <= 6]
+        """Try to guess the word"""
+        try:
+            with open('./words.txt', "r") as f:
+                words = [s.lower() for s in f.read().splitlines() if len(s) >= 4 and len(s) <= 6]
+        except FileNotFoundError:
+            return await ctx.send("Could not find the words.txt file")
         word = list(random.choice(words))
         guesses = []
         errors = 0
         revealed_message = "🟦 " * len(word)
-        embed = discord.Embed(color=discord.Color.blurple())
+        embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
         embed.add_field(
             name="Hangman", value=self.make_hangman(errors), inline=False
         )
@@ -48,7 +50,7 @@ class Hangman(commands.Cog):
         msg = await ctx.send(embed=embed)
 
         while True:
-            embed = discord.Embed(color=discord.Color.blurple())
+            embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             embed.add_field(
                 name="Word",
                 value="".join(f":regional_indicator_{i}:" for i in word),
@@ -59,6 +61,8 @@ class Hangman(commands.Cog):
                 check=lambda m: m.author == ctx.author
                 and m.channel == ctx.channel,
             )
+            if message.content.lower() in ['end','stop','cancel']:
+                return await ctx.send("Ended the game")
             if len(message.content.lower()) > 1:
                 if message.content.lower() == "".join(word):
                     embed.add_field(
@@ -76,7 +80,7 @@ class Hangman(commands.Cog):
                         "Invalid Syntax: your guess can't be more than 1 letter long or the word itself"
                     )
             elif message.content.lower().isalpha():
-                guesses.append(message.content)
+                guesses.append(message.content.lower())
                 if message.content.lower() not in word:
                     errors += 1
                 if errors == 6:
@@ -110,7 +114,7 @@ class Hangman(commands.Cog):
                     )
                     return await msg.edit(embed=embed)
                 else:
-                    embed = discord.Embed(color=discord.Color.blurple())
+                    embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
                     embed.add_field(
                         name="Hangman",
                         value=self.make_hangman(errors),

@@ -7,27 +7,27 @@ class Minesweeper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def create_boards(self):
-        board = [["b" if random.random() <= .1 else "n" for _ in range(10)] for _ in range(10)]
+    def create_minesweeper_boards(self):
+        board = [["b" if random.random() <= .14 else "n" for _ in range(10)] for _ in range(10)]
         board[random.randint(0, 9)][random.randint(0, 9)] = "n"
-        for y, row in enumerate(board):
-            for x, cell in enumerate(row):
+        for x, row in enumerate(board):
+            for y, cell in enumerate(row):
                 if cell == "n":
                     bombs = 0
                     for x_, y_ in self.get_neighbours(x, y):
                         try:
-                            if board[y_][x_] == "b":
+                            if board[x_][y_] == "b":
                                 bombs += 1
                         except IndexError:
                             pass
-                    board[y][x] = bombs
+                    board[x][y] = bombs
 
         visible_board = [[" " for _ in range(10)] for _ in range(10)]
         return board, visible_board
 
-    def get_coors(self, coordinate: str):
+    def get_coors(self, coordinate):
         if len(coordinate) not in (2, 3):
-            raise commands.BadArgument("Invalid coordinate provided.")
+            raise commands.BadArgument("Invalid syntax: invalid coordinate provided.")
 
         coordinate = coordinate.lower()
         if coordinate[0].isalpha():
@@ -44,10 +44,10 @@ class Minesweeper(commands.Cog):
         y = ord(letter) - ord("a")
 
         if (not 0 <= x <= 10) or (not 0 <= y <= 10):
-            raise commands.BadArgument("Entered coordinates aren't on the board")
+            raise commands.BadArgument("Invalid syntax: Entered coordinates aren't on the board")
         return x, y
 
-    def format_board(self, board):
+    def format_minesweeper_board(self, board):
         dct = {"b": "💣", "f": "🚩", " ": "🟦", "0": "⬛", '10':'🔟'}
         for i in range(1, 10):
             dct[str(i)] = f"{i}\N{variation selector-16}\N{combining enclosing keycap}"
@@ -86,7 +86,7 @@ class Minesweeper(commands.Cog):
                 continue
         return visible_board
 
-    def has_won(self, visible_board, board):
+    def has_won_minesweeper(self, visible_board, board):
         num = 0
         bombs = self.get_bombs(board)
         for x in board:
@@ -111,14 +111,15 @@ class Minesweeper(commands.Cog):
 
     @commands.command(aliases=['ms'])
     async def minesweeper(self, ctx):
-        grid, visible_board = self.create_boards()
+        """a square board containing hidden "mines" or bombs without detonating any of them, with help from clues about the number of neighbouring mines in each field."""
+        grid, visible_board = self.create_minesweeper_boards()
 
         em = discord.Embed(
             title="Minesweeper",
-            description=self.format_board(visible_board),
+            description=self.format_minesweeper_board(visible_board),
             color=discord.Color.blurple(),
-        )
-        m = await ctx.send("Send the coordinates, eg: `reveal 35 17 59`")
+        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+        m = await ctx.send("Send the coordinates, eg: `reveal d5 7a 3h`")
         msg = await ctx.send(embed=em)
         while True:
             inp = await self.bot.wait_for(
@@ -145,7 +146,7 @@ class Minesweeper(commands.Cog):
                             f"{ctx.author.mention} just lost Minesweeper! :pensive:",
                             embed=discord.Embed(
                                 title="Minesweeper",
-                                description=self.format_board(
+                                description=self.format_minesweeper_board(
                                     self.reveal_all(visible_board, grid)
                                 ),
                                 color=discord.Color.blurple(),
@@ -154,21 +155,15 @@ class Minesweeper(commands.Cog):
                         return
                     else:
                         if visible_board[x][y] == "f":
-                            await ctx.send(
-                                f"Invalid syntax: {coors} is already flagged",
-                                delete_after=5,
-                            )
                             continue
                         elif visible_board[x][y] != ' ':
-                            await ctx.send(f"Invalid Syntax: {coors} is already revealed")
+                            await ctx.send(f"Invalid Syntax: {coors} is already revealed", delete_after=5)
                         visible_board[x][y] = str(grid[x][y])
                         if visible_board[x][y] == "0":
                             visible_board = self.reveal_zeros(visible_board, grid, x, y)
                         grid[x][y] = "r"
                 elif type_.lower() in ["flag", "f"]:
-                    if visible_board[x][y] == "f":
-                        visible_board[x][y] = " "
-                    elif visible_board[x][y] != ' ':
+                    if visible_board[x][y] != ' ':
                         await ctx.send(
                             f"Invalid syntax: {coors} is already revealed or flagged",
                             delete_after=5,
@@ -180,10 +175,10 @@ class Minesweeper(commands.Cog):
                         f"Invalid syntax: {type_} isnt a valid move type",
                         delete_after=5,
                     )
-                if self.has_won(visible_board, grid):
+                if self.has_won_minesweeper(visible_board, grid):
                     em = discord.Embed(
                         title="Minesweeper",
-                        description=self.format_board(
+                        description=self.format_minesweeper_board(
                             self.reveal_all(visible_board, grid)
                         ),
                         color=discord.Color.blurple(),
@@ -196,8 +191,7 @@ class Minesweeper(commands.Cog):
                 await msg.edit(
                     embed=discord.Embed(
                         title="Minesweeper",
-                        description=self.format_board(visible_board),
+                        description=self.format_minesweeper_board(visible_board),
                         color=discord.Color.blurple(),
-                    )
+                    ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
                 )
-                await asyncio.sleep(1)

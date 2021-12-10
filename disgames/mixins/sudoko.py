@@ -5,7 +5,7 @@ class Sudoko(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	def format_board(self, board):
+	def format_sudoko_board(self, board):
 		lst = ['  123 456 789']
 		for num, i in enumerate(board):
 			scn_lst = []
@@ -19,7 +19,7 @@ class Sudoko(commands.Cog):
 			lst.append("".join(scn_lst))
 		return '```\n'+ "\n".join(lst) + '\n```'
 
-	def create_board(self, difficulty):
+	def create_sudoko_board(self, difficulty):
 		board = [['0' for i in range(9)] for i in range(9)]
 		if difficulty == 1:
 			diff = random.randint(4,6)
@@ -53,7 +53,7 @@ class Sudoko(commands.Cog):
 				x_ = 6
 			if y <= 3:
 				y_ = 0
-			elif y in range(3,6):
+			elif y in range(3,6):    
 				y_ = 3
 			else:
 				y_ = 6
@@ -79,7 +79,7 @@ class Sudoko(commands.Cog):
 			board[x][y] = num
 		return board
 
-	def has_won(self, board):
+	def has_won_sudoko(self, board):
 		for x in board:
 			for y in x:
 				if y == '0':
@@ -88,20 +88,23 @@ class Sudoko(commands.Cog):
 
 	@commands.command()
 	async def sudoko(self, ctx):
-		await ctx.send("Enter a difficulty level: 1, 2, 3", delete_after=5)
+		"""puzzle in which players insert the numbers one to nine into a grid consisting of nine squares subdivided into a further nine smaller squares in such a way that every number appears once in each horizontal line, vertical line, and square."""
+		m = await ctx.send("Enter a difficulty level: 1, 2, 3")
 		difficulty = await self.bot.wait_for('message', check = lambda m: m.author == ctx.author and m.channel == ctx.channel)
+		await m.delete()
 		try:
 			difficulty = int(difficulty.content)
 		except ValueError:
 			return await ctx.send("Invalid syntax: that's not a valid difficulty level", delete_after=5)
 		if difficulty in range(1,4):
-			board = self.create_board(difficulty)
+			board = self.create_sudoko_board(difficulty)
 		else:
 			return await ctx.send("Invalid syntax: that's not a valid difficulty level", delete_after=5)
 		steps = []
-		msg = await ctx.send(embed=discord.Embed(title='Sudoko', description=self.format_board(board), color=discord.Color.blurple()))
+		embed = discord.Embed(title='Sudoko', description=f"How to play: Insert the coordinates of where you want to play a number with the number after it, eg: `35 4`\n\n{self.format_sudoko_board(board)}", color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+		msg = await ctx.send(embed=embed)
 		while True:
-			embed=discord.Embed(title='Sudoko', description=self.format_board(board), color=discord.Color.blurple())
+			embed=discord.Embed(title='Sudoko', description=f"How to play: Insert the coordinates of where you want to play a number with the number after it, eg: `35 4`\n\n{self.format_sudoko_board(board)}", color=discord.Color.blurple().set_footer(text='Send "end"/"stop"/"cancel" to stop the game'))
 			await msg.edit(embed=embed)
 			inp = await self.bot.wait_for('message',check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
 			if inp.content == 'back':
@@ -112,7 +115,7 @@ class Sudoko(commands.Cog):
 				except IndexError:
 					await ctx.send("Invalid syntax: Cant go back any further", delete_after=5)
 					continue
-			elif inp.content in ['end','stop','cancel']:
+			elif inp.content.lower() in ['end','stop','cancel']:
 				await ctx.send("Ended the game", delete_after=5)
 				return
 			inp = inp.content.split(' ')
@@ -126,7 +129,7 @@ class Sudoko(commands.Cog):
 				continue
 			steps.append((x,y))
 			if int(board[x][y]) != 0:
-				await ctx.send("Invalid syntax: Cant put there", delete_after=5)
+				await ctx.send("Invalid syntax: Cant put a number there", delete_after=5)
 				continue
 			elif str(num) in board[x]:
 				await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same row", delete_after=5)
@@ -158,6 +161,6 @@ class Sudoko(commands.Cog):
 					await ctx.send(f"Invalid syntax: There is a another {str(num)} on the same 3x3", delete_after=5)
 					continue
 				board[x][y] = str(num)
-				if self.has_won(board):
+				if self.has_won_sudoko(board):
 					await ctx.send("You won sudoko!!!")
 					return

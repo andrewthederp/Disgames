@@ -12,7 +12,7 @@ class TicTacToe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def get_empty(self, board):
+    def get_empty_ttt(self, board):
         bord = eval(str(board))
         lst = []
         for i in range(len(bord)):
@@ -24,12 +24,12 @@ class TicTacToe(commands.Cog):
                     pass
         return lst or 0
 
-    def make_random_move(self, board):
-        h = self.get_empty(board)
+    def make_random_move_ttt(self, board):
+        h = self.get_empty_ttt(board)
         h = random.choice(h)
         return edit_board(board, [h], 'o')
 
-    def make_move(self, answer, board, turn):
+    def make_ttt_move(self, answer, board, turn):
         bord = eval(str(board))
         if answer not in [
             "11",
@@ -55,16 +55,9 @@ class TicTacToe(commands.Cog):
             else:
                 return (True, edit_board(board, [answer], turn))
 
-    def has_won(self, board, turn):
+    def has_won_ttt(self, board, turn):
         BLANK = board.seperator
         bord = eval(str(board))
-        h = 0
-        for i in bord:
-            for thing in i:
-                if thing != BLANK:
-                    h += 1
-        if h == 16:
-            return (True, "tie")
         for i in range(1, 4):
 
             if (bord[i][1] == bord[i][2] == bord[i][3]) and bord[i][
@@ -81,19 +74,26 @@ class TicTacToe(commands.Cog):
 
         if (bord[1][3] == bord[2][2] == bord[3][1]) and bord[1][3] != BLANK:
             return (True, turn)
-
+        h = 0
+        for i in bord:
+            for thing in i:
+                if thing != BLANK:
+                    h += 1
+        if h == 16:
+            return (True, "tie")
         return (False, "h")
 
     @commands.command(aliases=["ttt"])
     async def tictactoe(self, ctx: commands.Context, member: discord.Member=None):
+        """two players take turns marking the spaces in a three-by-three grid with X or O. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner"""
         if member == None:
             turn = ctx.author
             board = Board(3, 3, "|")
             embed = discord.Embed(
                 title="TicTacToe",
-                description=f"turn: `{turn.display_name}`\n```{format_board(board)}\n```",
+                description=f"How to play: send the coordinates of where you want to place your token, eg: `22`\n\nturn: `{turn.display_name}`\n```{format_board(board)}\n```",
                 color=discord.Color.blurple()
-            )
+            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             msg = await ctx.send(embed=embed)
             while True:
                 if turn == ctx.author:
@@ -101,17 +101,17 @@ class TicTacToe(commands.Cog):
                         "message",
                         check=lambda m: m.author == turn and m.channel == ctx.channel,
                     )
-                    if inp.content == "cancel":
+                    if inp.content.lower() in ["cancel","end",'stop']:
                         return await ctx.send("Cancelled the game")
-                    outp = make_move(inp.content, board, "x")
+                    outp = self.make_ttt_move(inp.content, board, "x")
                     if outp[0]:
                         board = outp[1]
                     else:
                         await ctx.send(outp[1], delete_after=5)
                         continue
                 else:
-                    board = make_random_move(board)
-                h = has_won(board, 'x' if turn == ctx.author else 'o')
+                    board = self.make_random_move_ttt(board)
+                h = self.has_won_ttt(board, 'x' if turn == ctx.author else 'o')
                 if h[0]:
                     return await ctx.send(
                         embed=discord.Embed(
@@ -119,7 +119,7 @@ class TicTacToe(commands.Cog):
                             title="TicTacToe",
                             description=(
                                 "winner: `"
-                                f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if turn == ctx.author else bot.user.display_name)}`"
+                                f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if turn == ctx.author else self.bot.user.display_name)}`"
                                 "\n"
                                 f"```{format_board(board)}```"
                                 "\n"
@@ -130,55 +130,58 @@ class TicTacToe(commands.Cog):
                 await msg.edit(
                     embed=discord.Embed(
                         title="TicTacToe",
-                        description=f"turn: `{turn.display_name}`\n```{format_board(board)}\n```",
+                        description=f"How to play: send the coordinates of where you want to place your token, eg: `22`\n\nturn: `{turn.display_name}`\n```{format_board(board)}\n```",
                         color=discord.Color.blurple()
-                    )
+                    ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
                 )
-        if member.bot or member == ctx.author:
+        elif member.bot or member == ctx.author:
             return await ctx.send(
                 f"Invalid Syntax: Can't play against {member.display_name}"
             )
-        turn = ctx.author
-        board = Board(3, 3, "|")
-        embed = discord.Embed(
-            title="TicTacToe",
-            description=f"turn: `{turn.display_name}`\n```{format_board(board)}\n```",
-            color=discord.Color.blurple()
-        )
-        msg = await ctx.send(embed=embed)
-        while True:
-            inp = await ctx.bot.wait_for(
-                "message",
-                check=lambda m: m.author == turn and m.channel == ctx.channel,
+        else:
+            turn = ctx.author
+            board = Board(3, 3, "|")
+            embed = discord.Embed(
+                title="TicTacToe",
+                description=f"How to play: send the coordinates of where you want to place your token, eg: `22`\n\nturn: `{turn.display_name}`\n```{format_board(board)}\n```",
+                color=discord.Color.blurple().set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             )
-            if inp.content == "cancel":
-                return await ctx.send("Cancelled the game")
-            outp = self.make_move(
-                inp.content, board, "x" if turn == ctx.author else "o"
-            )
-            if outp[0]:
-                board = outp[1]
-            else:
-                await ctx.send(outp[1])
-                continue
-            h = self.has_won(board, "x" if turn == ctx.author else "o")
-            if h[0]:
-                return await ctx.send(
+            msg = await ctx.send(embed=embed)
+            while True:
+                inp = await ctx.bot.wait_for(
+                    "message",
+                    check=lambda m: m.author == turn and m.channel == ctx.channel,
+                )
+                if inp.content in ["cancel",'end','stop']:
+                    return await ctx.send("Cancelled the game")
+                outp = self.make_ttt_move(
+                    inp.content, board, "x" if turn == ctx.author else "o"
+                )
+                if outp[0]:
+                    board = outp[1]
+                else:
+                    await ctx.send(outp[1])
+                    continue
+                h = self.has_won_ttt(board, "x" if turn == ctx.author else "o")
+                if h[0]:
+                    return await ctx.send(
+                        embed=discord.Embed(
+                            title="TicTacToe",
+                            color=discord.Color.blurple(),
+                            description=(
+                                "winner: `"
+                                f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}`"
+                                "\n"
+                                f"```{format_board(board)}```"
+                                "\n"
+                            ),
+                        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+                    )
+                turn = member if turn == ctx.author else ctx.author
+                await msg.edit(
                     embed=discord.Embed(
                         title="TicTacToe",
-                        description=(
-                            "winner: `"
-                            f"{'tie' if h[1] == 'tie' else (ctx.author.display_name if h[1] == 'x' else member.display_name)}`"
-                            "\n"
-                            f"```{format_board(board)}```"
-                            "\n"
-                        ),
-                    )
+                        description=f"How to play: send the coordinates of where you want to place your token, eg: `22`\n\nturn: `{turn.display_name}`\n```{format_board(board)}\n```",
+                        color=discord.Color.blurple()
+                    ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
                 )
-            turn = member if turn == ctx.author else ctx.author
-            await msg.edit(
-                embed=discord.Embed(
-                    title="TicTacToe",
-                    description=f"turn: `{turn.display_name}`\n```{format_board(board)}\n```",
-                )
-            )

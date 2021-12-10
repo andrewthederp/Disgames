@@ -5,8 +5,8 @@ class RPS(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	def won(self, inp1, inp2):
-		dct = {'✂️':'📜','🪨':'✂️','📜':'📜'}
+	def has_won_rps(self, inp1, inp2):
+		dct = {'✂️':'📜','🪨':'✂️','📜':'🪨'}
 		if inp1 == inp2:
 			return 'Draw'
 		elif dct[inp1] == inp2:
@@ -15,6 +15,7 @@ class RPS(commands.Cog):
 
 	@commands.command()
 	async def rps(self, ctx, member:discord.Member=None):
+		"""Rock wins against scissors; paper wins against rock; and scissors wins against paper"""
 		if not member:
 			msg = await ctx.send("Please react with your choice:")
 			for i in ['✂️','🪨','📜']:
@@ -26,7 +27,7 @@ class RPS(commands.Cog):
 					and str(r) in ['✂️', '🪨', '📜'],
 				)
 			bot_choice = random.choice(['🪨', '📜', '✂️'])
-			win = self.won(str(reaction), bot_choice)
+			win = self.has_won_rps(str(reaction), bot_choice)
 			await ctx.send(f"{self.bot.user.display_name}: {bot_choice}\n{ctx.author.display_name}: {str(reaction)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else self.bot.user.mention)}")
 		elif member.bot or member == ctx.author:
 			return await ctx.send(f"Invalid Syntax: Can't play against {member.display_name}")
@@ -57,7 +58,7 @@ class RPS(commands.Cog):
 						check=lambda p: p.message_id == msg2.id
 						and str(payload.emoji) in ['✂️', '🪨', '📜'],
 					)
-				win = self.won(str(payload.emoji), str(payload2.emoji))
+				win = self.has_won_rps(str(payload.emoji), str(payload2.emoji))
 				await ctx.send(f"{member.display_name}: {str(payload2.emoji)}\n{ctx.author.display_name}: {str(payload.emoji)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
 			else:
 				await ctx.send(f"Waiting for {ctx.author.display_name}")
@@ -66,5 +67,5 @@ class RPS(commands.Cog):
 						check=lambda p: p.message_id == msg1.id
 						and str(payload.emoji) in ['✂️', '🪨', '📜'],
 					)
-				win = self.won(str(payload2.emoji), str(payload.emoji))
+				win = self.has_won_rps(str(payload2.emoji), str(payload.emoji))
 				await ctx.send(f"{member.display_name}: {str(payload.emoji)}\n{ctx.author.display_name}: {str(payload2.emoji)}\nWinner: {'Draw' if win == 'Draw' else (ctx.author.mention if win == 'inp1' else member.mention)}")
