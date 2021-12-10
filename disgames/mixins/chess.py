@@ -9,6 +9,7 @@ from ..errors import PathNotFound
 class Chess(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.stockfish_path = None
         try:
             h = os.getcwd().split('\\')[2]
         except IndexError:

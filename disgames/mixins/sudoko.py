@@ -104,7 +104,7 @@ class Sudoko(commands.Cog):
 		embed = discord.Embed(title='Sudoko', description=f"How to play: Insert the coordinates of where you want to play a number with the number after it, eg: `35 4`\n\n{self.format_sudoko_board(board)}", color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
 		msg = await ctx.send(embed=embed)
 		while True:
-			embed=discord.Embed(title='Sudoko', description=f"How to play: Insert the coordinates of where you want to play a number with the number after it, eg: `35 4`\n\n{self.format_sudoko_board(board)}", color=discord.Color.blurple().set_footer(text='Send "end"/"stop"/"cancel" to stop the game'))
+			embed=discord.Embed(title='Sudoko', description=f"How to play: Insert the coordinates of where you want to play a number with the number after it, eg: `35 4`\n\n{self.format_sudoko_board(board)}", color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
 			await msg.edit(embed=embed)
 			inp = await self.bot.wait_for('message',check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
 			if inp.content == 'back':
