@@ -11,16 +11,12 @@ class Chess(commands.Cog):
         self.bot = bot
         try:
             h = os.getcwd().split('\\')[2]
-            print(h)
         except IndexError:
             self.stockfish_path = None
-            print("IndexError")
         else:
             stockfish_path = sorted(Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe"))
-            print(stockfish_path)
             if stockfish_path:
                 self.stockfish_path = stockfish_path[0]
-                print("Stockfish path set to ", stockfish_path[0])
 
     def has_won_chess(self, board, member):
         value = None
