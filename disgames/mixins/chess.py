@@ -13,7 +13,7 @@ class Chess(commands.Cog):
         try:
             h = os.getcwd().split('\\')[2]
         except IndexError:
-            self.stockfish_path = None
+            pass
         else:
             stockfish_path = sorted(Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe"))
             if stockfish_path:
