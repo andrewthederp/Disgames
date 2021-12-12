@@ -68,6 +68,8 @@ class Hangman(commands.Cog):
                 continue
 
             elif len(message.content.lower()) > 1:
+                if ' ' in message.content:
+                    continue
                 if message.content.lower() == "".join(word):
                     embed.add_field(
                         name="Hangman",
@@ -80,9 +82,24 @@ class Hangman(commands.Cog):
                     )
                     return await msg.edit(embed=embed)
                 else:
+                    errors += 1
                     await ctx.send(
-                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself", delete_after=5
+                        "Uhoh, that was not the word", delete_after=5
                     )
+                    if errors == 6:
+                        embed = discord.Embed(color=discord.Color.blurple())
+                        embed.add_field(
+                            name="Hangman",
+                            value=self.make_hangman(errors),
+                            inline=False,
+                        )
+                        self._show_guesses(embed, guesses)
+                        embed.add_field(
+                            name="Result:",
+                            value=f"You lost :pensive:\n word was {''.join(word)}",
+                            inline=False,
+                        )
+                        return await msg.edit(embed=embed)
             elif message.content.lower().isalpha():
                 guesses.append(message.content.lower())
                 if message.content.lower() not in word:
