@@ -16,13 +16,6 @@ class Connect4(commands.Cog):
 		return toDisplay
 
 	def has_won_connect4(self, height, width, board):
-		num = 0
-		for row in board:
-			for column in row:
-				if column != ' ':
-					num += 1
-		if num == (len(board)*len(board[0])):
-			return False, board, 'Tie'
 		for x in range(height):
 			for y in range(width-3):
 				if(board[x][y]==board[x][y+1] and board[x][y]==board[x][y+2] and board[x][y]==board[x][y+3] and board[x][y]!=' '):
@@ -79,6 +72,13 @@ class Connect4(commands.Cog):
 						board[x+2][y-2]="R"
 						board[x+3][y-3]="R"
 					return True, board, "in a / diagonal"
+		num = 0
+		for row in board:
+			for column in row:
+				if column != ' ':
+					num += 1
+		if num == (len(board)*len(board[0])):
+			return False, board, 'Tie'
 		return None, None, None
 
 	@commands.command()

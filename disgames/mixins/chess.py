@@ -98,12 +98,14 @@ class Chess(commands.Cog):
                     elif inp.content.lower() == "back":
                         try:
                             board.pop()
+                            turn = member if turn == ctx.author else ctx.author
+                            continue
                         except IndexError:
                             await ctx.send("Can't go back", delete_after=5)
                             continue
                     else:
                         try:
-                            move = chess.Move.from_uci(inp.content)
+                            move = chess.Move.from_uci(inp.content.lower())
                             board.push(move)
                         except ValueError:
                             await ctx.send("Invalid move", delete_after=5)
@@ -138,7 +140,7 @@ class Chess(commands.Cog):
                     check=lambda m: m.author in [ctx.author, member]
                     and m.channel == ctx.channel,
                 )
-                if inp.content.lower() == "stop":
+                if inp.content.lower() in ["stop","end","cancel"]:
                     return await ctx.send("Game ended", delete_after=5)
                 elif inp.content.lower() == "back":
                     try:
@@ -149,7 +151,7 @@ class Chess(commands.Cog):
                 else:
                     if inp.author == turn:
                         try:
-                            move = chess.Move.from_uci(inp.content)
+                            move = chess.Move.from_uci(inp.content.lower())
                             board.push(move)
                         except ValueError:
                             await ctx.send("Invalid move", delete_after=5)
@@ -158,6 +160,8 @@ class Chess(commands.Cog):
                             await inp.delete()
                         except discord.Forbidden:
                             pass
+                    else:
+                    	continue
                 turn = member if turn == ctx.author else ctx.author
                 won = self.has_won_chess(board, member if turn == ctx.author else ctx.author)
                 if won:

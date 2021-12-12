@@ -53,7 +53,7 @@ class Hangman(commands.Cog):
             embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             embed.add_field(
                 name="Word",
-                value="".join(f":regional_indicator_{i}:" for i in word),
+                value="".join(f":regional_indicator_{i}:" if i.isalpha() else i for i in word),
                 inline=False,
             )
             message: discord.Message = await ctx.bot.wait_for(
@@ -63,7 +63,11 @@ class Hangman(commands.Cog):
             )
             if message.content.lower() in ['end','stop','cancel']:
                 return await ctx.send("Ended the game")
-            if len(message.content.lower()) > 1:
+            if message.content in guesses:
+                await ctx.send("You already guessed that", delete_after=5)
+                continue
+
+            elif len(message.content.lower()) > 1:
                 if message.content.lower() == "".join(word):
                     embed.add_field(
                         name="Hangman",
@@ -77,7 +81,7 @@ class Hangman(commands.Cog):
                     return await msg.edit(embed=embed)
                 else:
                     await ctx.send(
-                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself"
+                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself", delete_after=5
                     )
             elif message.content.lower().isalpha():
                 guesses.append(message.content.lower())
@@ -127,7 +131,11 @@ class Hangman(commands.Cog):
                     )
                     self._show_guesses(embed, guesses)
                     await msg.edit(embed=embed)
+                    try:
+                        await message.delete()
+                    except discord.Forbidden:
+                        pass
             else:
                 await ctx.send(
-                    f"Invalid Syntax: {message.content.lower()} is not a letter"
+                    f"Invalid Syntax: {message.content.lower()} is not a letter", delete_after=5
                 )

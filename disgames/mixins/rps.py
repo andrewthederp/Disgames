@@ -46,7 +46,7 @@ class RPS(commands.Cog):
 				return await ctx.send(f"I couldnt dm {member.display_name}")
 
 			def check(payload):
-				return payload.message_id in [msg1.id,msg2.id] and str(payload.emoji) in ['✂️', '🪨', '📜']
+				return payload.message_id in [msg1.id,msg2.id] and str(payload.emoji) in ['✂️', '🪨', '📜'] and payload.user_id != self.bot.user.id
 			payload = await self.bot.wait_for(
 					"raw_reaction_add",
 					check=check

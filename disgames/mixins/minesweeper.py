@@ -116,10 +116,9 @@ class Minesweeper(commands.Cog):
 
         em = discord.Embed(
             title="Minesweeper",
-            description=self.format_minesweeper_board(visible_board),
+            description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\n{self.format_minesweeper_board(visible_board)}",
             color=discord.Color.blurple(),
         ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
-        m = await ctx.send("Send the coordinates, eg: `reveal d5 7a 3h`")
         msg = await ctx.send(embed=em)
         while True:
             inp = await self.bot.wait_for(
@@ -142,7 +141,7 @@ class Minesweeper(commands.Cog):
                     continue
                 if type_.lower() in ["reveal", "r"]:
                     if grid[x][y] == "b":
-                        await ctx.send(
+                        return await ctx.send(
                             f"{ctx.author.mention} just lost Minesweeper! :pensive:",
                             embed=discord.Embed(
                                 title="Minesweeper",
@@ -152,12 +151,12 @@ class Minesweeper(commands.Cog):
                                 color=discord.Color.blurple(),
                             ),
                         )
-                        return
                     else:
                         if visible_board[x][y] == "f":
                             continue
                         elif visible_board[x][y] != ' ':
                             await ctx.send(f"Invalid Syntax: {coors} is already revealed", delete_after=5)
+                            continue
                         visible_board[x][y] = str(grid[x][y])
                         if visible_board[x][y] == "0":
                             visible_board = self.reveal_zeros(visible_board, grid, x, y)
@@ -191,7 +190,7 @@ class Minesweeper(commands.Cog):
                 await msg.edit(
                     embed=discord.Embed(
                         title="Minesweeper",
-                        description=self.format_minesweeper_board(visible_board),
+                        description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\n{self.format_minesweeper_board(visible_board)}",
                         color=discord.Color.blurple(),
                     ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
                 )

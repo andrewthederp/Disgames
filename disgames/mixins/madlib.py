@@ -28,7 +28,7 @@ class MadLib(commands.Cog):
         lst = []
         try:
             for question in json["blanks"]:
-                await ctx.send(f"Please send: {question}")
+                await ctx.reply(f"Please send: {question}", mention_author=False)
                 answer = await ctx.bot.wait_for(
                     "message",
                     check=lambda m: m.author == ctx.author
