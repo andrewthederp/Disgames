@@ -28,7 +28,7 @@ class Hangman(commands.Cog):
                 data = file.read().splitlines()
                 word = random.choice(data)                
         except as Exception:
-            words = await self.request()
+            words = await self._request()
             with open('./words.txt', 'w') as file:
                 file.write(words)    
             with open('./words.txt', 'r') as file:
