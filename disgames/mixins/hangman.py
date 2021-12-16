@@ -1,5 +1,6 @@
 import discord, random
 from discord.ext import commands
+import aiohttp
 
 class Hangman(commands.Cog):
     """
@@ -8,6 +9,35 @@ class Hangman(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        
+    @property
+    def _url(self):
+        return "https://raw.githubusercontent.com/andrewthederp/Disgames/main/disgames/mixins/words.txt"
+    
+    @property
+    def _session(self):
+        return self.bot.http._HTTPClient__session
+    
+    async def _request(self):
+        response = await self._session.get(self._url)
+        return await response.text()
+    
+    async def _get_word(self):
+        try:
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                word = random.choice(data)                
+        except Exception:
+            words = await self._request()
+            with open('./words.txt', 'w') as file:
+                file.write(words)    
+            with open('./words.txt', 'r') as file:
+                data = file.read().splitlines()
+                word = random.choice(data)
+        finally:
+            return str(word)
+            
+        
 
     def make_hangman(self, errors):
         head = "()" if errors > 0 else "  "
@@ -28,17 +58,14 @@ class Hangman(commands.Cog):
 
     @commands.command("hangman", aliases=["hm"])
     async def command(self, ctx: commands.Context):
-        """Try to guess the word"""
-        try:
-            with open('./words.txt', "r") as f:
-                words = [s.lower() for s in f.read().splitlines() if len(s) >= 4 and len(s) <= 6]
-        except FileNotFoundError:
-            return await ctx.send("Could not find the words.txt file")
-        word = list(random.choice(words))
+        words = await self._get_word()
+        words = str(words).replace('\n', '')
+        word = list(words)
+            
         guesses = []
         errors = 0
         revealed_message = "🟦 " * len(word)
-        embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+        embed = discord.Embed(color=discord.Color.blurple())
         embed.add_field(
             name="Hangman", value=self.make_hangman(errors), inline=False
         )
@@ -50,10 +77,10 @@ class Hangman(commands.Cog):
         msg = await ctx.send(embed=embed)
 
         while True:
-            embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+            embed = discord.Embed(color=discord.Color.blurple())
             embed.add_field(
                 name="Word",
-                value="".join(f":regional_indicator_{i}:" if i.isalpha() else i for i in word),
+                value="".join(f":regional_indicator_{i}:" for i in word),
                 inline=False,
             )
             message: discord.Message = await ctx.bot.wait_for(
@@ -61,15 +88,8 @@ class Hangman(commands.Cog):
                 check=lambda m: m.author == ctx.author
                 and m.channel == ctx.channel,
             )
-            if message.content.lower() in ['end','stop','cancel']:
-                return await ctx.send("Ended the game")
-            if message.content in guesses:
-                await ctx.send("You already guessed that", delete_after=5)
-                continue
-
-            elif len(message.content.lower()) > 1:
-                if ' ' in message.content:
-                    continue
+            await ctx.channel.purge(limit=1)
+            if len(message.content.lower()) > 1:
                 if message.content.lower() == "".join(word):
                     embed.add_field(
                         name="Hangman",
@@ -82,26 +102,12 @@ class Hangman(commands.Cog):
                     )
                     return await msg.edit(embed=embed)
                 else:
-                    errors += 1
                     await ctx.send(
-                        "Uhoh, that was not the word", delete_after=5
+                        "Invalid Syntax: your guess can't be more than 1 letter long or the word itself", 
+                        delete_after=5
                     )
-                    if errors == 6:
-                        embed = discord.Embed(color=discord.Color.blurple())
-                        embed.add_field(
-                            name="Hangman",
-                            value=self.make_hangman(errors),
-                            inline=False,
-                        )
-                        self._show_guesses(embed, guesses)
-                        embed.add_field(
-                            name="Result:",
-                            value=f"You lost :pensive:\n word was {''.join(word)}",
-                            inline=False,
-                        )
-                        return await msg.edit(embed=embed)
             elif message.content.lower().isalpha():
-                guesses.append(message.content.lower())
+                guesses.append(message.content)
                 if message.content.lower() not in word:
                     errors += 1
                 if errors == 6:
@@ -135,7 +141,7 @@ class Hangman(commands.Cog):
                     )
                     return await msg.edit(embed=embed)
                 else:
-                    embed = discord.Embed(color=discord.Color.blurple()).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+                    embed = discord.Embed(color=discord.Color.blurple())
                     embed.add_field(
                         name="Hangman",
                         value=self.make_hangman(errors),
@@ -148,11 +154,7 @@ class Hangman(commands.Cog):
                     )
                     self._show_guesses(embed, guesses)
                     await msg.edit(embed=embed)
-                    try:
-                        await message.delete()
-                    except discord.Forbidden:
-                        pass
             else:
                 await ctx.send(
-                    f"Invalid Syntax: {message.content.lower()} is not a letter", delete_after=5
+                    f"Invalid Syntax: {message.content.lower()} is not a letter"
                 )
