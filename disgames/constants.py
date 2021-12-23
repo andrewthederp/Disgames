@@ -11,5 +11,7 @@ ALL_GAMES = [
     Connect4,
     _2048,
     Checkers,
-    Sudoko
+    Sudoko,
+    TicTacToeReactions,
+    Battleships,
 ]
