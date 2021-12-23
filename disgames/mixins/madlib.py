@@ -2,10 +2,12 @@ import discord
 from discord.ext import commands
 import aiohttp
 
+
 class MadLib(commands.Cog):
     """
     Madlib command
     """
+
     def __init__(self, bot) -> None:
         self.bot = bot
 
@@ -18,6 +20,7 @@ class MadLib(commands.Cog):
         return self.bot.http._HTTPClient__session
 
     async def request(self, min: int, max: int):
+        """Returns the json containing the game"""
         params = {"minlength": min, "maxlength": max}
         response = await self.session.get(self.url, params=params)
         return await response.json()
@@ -31,8 +34,7 @@ class MadLib(commands.Cog):
                 await ctx.reply(f"Please send: {question}", mention_author=False)
                 answer = await ctx.bot.wait_for(
                     "message",
-                    check=lambda m: m.author == ctx.author
-                    and m.channel == ctx.channel,
+                    check=lambda m: m.author == ctx.author and m.channel == ctx.channel,
                 )
                 lst.append(answer.content)
             madlib = json["value"]

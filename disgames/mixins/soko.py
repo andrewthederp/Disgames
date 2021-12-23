@@ -7,6 +7,7 @@ class Sokoban(commands.Cog):
         self.bot = bot
 
     def format_soko_board(self, board):
+        """Format the soko board"""
         dct = {
             "p": ":flushed:",
             " ": random.choice(
@@ -32,11 +33,12 @@ class Sokoban(commands.Cog):
         return "\n".join(lst)
 
     def create_soko_board(self, difficulty_level):
-        num1 = 9 - difficulty_level // 4
-        num2 = 9 - difficulty_level // 4
+        """Creates the soko board based on the difficulty level"""
+        num1 = 8 - difficulty_level // 4
+        num2 = 8 - difficulty_level // 4
         if num1 >= 5:
-            num1 = random.randint(5,9)
-            num2 = random.randint(5,9)
+            num1 = random.randint(5, 9)
+            num2 = random.randint(5, 9)
         num3 = 1 + difficulty_level // 5
         if num3 > 7:
             num3 = 7
@@ -66,12 +68,14 @@ class Sokoban(commands.Cog):
         return board
 
     def get_player(self, board):
+        """Returnes the x,y coordinates of the player"""
         for x, i in enumerate(board):
             for y, thing in enumerate(i):
                 if thing == "p" or thing == "tp":
                     return x, y
 
     def has_won_soko(self, board):
+        """Checks if there are no more t on the board"""
         for x in board:
             for y in x:
                 if y == "t" or y == "tp":
@@ -98,7 +102,9 @@ class Sokoban(commands.Cog):
                 title="Sokoban",
                 description=self.format_soko_board(board),
                 color=discord.Color.blurple(),
-            ).set_footer(text='React with "⏹️" to end the game | React with "🔄" to restart the level')
+            ).set_footer(
+                text='React with "⏹️" to end the game | React with "🔄" to restart the level'
+            )
             em.add_field(
                 name="Play",
                 value=f"Score: {diff_level}\nReact with a direction (up :arrow_up:, down :arrow_down:, right :arrow_right:, left :arrow_left:)",
