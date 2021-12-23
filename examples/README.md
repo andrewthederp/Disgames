@@ -14,4 +14,4 @@ This folder contains different examples of adding games to your bot
 
 - [`register_commands.py`](./register_commands.py)
 
-  - Shows how you could use `disgames.register_commands` to add games and customize games to your bot
+  - Shows how you could use `disgame
