@@ -25,7 +25,7 @@ class SNL(commands.Cog):
 	@commands.command()
 	async def snl(self, ctx, players: commands.Greedy[discord.Member]=[]):
 		for player in players:
-			if player.bot or player == ctx.author:
+			if player == ctx.author:
 				players.remove(player)
 		if not players:
 			players.append(self.bot.user)
@@ -62,7 +62,8 @@ class SNL(commands.Cog):
 					players.remove(user)
 					await ctx.send(f"{user.mention} leaves")
 				else:
-					continue
+					if user != player:
+						continue
 			await ctx.send(f'{player.mention} rolled a {number}', delete_after=5)
 			board[index[0]][index[1]] = ' '
 			past_number = index[1]
