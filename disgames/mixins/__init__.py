@@ -11,6 +11,7 @@ from .checkers import Checkers
 from .sudoko import Sudoko
 from .ttt_reactions import TicTacToeReactions
 from .battleship import Battleships
+from .snake import Snake
 from .snl import SNL
 
 __all__ = (
@@ -27,5 +28,6 @@ __all__ = (
     "Sudoko",
     "TicTacToeReactions",
     "Battleships",
+    "Snake,
     "SNL",
 )
