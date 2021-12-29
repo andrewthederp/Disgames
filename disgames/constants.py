@@ -14,5 +14,6 @@ ALL_GAMES = [
     Sudoko,
     TicTacToeReactions,
     Battleships,
+    Snake
     SNL,
 ]
