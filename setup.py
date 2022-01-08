@@ -6,7 +6,7 @@ desc = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="disgames",
-    version="1.4.1",
+    version="2.2.0",
     description="A games module that can be used to instantly add games to your discord bot",
     long_description=desc,
     long_description_content_type="text/markdown",
@@ -29,3 +29,5 @@ setup(
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
 )
+
+

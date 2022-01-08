@@ -9,6 +9,10 @@ from .two048 import _2048
 from .connect4 import Connect4
 from .checkers import Checkers
 from .sudoko import Sudoko
+from .ttt_reactions import TicTacToeReactions
+from .battleship import Battleships
+from .snake import Snake
+from .snl import SNL
 
 __all__ = (
     "Hangman",
@@ -21,5 +25,9 @@ __all__ = (
     "_2048",
     "Connect4",
     "Checkers",
-    "Sudoko"
+    "Sudoko",
+    "TicTacToeReactions",
+    "Battleships",
+    "Snake,
+    "SNL",
 )
