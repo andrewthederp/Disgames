@@ -1,18 +1,8 @@
-# Home
-
-![logo](./src/disgames.png)
-
-<h2 align="center">Disgames</h2>
+# Disgames
 
 <p align="center">
-    A python module made to make creating games easier and adds a bunch of game commands to your discord python bot
+ <img src="https://andrewthederp.github.io/Disgames/src/disgames.png" height="125px" width="125px" />
 </p>
+Welcome to the offical documentation of disgames! You can find our source code [here](https://github.com/andrewthederp/disgames).
 
---- 
-Welcome to the official documentation of the disgames.
-
-**The logo of disgames was created using resources from [flaticon.com](https://www.flaticon.com/).**
-
----
-
-Check out our [faq](./faq.md) for more information on how to use.
+If you have any questions, check out our [faq](./faq.md)

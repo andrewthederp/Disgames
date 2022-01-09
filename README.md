@@ -1,5 +1,5 @@
 <p align="center">
- <img src="./docs/src/disgames.png" height="125px" width="125px" />
+ <img src="./disgames.png" height="125px" width="125px" />
 </p>
 
 <h1 align="center">Disgames</h1>
