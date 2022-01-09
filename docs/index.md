@@ -1,7 +1,7 @@
 # Home
 
 <p align="center">
- <img src="./src/disgames.png" height="125px" width="125px" />
+ ![logo](./src/disgames.png)
 </p>
 
 <h2 align="center">Disgames</h2>
