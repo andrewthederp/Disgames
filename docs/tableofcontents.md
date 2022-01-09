@@ -2,7 +2,7 @@
 
 ## Homepage
 
-* [Home](./home.md)
+* [Home](./index.md)
 * [FAQ](faq.md)
 
 ## Getting started
@@ -27,6 +27,6 @@
 * [Snake](./mixins/snake.md)
 * [SNL](./mixins/snl.md)
 * [Sokoban](./mixins/sokoban.md)
-* [Sudoku](./mixins/sudoku.md)
+* [Sudoko](./mixins/sudoko.md)
 * [TicTacToe](./mixins/tictactoe.md)
 * [2048](./mixins/2048.md)
