@@ -1,8 +1,6 @@
 # Home
 
-<p align="center">
- ![logo](./src/disgames.png)
-</p>
+![logo](./src/disgames.png)
 
 <h2 align="center">Disgames</h2>
 
