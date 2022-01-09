@@ -20,8 +20,6 @@ Source: [Wikipedia](https://en.wikipedia.org/wiki/Battleship_(game))
 | :-- | :-- |
 | **Member** | Member ([discord.Member](https://docs.pycord.dev/en/master/api.html?highlight=member#discord.Member) e.g @user) |
 
-![Sample](../src/screenshots/battleship.png)
-
 ### Permissions
 
 ??? tdlr "Permissions Required"
