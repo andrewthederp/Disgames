@@ -22,8 +22,6 @@ Madlib is an api library that will allow you to create a paragraph by passing in
 | **min** | ([int](https://docs.python.org/3/library/functions.html?highlight=int#int))|
 | **max** | ([int](https://docs.python.org/3/library/functions.html?highlight=int#int))|
 
-![Sample](../src/screenshots/madlib.png)
-
 ### Permissions
 
 ??? tdlr "Permissions Required"
