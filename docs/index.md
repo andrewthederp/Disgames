@@ -15,7 +15,7 @@ If you have any questions, check out our [faq](./faq.md)
 
 To install it from [pypi](https://pypi.org/project/disgames), run
 
-```python
+```sh
 pip install disgames
 ```
 
