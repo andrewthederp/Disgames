@@ -68,7 +68,7 @@ class Sokoban(commands.Cog):
         """Returnes the x,y coordinates of the player"""
         for x, i in enumerate(board):
             for y, thing in enumerate(i):
-                if thing == "p" or thing == "tp":
+                if thing in ["p", "tp"]:
                     return x, y
 
     def has_won_soko(self, board):
