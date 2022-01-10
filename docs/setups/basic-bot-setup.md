@@ -7,7 +7,7 @@ If you don't know what you are doing, you might wanna read everything
 1. Create a bot account
     Create a bot at [developer portal](https://discordapp.com/developers/applications/me)
 
-    If you need some help you can check this [guide](https://docs.pycord.dev/en/master/discord.html) out
+    If you need some help you can check this [guide](https://discordpy.readthedocs.io/en/latest/discord.html) out
 
     You also need intents to be on:
 
@@ -27,10 +27,10 @@ If you don't know what you are doing, you might wanna read everything
     # We are installing 2 modules at the same time
 
     # Windows
-    py -3 -m pip install py-cord disgames
+    py -3 -m pip install discord.py disgames
 
     # MacOS and Linux
-    python3 -m pip install py-cord disgames
+    python3 -m pip install discord.py disgames
     ```
 
 3. Writing your bot
@@ -42,6 +42,13 @@ If you don't know what you are doing, you might wanna read everything
     !!! warning
         Please do not leave `your bot prefix` or `your token here` in the code. Please replace it with your bot prefix and your token.
 
+    !!! tip inline end
+        Stockfish path is optional. If you want to input it. Please choose stockfish as stockfish_20011801_32bit.exe. You can rename it to that
+
+        Ignore only takes in a list of commands you want to ignore. E.g. `ignore=[Chess]` Where Chess is imported like
+
+        `from disgames.mixins.chess import Chess`
+
     ```python
     from discord.ext import commands
     from disgames import register_commands
@@ -49,7 +56,7 @@ If you don't know what you are doing, you might wanna read everything
 
     client = commands.Bot(command_prefix='your bot prefix', intents=discord.Intents.all())
 
-    register_commands(client)
+    register_commands(client, ignore=[], stockfish_path=None, ttt_reactions=False) # defualt
 
 
     client.run('your token here')
