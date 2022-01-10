@@ -7,7 +7,7 @@ If you don't know what you are doing, you might wanna read everything
 1. Create a bot account
     Create a bot at [developer portal](https://discordapp.com/developers/applications/me)
 
-    If you need some help you can check this [guide](https://docs.pycord.dev/en/master/discord.html) out
+    If you need some help you can check this [guide](https://discordpy.readthedocs.io/en/latest/discord.html) out
 
     You also need intents to be on:
 
@@ -27,10 +27,10 @@ If you don't know what you are doing, you might wanna read everything
     # We are installing 2 modules at the same time
 
     # Windows
-    py -3 -m pip install py-cord disgames
+    py -3 -m pip install discord.py disgames
 
     # MacOS and Linux
-    python3 -m pip install py-cord disgames
+    python3 -m pip install discord.py disgames
     ```
 
 3. Writing your bot
@@ -56,7 +56,7 @@ If you don't know what you are doing, you might wanna read everything
 
     client = commands.Bot(command_prefix='your bot prefix', intents=discord.Intents.all())
 
-    register_commands(client)
+    register_commands(client, ignore=[], stockfish_path=None, ttt_reactions=False) # defualt
 
 
     client.run('your token here')

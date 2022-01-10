@@ -13,7 +13,7 @@ class Bot(commands.Bot):
         super().__init__(command_prefix='!', intents=discord.Intents.all())
 ```
 
-Well It's pretty simple to add disgames to your bot. Inside of __init__ function add this line of code to your bot:
+Well It's pretty simple to add disgames to your bot. Inside of `__init__` function add this line of code to your bot:
 
 ```python
 register_commands(self, ignore=[], stockfish_path=None)
@@ -32,7 +32,7 @@ So your bot `__init__` function would look like this:
 class Bot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='!', intents=discord.Intents.all())
-        register_commands(self, ignore=[], stockfish_path=None)
+        register_commands(self, ignore=[], stockfish_path=None, ttt_reactions=False) # defualt
 ```
 
 !!! tip

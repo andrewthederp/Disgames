@@ -7,10 +7,10 @@ nav:
   - Home:
     - Overiew: index.md
     - FAQ: faq.md
-    - Table Of Contents: tableofcontents.md
+    - Table Of Contents: table-of-contents.md
   - Getting Started: 
-    - Basic Bot: setups/basicbotsetup.md
-    - Advanced Bot: setups/advancedbotsetup.md
+    - Basic Bot: setups/basic-bot-setup.md
+    - Advanced Bot: setups/advanced-bot-setup.md
   - Releases:
     - Changelog : changelog.md
   - Mixins:

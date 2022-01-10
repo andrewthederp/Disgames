@@ -7,8 +7,8 @@
 
 ## Getting started
 
-* [Basic Bot Setup](./setups/basicbotsetup.md)
-* [Advanced Bot Setup](./setups/advancedbotsetup.md)
+* [Basic Bot Setup](./setups/basic-bot-setup.md)
+* [Advanced Bot Setup](./setups/advanced-bot-setup.md)
 
 ## Releases
 
