@@ -3,18 +3,19 @@
 <p align="center">
  <img src="https://raw.githubusercontent.com/andrewthederp/Disgames/main/docs/src/disgames.png" height="125px" width="125px" />
 </p>
-Welcome to the offical documentation of `disgames`! You can find our source code [here](https://github.com/andrewthederp/disgames).
+Welcome to the offical documentation of disgames! You can find our source code [here]((https://github.com/andrewthederp/disgames)).
 
 If you have any questions, check out our [faq](./faq.md)
 
-- [Installation](#installation)
-- [Extra](#extra)
+- [Disgames](#disgames)
+  - [Installation](#installation)
+  - [Extra](#extra)
 
 ## Installation
 
 To install it from [pypi](https://pypi.org/project/disgames), run
 
-```sh
+```python
 pip install disgames
 ```
 
