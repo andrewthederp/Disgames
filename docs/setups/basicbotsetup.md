@@ -42,6 +42,14 @@ If you don't know what you are doing, you might wanna read everything
     !!! warning
         Please do not leave `your bot prefix` or `your token here` in the code. Please replace it with your bot prefix and your token.
 
+    !!! tip inline end
+        Stockfish path is optional. If you want to input it. Please choose stockfish as stockfish_20011801_32bit.exe. You can rename it to that
+
+        Ignore only takes in a list of commands you want to ignore. E.g. ignore=[Chess] Where Chess is imported like
+        Ignore only takes in a list of commands you want to ignore. E.g. `ignore=[Chess]` Where Chess is imported like
+
+        `from disgames.mixins.chess import Chess`
+
     ```python
     from discord.ext import commands
     from disgames import register_commands
@@ -49,7 +57,7 @@ If you don't know what you are doing, you might wanna read everything
 
     client = commands.Bot(command_prefix='your bot prefix', intents=discord.Intents.all())
 
-    register_commands(client)
+    register_commands(client, ignore=[], stockfish_path=None)
 
 
     client.run('your token here')
