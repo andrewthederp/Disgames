@@ -43,7 +43,6 @@ class TicTacToeReactions(commands.Cog):
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
-            return bestScore
         else:
             bestScore = 800
             for x, y in self.get_empty_ttt_reactions(board):
@@ -52,7 +51,8 @@ class TicTacToeReactions(commands.Cog):
                 board[x][y] = " "
                 if score < bestScore:
                     bestScore = score
-            return bestScore
+
+        return bestScore
 
     def make_bot_move_ttt_reactions(self, board, difficulty):
         """Returns the best move the bot can take"""
@@ -60,17 +60,16 @@ class TicTacToeReactions(commands.Cog):
             return random.choice(
                 [str(x) + str(y) for x, y in self.get_empty_ttt_reactions(board)]
             )
-        else:
-            bestScore = -800
-            bestMove = 0
-            for x, y in self.get_empty_ttt_reactions(board):
-                board[x][y] = "o"
-                score = self.minimax_ttt_reactions(board, 0, False)
-                board[x][y] = " "
-                if score > bestScore:
-                    bestScore = score
-                    bestMove = str(x) + str(y)
-            return bestMove
+        bestScore = -800
+        bestMove = 0
+        for x, y in self.get_empty_ttt_reactions(board):
+            board[x][y] = "o"
+            score = self.minimax_ttt_reactions(board, 0, False)
+            board[x][y] = " "
+            if score > bestScore:
+                bestScore = score
+                bestMove = str(x) + str(y)
+        return bestMove
 
     def has_won_ttt_reactions(self, board):
         """Checks if someone won, returns True and the winner if someone won, returns False and "tie" if it was a tie"""
@@ -87,7 +86,7 @@ class TicTacToeReactions(commands.Cog):
 
         if (board[0][2] == board[1][1] == board[2][0]) and board[0][2] != BLANK:
             return (True, board[0][2])
-        if sum([i.count(BLANK) for i in board]) == 0:
+        if sum(i.count(BLANK) for i in board) == 0:
             return (False, "tie")
         return (None, "h")
 
@@ -107,7 +106,7 @@ class TicTacToeReactions(commands.Cog):
             "🏳": "end",
         }
         emojis = ["↖", "⬆", "↗", "⬅", "⏺️", "➡", "↙", "⬇", "↘", "🏳"]
-        if member == None:
+        if member is None:
             turn = ctx.author
             board = [[" " for i in range(3)] for i in range(3)]
             await ctx.send("Choose ai difficulty, easy/hard:")

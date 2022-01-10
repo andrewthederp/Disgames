@@ -1,6 +1,5 @@
 import discord, random
 from discord.ext import commands
-import aiohttp
 
 
 class Hangman(commands.Cog):

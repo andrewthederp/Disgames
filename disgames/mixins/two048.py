@@ -8,17 +8,15 @@ class _2048(commands.Cog):
 
     def format_2048_board(self, board):
         """Format the 2048 board"""
-        h = []
-        for row in board:
-            h.append("".join(str(row)))
+        h = ["".join(str(row)) for row in board]
         h = "\n".join(h)
         return f"```\n{h}\n```"
 
     def go_up(self, board):
         """Move all the numbers on the board upwards"""
         moved = False
-        for x in range(0, 4):
-            for y in range(0, 4):
+        for x in range(4):
+            for y in range(4):
                 if board[y][x] != 0 and y < 3:
                     for yprime in range(y + 1, 4):
                         if board[yprime][x] != 0:
@@ -26,10 +24,8 @@ class _2048(commands.Cog):
                                 board[y][x] = 2 * board[y][x]
                                 moved = True
                                 board[yprime][x] = 0
-                                break
-                            else:
-                                break
-            for y in range(0, 4):
+                            break
+            for y in range(4):
                 if board[y][x] == 0 and y < 3:
                     for yprime in range(y + 1, 4):
                         if board[yprime][x] != 0:
@@ -42,7 +38,7 @@ class _2048(commands.Cog):
     def go_down(self, board):
         """Move all the numbers on the board downwards"""
         moved = False
-        for x in range(0, 4):
+        for x in range(4):
             for y in range(3, -1, -1):
                 if board[y][x] != 0 and y > 0:
                     for yprime in range(y - 1, -1, -1):
@@ -51,9 +47,7 @@ class _2048(commands.Cog):
                                 board[y][x] = board[y][x] * 2
                                 moved = True
                                 board[yprime][x] = 0
-                                break
-                            else:
-                                break
+                            break
             for y in range(3, -1, -1):
                 if board[y][x] == 0 and y > 0:
                     for yprime in range(y - 1, -1, -1):
@@ -67,7 +61,7 @@ class _2048(commands.Cog):
     def go_right(self, board):
         """Move all the numbers on the board right"""
         moved = False
-        for y in range(0, 4):
+        for y in range(4):
             for x in range(3, -1, -1):
                 if board[y][x] != 0 and x > 0:
                     for xprime in range(x - 1, -1, -1):
@@ -76,9 +70,7 @@ class _2048(commands.Cog):
                                 board[y][x] = 2 * board[y][x]
                                 moved = True
                                 board[y][xprime] = 0
-                                break
-                            else:
-                                break
+                            break
             for x in range(3, -1, -1):
                 if board[y][x] == 0 and x > 0:
                     for xprime in range(x - 1, -1, -1):
@@ -92,8 +84,8 @@ class _2048(commands.Cog):
     def go_left(self, board):
         """Move all the numbers on the board left"""
         moved = False
-        for y in range(0, 4):
-            for x in range(0, 4):
+        for y in range(4):
+            for x in range(4):
                 if board[y][x] != 0 and x < 3:
                     for xprime in range(x + 1, 4):
                         if board[y][xprime] != 0:
@@ -101,10 +93,8 @@ class _2048(commands.Cog):
                                 board[y][x] = 2 * board[y][x]
                                 moved = True
                                 board[y][xprime] = 0
-                                break
-                            else:
-                                break
-            for x in range(0, 4):
+                            break
+            for x in range(4):
                 if board[y][x] == 0 and x < 3:
                     for xprime in range(x + 1, 4):
                         if board[y][xprime] != 0:
@@ -122,11 +112,7 @@ class _2048(commands.Cog):
             y = random.randint(0, 3)
 
             pickanumber = random.randint(0, 9)
-            if pickanumber < 1:
-                num = 4
-            else:
-                num = 2
-
+            num = 4 if pickanumber < 1 else 2
             if board[x][y] == 0:
                 board[x][y] = num
                 break
@@ -140,21 +126,21 @@ class _2048(commands.Cog):
             for y in range(len(board[x])):
                 if board[x][y] == 2048:
                     return True
-        for y in range(0, 4):
+        for y in range(4):
             zeroes += board[y].count(0)
             if zeroes > 0:
                 break
-            for x in range(0, 4):
+            for x in range(4):
                 if x < 3 and board[y][x + 1] == board[y][x]:
                     playsleft = True
                     break
                 if y < 3 and board[y + 1][x] == board[y][x]:
                     playsleft = True
                     break
-            if playsleft == True:
+            if playsleft:
                 break
 
-        if zeroes == 0 and playsleft == False:
+        if zeroes == 0 and not playsleft:
             return False
 
     def create_2048_board(self):

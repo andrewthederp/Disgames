@@ -36,11 +36,7 @@ class Sudoko(commands.Cog):
             y = random.randint(0, 8)
             while num in board[x]:
                 num = str(random.randint(1, 9))
-            h = False
-            for i in range(9):
-                if num in board[i][y]:
-                    h = True
-                    break
+            h = any(num in board[i][y] for i in range(9))
             while h:
                 num = str(random.randint(1, 9))
                 h = False
@@ -182,21 +178,19 @@ class Sudoko(commands.Cog):
                 continue
             elif str(num) in board[x]:
                 await ctx.send(
-                    f"Invalid syntax: There is a another {str(num)} on the same row",
+                    f'Invalid syntax: There is a another {num} on the same row',
                     delete_after=5,
                 )
+
                 continue
             else:
-                h = False
-                for i in range(9):
-                    if str(num) in board[i][y]:
-                        h = True
-                        break
+                h = any(str(num) in board[i][y] for i in range(9))
                 if h:
                     await ctx.send(
-                        f"Invalid syntax: There is a another {str(num)} on the same column",
+                        f'Invalid syntax: There is a another {num} on the same column',
                         delete_after=5,
                     )
+
                     continue
                 if x in range(3):
                     x_ = 0
@@ -223,9 +217,10 @@ class Sudoko(commands.Cog):
                 ]
                 if str(num) in lst:
                     await ctx.send(
-                        f"Invalid syntax: There is a another {str(num)} on the same 3x3",
+                        f'Invalid syntax: There is a another {num} on the same 3x3',
                         delete_after=5,
                     )
+
                     continue
                 board[x][y] = str(num)
                 if self.has_won_sudoko(board):

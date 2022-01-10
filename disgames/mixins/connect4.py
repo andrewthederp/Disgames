@@ -141,7 +141,6 @@ class Connect4(commands.Cog):
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
-            return bestScore
         else:
             bestScore = 800
             for x, y in self.get_empty_connect4(board):
@@ -150,14 +149,14 @@ class Connect4(commands.Cog):
                 board[x][y] = " "
                 if score < bestScore:
                     bestScore = score
-            return bestScore
+
+        return bestScore
 
     def make_bot_move_connect4(self, board, difficulty):
         """Returns the best move the bot can take"""
         if difficulty == 1:
-            x, y = random.choice([move for move in self.get_empty_connect4(board)])
+            x, y = random.choice(list(self.get_empty_connect4(board)))
             board[x][y] = 'b'
-            return board
         else:
             bestScore = -800
             bestMove = 0
@@ -169,7 +168,8 @@ class Connect4(commands.Cog):
                     bestScore = score
                     bestMove = x, y
             board[bestMove[0]][bestMove[1]] = 'b'
-            return board
+
+        return board
 
     @commands.command()
     async def connect4(self, ctx, member: discord.Member = None):
@@ -205,14 +205,14 @@ class Connect4(commands.Cog):
                     )
                     if inp.content.lower() in ["stop", "end", "cancel"]:
                         return await ctx.send("Ended the game")
-                    if not len(inp.content) == 1:
+                    if len(inp.content) != 1:
                         continue
                     try:
                         x = int(inp.content) - 1
                     except ValueError:
                         await ctx.send(f"Invalid Syntax: {inp.content} is not a number")
                         continue
-                    if not x in range(7):
+                    if x not in range(7):
                         await ctx.send(
                             f"Invalid syntax: {inp.content} isnt a valid place on the board"
                         )
@@ -256,13 +256,13 @@ class Connect4(commands.Cog):
             )
         else:
             board = [[" " for _ in range(7)] for i in range(6)]
+            turn = ctx.author
             e = discord.Embed(
                 title="Connect4",
                 description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                 color=discord.Color.blurple(),
             ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             msg = await ctx.send(embed=e)
-            turn = ctx.author
             while True:
                 e = discord.Embed(
                     title="Connect4",
@@ -276,7 +276,7 @@ class Connect4(commands.Cog):
                 )
                 if inp.content.lower() in ["stop", "end", "cancel"]:
                     return await ctx.send("Ended the game")
-                if not len(inp.content) == 1:
+                if len(inp.content) != 1:
                     continue
                 try:
                     x = int(inp.content) - 1

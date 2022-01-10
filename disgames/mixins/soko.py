@@ -26,9 +26,7 @@ class Sokoban(commands.Cog):
         }
         lst = []
         for i in board:
-            scn_lst = []
-            for thing in i:
-                scn_lst.append(dct[thing])
+            scn_lst = [dct[thing] for thing in i]
             lst.append("".join(scn_lst))
         return "\n".join(lst)
 
@@ -40,8 +38,7 @@ class Sokoban(commands.Cog):
             num1 = random.randint(5, 9)
             num2 = random.randint(5, 9)
         num3 = 1 + difficulty_level // 5
-        if num3 > 7:
-            num3 = 7
+        num3 = min(num3, 7)
         board = [[" " for i in range(num1)] for i in range(num2)]
         x, y = random.randint(0, len(board) - 1), random.randint(0, len(board[0]) - 1)
         board[x][y] = "p"
@@ -78,7 +75,7 @@ class Sokoban(commands.Cog):
         """Checks if there are no more t on the board"""
         for x in board:
             for y in x:
-                if y == "t" or y == "tp":
+                if y in ["t", "tp"]:
                     return False
         return True
 
@@ -127,61 +124,7 @@ class Sokoban(commands.Cog):
                 if inp == "end":
                     await ctx.send("Ended the game")
                     return
-                if inp == "up":
-                    try:
-                        num = self.get_player(board)
-                        if (num[0] - 1) < 0:
-                            await ctx.send("Cant go up any further", delete_after=5)
-                            continue
-                        elif board[num[0] - 1][num[1]] == "b":
-                            if (num[0] - 2) < 0:
-                                await ctx.send(
-                                    "Cant push this box up any further", delete_after=5
-                                )
-                                continue
-                            if board[num[0] - 2][num[1]] == "b":
-                                await ctx.send(
-                                    "Can't push a 2 boxes at the same time",
-                                    delete_after=5,
-                                )
-                                continue
-                            if board[num[0] - 2][num[1]] == "t":
-                                board[num[0] - 2][num[1]] = "tb"
-                            else:
-                                board[num[0] - 2][num[1]] = "b"
-                            board[num[0]][num[1]] = " "
-                            board[num[0] - 1][num[1]] = "p"
-                        elif board[num[0] - 1][num[1]] == "tb":
-                            if (num[0] - 2) < 0:
-                                await ctx.send(
-                                    "Cant push this box up any further", delete_after=5
-                                )
-                                continue
-                            if board[num[0] - 2][num[1]] == "b":
-                                await ctx.send(
-                                    "Can't push a 2 boxes at the same time",
-                                    delete_after=5,
-                                )
-                                continue
-                            if board[num[0] - 2][num[1]] == "t":
-                                board[num[0] - 2][num[1]] = "tb"
-                            else:
-                                board[num[0] - 2][num[1]] = "b"
-                            board[num[0]][num[1]] = " "
-                            board[num[0] - 1][num[1]] = "tp"
-                        else:
-                            if board[num[0]][num[1]] == "p":
-                                board[num[0]][num[1]] = " "
-                            else:
-                                board[num[0]][num[1]] = "t"
-                            if board[num[0] - 1][num[1]] == "t":
-                                board[num[0] - 1][num[1]] = "tp"
-                            else:
-                                board[num[0] - 1][num[1]] = "p"
-                    except IndexError:
-                        await ctx.send("Cant do that", delete_after=5)
-                        continue
-                elif inp == "down":
+                if inp == "down":
                     try:
                         num = self.get_player(board)
                         if (num[0] + 1) > len(board) - 1:
@@ -207,7 +150,7 @@ class Sokoban(commands.Cog):
                             board[num[0]][num[1]] = " "
                             board[num[0] + 1][num[1]] = "p"
                         elif board[num[0] + 1][num[1]] == "tb":
-                            if (num[0] + 2) < 0:
+                            if num[0] < -2:
                                 await ctx.send(
                                     "Cant push this box down any further",
                                     delete_after=5,
@@ -240,11 +183,11 @@ class Sokoban(commands.Cog):
                 elif inp == "left":
                     try:
                         num = self.get_player(board)
-                        if (num[1] - 1) < 0:
+                        if num[1] < 1:
                             await ctx.send("Cant go left any further", delete_after=5)
                             continue
                         elif board[num[0]][num[1] - 1] == "b":
-                            if (num[1] - 2) < 0:
+                            if num[1] < 2:
                                 await ctx.send(
                                     "Cant push this box left any further",
                                     delete_after=5,
@@ -263,7 +206,7 @@ class Sokoban(commands.Cog):
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] - 1] = "p"
                         elif board[num[0]][num[1] - 1] == "tb":
-                            if (num[1] - 2) < 0:
+                            if num[1] < 2:
                                 await ctx.send(
                                     "Cant push this box left any further",
                                     delete_after=5,
@@ -293,6 +236,9 @@ class Sokoban(commands.Cog):
                     except IndexError:
                         await ctx.send("Cant do that", delete_after=5)
                         continue
+                elif inp == "reset":
+                    board = origin_board
+                    origin_board = copy.deepcopy(board)
                 elif inp == "right":
                     try:
                         num = self.get_player(board)
@@ -300,7 +246,7 @@ class Sokoban(commands.Cog):
                             await ctx.send("Cant go right any further", delete_after=5)
                             continue
                         elif board[num[0]][num[1] + 1] == "b":
-                            if (num[1] + 2) < 0:
+                            if num[1] < -2:
                                 await ctx.send(
                                     "Cant push this box right any further",
                                     delete_after=5,
@@ -319,7 +265,7 @@ class Sokoban(commands.Cog):
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] + 1] = "p"
                         elif board[num[0]][num[1] + 1] == "tb":
-                            if (num[1] + 2) < 0:
+                            if num[1] < -2:
                                 await ctx.send(
                                     "Cant push this box right any further",
                                     delete_after=5,
@@ -349,9 +295,60 @@ class Sokoban(commands.Cog):
                     except IndexError:
                         await ctx.send("Cant do that")
                         continue
-                elif inp == "reset":
-                    board = origin_board
-                    origin_board = copy.deepcopy(board)
+                elif inp == "up":
+                    try:
+                        num = self.get_player(board)
+                        if num[0] < 1:
+                            await ctx.send("Cant go up any further", delete_after=5)
+                            continue
+                        elif board[num[0] - 1][num[1]] == "b":
+                            if num[0] < 2:
+                                await ctx.send(
+                                    "Cant push this box up any further", delete_after=5
+                                )
+                                continue
+                            if board[num[0] - 2][num[1]] == "b":
+                                await ctx.send(
+                                    "Can't push a 2 boxes at the same time",
+                                    delete_after=5,
+                                )
+                                continue
+                            if board[num[0] - 2][num[1]] == "t":
+                                board[num[0] - 2][num[1]] = "tb"
+                            else:
+                                board[num[0] - 2][num[1]] = "b"
+                            board[num[0]][num[1]] = " "
+                            board[num[0] - 1][num[1]] = "p"
+                        elif board[num[0] - 1][num[1]] == "tb":
+                            if num[0] < 2:
+                                await ctx.send(
+                                    "Cant push this box up any further", delete_after=5
+                                )
+                                continue
+                            if board[num[0] - 2][num[1]] == "b":
+                                await ctx.send(
+                                    "Can't push a 2 boxes at the same time",
+                                    delete_after=5,
+                                )
+                                continue
+                            if board[num[0] - 2][num[1]] == "t":
+                                board[num[0] - 2][num[1]] = "tb"
+                            else:
+                                board[num[0] - 2][num[1]] = "b"
+                            board[num[0]][num[1]] = " "
+                            board[num[0] - 1][num[1]] = "tp"
+                        else:
+                            if board[num[0]][num[1]] == "p":
+                                board[num[0]][num[1]] = " "
+                            else:
+                                board[num[0]][num[1]] = "t"
+                            if board[num[0] - 1][num[1]] == "t":
+                                board[num[0] - 1][num[1]] = "tp"
+                            else:
+                                board[num[0] - 1][num[1]] = "p"
+                    except IndexError:
+                        await ctx.send("Cant do that", delete_after=5)
+                        continue
                 em = discord.Embed(
                     title="Sokoban",
                     description=self.format_soko_board(board),

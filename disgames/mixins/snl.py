@@ -9,9 +9,7 @@ class SNL(commands.Cog):
 
 	def format_snl_board(self, board):
 		dct = {' ':'⬛', 's':'🐍', 'l':'🪜', 'p1':'🔴', 'p2':'🟡', 'p3':'🟢', 'p4':'🔵'}
-		lst = []
-		for row in board:
-			lst.append(''.join([dct[column] for column in row]))
+		lst = [''.join([dct[column] for column in row]) for row in board]
 		return '\n'.join(lst)
 
 	def create_board(self):
@@ -33,11 +31,12 @@ class SNL(commands.Cog):
 		if len(players) > 4:
 			return await ctx.send("Can't have more than 4 people playing")
 		tokens = {'p1':'🔴', 'p2':'🟡', 'p3':'🟢', 'p4':'🔵'}
-		indexes = {}
-		for player in players:
-			indexes[player] = [9,0]
+		indexes = {player: [9,0] for player in players}
 		board = self.create_board()
-		player_string = f' '.join([f"{player.mention}: {tokens['p'+str(num)]}" for num, player in enumerate(players, start=1)])
+		player_string = ' '.join([
+		    f"{player.mention}: {tokens['p'+str(num)]}"
+		    for num, player in enumerate(players, start=1)
+		])
 		embed = discord.Embed(title='Snakes and Ladders', description=f"React to '🎲' to roll your dice\n\n{player_string}\n{self.format_snl_board(board)}", color=discord.Color.blurple())
 		msg = await ctx.send(embed=embed)
 		await msg.add_reaction('🎲')
@@ -61,19 +60,15 @@ class SNL(commands.Cog):
 				if str(reaction) == '🏳️':
 					players.remove(user)
 					await ctx.send(f"{user.mention} leaves")
-				else:
-					if user != player:
-						continue
+				elif user != player:
+					continue
 			await ctx.send(f'{player.mention} rolled a {number}', delete_after=5)
 			board[index[0]][index[1]] = ' '
 			past_number = index[1]
 			if index[0]%2:
 				index[1] += number
-			else:
-				if index[0] == 0 and (index[1] - number) < 0:
-					pass
-				else:
-					index[1] -= number
+			elif index[0] != 0 or index[1] - number >= 0:
+				index[1] -= number
 			if (index[1]) > 9 or (index[1]) < 0 and index[1] != 0:
 				index[0] -= 1
 				if index[0]%2:

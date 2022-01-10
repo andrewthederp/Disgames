@@ -43,7 +43,6 @@ class TicTacToe(commands.Cog):
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
-            return bestScore
         else:
             bestScore = 800
             for x, y in self.get_empty_ttt(board):
@@ -52,7 +51,8 @@ class TicTacToe(commands.Cog):
                 board[x][y] = " "
                 if score < bestScore:
                     bestScore = score
-            return bestScore
+
+        return bestScore
 
     def make_bot_move_ttt(self, board, difficulty):
         """Returns the best move the bot can take"""
@@ -60,17 +60,16 @@ class TicTacToe(commands.Cog):
             return random.choice(
                 [str(x) + str(y) for x, y in self.get_empty_ttt(board)]
             )
-        else:
-            bestScore = -800
-            bestMove = 0
-            for x, y in self.get_empty_ttt(board):
-                board[x][y] = "o"
-                score = self.minimax_ttt(board, 0, False)
-                board[x][y] = " "
-                if score > bestScore:
-                    bestScore = score
-                    bestMove = str(x), str(y)
-            return bestMove
+        bestScore = -800
+        bestMove = 0
+        for x, y in self.get_empty_ttt(board):
+            board[x][y] = "o"
+            score = self.minimax_ttt(board, 0, False)
+            board[x][y] = " "
+            if score > bestScore:
+                bestScore = score
+                bestMove = str(x), str(y)
+        return bestMove
 
     def make_ttt_move(self, move, board, turn):
         """Checks if `move` is a valid move or not"""
@@ -89,15 +88,13 @@ class TicTacToe(commands.Cog):
                 False,
                 f"Invalid Syntax: {move} isn't a valid place on the board, Please try again",
             )
-        else:
-            if board[int(move[0]) - 1][int(move[1]) - 1] != " ":
-                return (
-                    False,
-                    f"Invalid Syntax: {move} has already been chosen, Please try again",
-                )
-            else:
-                board[int(move[0]) - 1][int(move[1]) - 1] = turn
-                return True, board
+        if board[int(move[0]) - 1][int(move[1]) - 1] != " ":
+            return (
+                False,
+                f"Invalid Syntax: {move} has already been chosen, Please try again",
+            )
+        board[int(move[0]) - 1][int(move[1]) - 1] = turn
+        return True, board
 
     def has_won_ttt(self, board):
         """Checks if someone won, returns True and the winner if someone won, returns False and "tie" if it was a tie"""
@@ -114,14 +111,14 @@ class TicTacToe(commands.Cog):
 
         if (board[0][2] == board[1][1] == board[2][0]) and board[0][2] != BLANK:
             return (True, board[0][2])
-        if sum([i.count(BLANK) for i in board]) == 0:
+        if sum(i.count(BLANK) for i in board) == 0:
             return (False, "tie")
         return (None, "h")
 
     @commands.command(aliases=["ttt"])
     async def tictactoe(self, ctx: commands.Context, member: discord.Member = None):
         """two players take turns marking the spaces in a three-by-three grid with X or O. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner"""
-        if member == None:
+        if member is None:
             turn = ctx.author
             board = [[" " for i in range(3)] for i in range(3)]
             await ctx.send("Choose ai difficulty, easy/hard:")
