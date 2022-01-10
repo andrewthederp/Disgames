@@ -1,6 +1,13 @@
-# Disgames
+<p align="center">
+ <img src="./docs/src/disgames.png" height="125px" width="125px" />
+</p>
 
+<h1 align="center">Disgames</h1>
 A python module made to make creating games easier and adds a bunch of game commands to your discord python bot
+
+---
+Note: The logo has been designed by using resources from [flaticon.com](https://www.flaticon.com/)
+
 
 ## Contents
 
