@@ -42,7 +42,7 @@ Added:
 * Add examples
 * Removed support for `Bot.add_command` method
 
-## [v1.1.0](https//github.com/andrewthederp/Disgames/releases/tag/1.1.0) (2021-10-30)
+## [v1.1.0](https://github.com/andrewthederp/Disgames/releases/tag/1.1.0) (2021-10-30)
 
 * Added Chess, Hangman, Madlib, Tictactoe
 * Chess AI
