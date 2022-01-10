@@ -7,10 +7,8 @@ Welcome to the offical documentation of `disgames`! You can find our source code
 
 If you have any questions, check out our [faq](./faq.md)
 
-- [Disgames](#disgames)
-  - [Contents](#contents)
-  - [Installation](#installation)
-  - [Extra](#extra)
+- [Installation](#installation)
+- [Extra](#extra)
 
 ## Installation
 
