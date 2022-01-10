@@ -1,6 +1,6 @@
 # FAQ
 
-## What is disgames and what's does it's purpose?
+## What is disgames and what's it's purpose?
 
 Disgames is a 3rd party library that adds games created in our [source code](https://github.com/andrewthederp/disgames) to your bot. 
 
