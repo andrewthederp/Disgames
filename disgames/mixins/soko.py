@@ -26,9 +26,7 @@ class Sokoban(commands.Cog):
         }
         lst = []
         for i in board:
-            scn_lst = []
-            for thing in i:
-                scn_lst.append(dct[thing])
+            scn_lst = [dct[thing] for thing in i]
             lst.append("".join(scn_lst))
         return "\n".join(lst)
 
@@ -40,8 +38,7 @@ class Sokoban(commands.Cog):
             num1 = random.randint(5, 9)
             num2 = random.randint(5, 9)
         num3 = 1 + difficulty_level // 5
-        if num3 > 7:
-            num3 = 7
+        num3 = min(num3, 7)
         board = [[" " for i in range(num1)] for i in range(num2)]
         x, y = random.randint(0, len(board) - 1), random.randint(0, len(board[0]) - 1)
         board[x][y] = "p"
@@ -71,14 +68,14 @@ class Sokoban(commands.Cog):
         """Returnes the x,y coordinates of the player"""
         for x, i in enumerate(board):
             for y, thing in enumerate(i):
-                if thing == "p" or thing == "tp":
+                if thing in ["p", "tp"]:
                     return x, y
 
     def has_won_soko(self, board):
         """Checks if there are no more t on the board"""
         for x in board:
             for y in x:
-                if y == "t" or y == "tp":
+                if y in ["t", "tp"]:
                     return False
         return True
 

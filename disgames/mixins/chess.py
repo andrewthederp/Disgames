@@ -51,10 +51,11 @@ class Chess(commands.Cog):
         )
         e.add_field(name="Turn", value=turn.mention, inline=False)
         e.add_field(
-            name=f"Legal moves",
-            value=", ".join([f"`{str(i)}`" for i in board.legal_moves]),
+            name='Legal moves',
+            value=", ".join([f'`{i}`' for i in board.legal_moves]),
             inline=False,
         )
+
         e.add_field(name="Check", value=board.is_check(), inline=False)
         if board.halfmove_clock >= 45:
             e.add_field(name="Half move clock", value=board.halfmove_clock)
@@ -82,7 +83,7 @@ class Chess(commands.Cog):
     @commands.command("chess")
     async def chess(self, ctx, member: discord.Member = None):
         """a board game of strategic skill for two players, played on a chequered board on which each playing piece is moved according to precise rules. The object is to put the opponent's king under a direct attack from which escape is impossible"""
-        if member == None:
+        if member is None:
             if not self.stockfish_path:
                 raise PathNotFound
             await ctx.send("Please enter a a difficulty level from 0-20")
@@ -174,19 +175,18 @@ class Chess(commands.Cog):
                         await ctx.send("Can't go back", delete_after=5)
                         continue
                 else:
-                    if inp.author == turn:
-                        try:
-                            move = chess.Move.from_uci(inp.content.lower())
-                            board.push(move)
-                        except ValueError:
-                            await ctx.send("Invalid move", delete_after=5)
-                            continue
-                        try:
-                            await inp.delete()
-                        except discord.Forbidden:
-                            pass
-                    else:
+                    if inp.author != turn:
                         continue
+                    try:
+                        move = chess.Move.from_uci(inp.content.lower())
+                        board.push(move)
+                    except ValueError:
+                        await ctx.send("Invalid move", delete_after=5)
+                        continue
+                    try:
+                        await inp.delete()
+                    except discord.Forbidden:
+                        pass
                 turn = member if turn == ctx.author else ctx.author
                 won = self.has_won_chess(
                     board, member if turn == ctx.author else ctx.author

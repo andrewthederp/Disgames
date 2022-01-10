@@ -52,7 +52,7 @@ class Minesweeper(commands.Cog):
         x = int(digit) - 1
         y = ord(letter) - ord("a")
 
-        if (not x in range(10)) or (not y in range(10)):
+        if x not in range(10) or y not in range(10):
             raise commands.BadArgument(
                 "Invalid syntax: Entered coordinates aren't on the board"
             )
@@ -64,8 +64,9 @@ class Minesweeper(commands.Cog):
         for i in range(1, 10):
             dct[str(i)] = f"{i}\N{variation selector-16}\N{combining enclosing keycap}"
         lst = [
-            f":stop_button::regional_indicator_a::regional_indicator_b::regional_indicator_c::regional_indicator_d::regional_indicator_e::regional_indicator_f::regional_indicator_g::regional_indicator_h::regional_indicator_i::regional_indicator_j:"
+            ':stop_button::regional_indicator_a::regional_indicator_b::regional_indicator_c::regional_indicator_d::regional_indicator_e::regional_indicator_f::regional_indicator_g::regional_indicator_h::regional_indicator_i::regional_indicator_j:'
         ]
+
         for num, row in enumerate(board, start=1):
             lst.append(dct[str(num)]+''.join([dct[str(column)] for column in row]))
         return "\n".join(lst)
@@ -110,10 +111,7 @@ class Minesweeper(commands.Cog):
         if num == ((len(board) * len(board[0])) - len(bombs)):
             return True
 
-        for bomb in bombs:
-            if not visible_board[int(bomb[0])][int(bomb[1])] == "f":
-                return False
-        return True
+        return all(visible_board[int(bomb[0])][int(bomb[1])] == "f" for bomb in bombs)
 
     def reveal_all(self, visible_board, board):
         for x in range(len(visible_board)):
@@ -121,7 +119,7 @@ class Minesweeper(commands.Cog):
                 if visible_board[x][y] == " ":
                     visible_board[x][y] = board[x][y]
                 elif visible_board[x][y] == 'f':
-                    if not board[x][y] == 'b':
+                    if board[x][y] != 'b':
                         visible_board[x][y] = 'x'
         return visible_board
 
@@ -170,16 +168,15 @@ class Minesweeper(commands.Cog):
                                 color=discord.Color.blurple(),
                             ),
                         )
-                    else:
-                        if visible_board[x][y] not in [" ","f"]:
-                            await ctx.send(
-                                f"Invalid Syntax: {coors} is already revealed",
-                                delete_after=5,
-                            )
-                            continue
-                        visible_board[x][y] = str(grid[x][y])
-                        if visible_board[x][y] == "0":
-                            visible_board = self.reveal_zeros(visible_board, grid, x, y)
+                    if visible_board[x][y] not in [" ","f"]:
+                        await ctx.send(
+                            f"Invalid Syntax: {coors} is already revealed",
+                            delete_after=5,
+                        )
+                        continue
+                    visible_board[x][y] = str(grid[x][y])
+                    if visible_board[x][y] == "0":
+                        visible_board = self.reveal_zeros(visible_board, grid, x, y)
                 elif type_.lower() in ["flag", "f"]:
                     if visible_board[x][y] != " ":
                         await ctx.send(

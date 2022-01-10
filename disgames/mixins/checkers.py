@@ -14,7 +14,7 @@ class Checkers(commands.Cog):
         lst = ["⏹️" + "".join([dct[str(i + 1)] for i in range(len(board[0]))])]
         for x, row in enumerate(board):
             scn_lst = [dct[str(x + 1)]]
-            for y, column in enumerate(row):
+            for column in row:
                 scn_lst.append(dct[column])
             lst.append("".join(scn_lst))
         return "\n".join(lst)
@@ -80,15 +80,17 @@ class Checkers(commands.Cog):
                 continue
             if direction not in opts:
                 await ctx.send(
-                    f"Invalid syntax: Correct directions ul (up left), dl (down left), ur (up right), dr (down right)",
+                    'Invalid syntax: Correct directions ul (up left), dl (down left), ur (up right), dr (down right)',
                     delete_after=5,
                 )
+
                 continue
-            elif not len(coors) == 2:
+            elif len(coors) != 2:
                 await ctx.send(
-                    f"Invalid syntax: The coordinates entered are invalid",
+                    'Invalid syntax: The coordinates entered are invalid',
                     delete_after=5,
                 )
+
                 continue
             try:
                 await inp.delete()
@@ -97,11 +99,11 @@ class Checkers(commands.Cog):
             direction = opts[direction]
             if direction == 1:
                 inc = (-1, -1)
-            if direction == 2:
+            elif direction == 2:
                 inc = (1, -1)
-            if direction == 3:
+            elif direction == 3:
                 inc = (-1, 1)
-            if direction == 4:
+            elif direction == 4:
                 inc = (1, 1)
             try:
                 x, y = int(coors[0]) - 1, int(coors[1]) - 1

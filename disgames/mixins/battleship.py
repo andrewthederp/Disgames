@@ -42,9 +42,11 @@ class Battleships(commands.Cog):
     def format_battleships_board(self, board):
         """Format the battleship board"""
         lst = ["⏹1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣"]
-        dct = {}
-        for i in range(1, 10):
-            dct[i] = f"{i}\N{variation selector-16}\N{combining enclosing keycap}"
+        dct = {
+            i: f"{i}\N{variation selector-16}\N{combining enclosing keycap}"
+            for i in range(1, 10)
+        }
+
         for num, row in enumerate(board, start=1):
             scn_lst = [dct[num]]
             for column in row:
@@ -56,8 +58,7 @@ class Battleships(commands.Cog):
         """Checks if either players died"""
         for x in board:
             for y in x:
-                if y != "🌊" or y != "🔥":
-                    return False
+                return False
         return True
 
     @commands.command()

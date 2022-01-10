@@ -21,10 +21,8 @@ class SnakeGame:
 		return self.snake[0]
 
 	def point(self, pt):
-		if self.length > 1 and (pt[0] * -1, pt[1] * -1) == self.direction:
-			pass
-		else:
-		   self.direction = pt
+		if self.length <= 1 or (pt[0] * -1, pt[1] * -1) != self.direction:
+			self.direction = pt
 
 	def move(self):
 		cur = self.snake[0]

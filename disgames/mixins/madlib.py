@@ -47,4 +47,4 @@ class MadLib(commands.Cog):
 
             await ctx.send(string)
         except KeyError:
-            return await ctx.send(f"Invalid syntax: invalid arguments entered")
+            return await ctx.send('Invalid syntax: invalid arguments entered')
