@@ -143,10 +143,7 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0] + 2][num[1]] == "t":
-                                board[num[0] + 2][num[1]] = "tb"
-                            else:
-                                board[num[0] + 2][num[1]] = "b"
+                            board[num[0] + 2][num[1]] = "tb" if board[num[0] + 2][num[1]] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0] + 1][num[1]] = "p"
                         elif board[num[0] + 1][num[1]] == "tb":
@@ -162,21 +159,12 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0] + 2][num[1]] == "t":
-                                board[num[0] + 2][num[1]] = "tb"
-                            else:
-                                board[num[0] + 2][num[1]] = "b"
+                            board[num[0] + 2][num[1]] = "tb" if board[num[0] + 2][num[1]] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0] + 1][num[1]] = "tp"
                         else:
-                            if board[num[0]][num[1]] == "p":
-                                board[num[0]][num[1]] = " "
-                            else:
-                                board[num[0]][num[1]] = "t"
-                            if board[num[0] + 1][num[1]] == "t":
-                                board[num[0] + 1][num[1]] = "tp"
-                            else:
-                                board[num[0] + 1][num[1]] = "p"
+                            board[num[0]][num[1]] = " " if board[num[0]][num[1]] == "p" else "t"
+                            board[num[0] + 1][num[1]] = "tp" if board[num[0] + 1][num[1]] == "t" else "p"
                     except IndexError:
                         await ctx.send("Cant do that", delete_after=5)
                         continue
@@ -199,10 +187,7 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0]][num[1] - 2] == "t":
-                                board[num[0]][num[1] - 2] = "tb"
-                            else:
-                                board[num[0]][num[1] - 2] = "b"
+                            board[num[0]][num[1] - 2] = "tb" if board[num[0]][num[1] - 2] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] - 1] = "p"
                         elif board[num[0]][num[1] - 1] == "tb":
@@ -218,21 +203,12 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0]][num[1] - 2] == "t":
-                                board[num[0]][num[1] - 2] = "tb"
-                            else:
-                                board[num[0]][num[1] - 2] = "b"
+                            board[num[0]][num[1] - 2] = "tb" if board[num[0]][num[1] - 2] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] - 1] = "tp"
                         else:
-                            if board[num[0]][num[1]] == "p":
-                                board[num[0]][num[1]] = " "
-                            else:
-                                board[num[0]][num[1]] = "t"
-                            if board[num[0]][num[1] - 1] == "t":
-                                board[num[0]][num[1] - 1] = "tp"
-                            else:
-                                board[num[0]][num[1] - 1] = "p"
+                            board[num[0]][num[1]] = " " if board[num[0]][num[1]] == "p" else "t"
+                            board[num[0]][num[1] - 1] = "tp" if board[num[0]][num[1] - 1] == "t" else "p"
                     except IndexError:
                         await ctx.send("Cant do that", delete_after=5)
                         continue
@@ -258,10 +234,7 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0]][num[1] + 2] == "t":
-                                board[num[0]][num[1] + 2] = "tb"
-                            else:
-                                board[num[0]][num[1] + 2] = "b"
+                            board[num[0]][num[1] + 2] = "tb" if board[num[0]][num[1] + 2] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] + 1] = "p"
                         elif board[num[0]][num[1] + 1] == "tb":
@@ -277,21 +250,12 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0]][num[1] + 2] == "t":
-                                board[num[0]][num[1] + 2] = "tb"
-                            else:
-                                board[num[0]][num[1] + 2] = "b"
+                            board[num[0]][num[1] + 2] = "tb" if board[num[0]][num[1] + 2] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0]][num[1] + 1] = "tp"
                         else:
-                            if board[num[0]][num[1]] == "p":
-                                board[num[0]][num[1]] = " "
-                            else:
-                                board[num[0]][num[1]] = "t"
-                            if board[num[0]][num[1] + 1] == "t":
-                                board[num[0]][num[1] + 1] = "tp"
-                            else:
-                                board[num[0]][num[1] + 1] = "p"
+                            board[num[0]][num[1]] = " " if board[num[0]][num[1]] == "p" else "t"
+                            board[num[0]][num[1] + 1] = "tp" if board[num[0]][num[1] + 1] == "t" else "p"
                     except IndexError:
                         await ctx.send("Cant do that")
                         continue
@@ -313,10 +277,7 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0] - 2][num[1]] == "t":
-                                board[num[0] - 2][num[1]] = "tb"
-                            else:
-                                board[num[0] - 2][num[1]] = "b"
+                            board[num[0] - 2][num[1]] = "tb" if board[num[0] - 2][num[1]] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0] - 1][num[1]] = "p"
                         elif board[num[0] - 1][num[1]] == "tb":
@@ -331,21 +292,12 @@ class Sokoban(commands.Cog):
                                     delete_after=5,
                                 )
                                 continue
-                            if board[num[0] - 2][num[1]] == "t":
-                                board[num[0] - 2][num[1]] = "tb"
-                            else:
-                                board[num[0] - 2][num[1]] = "b"
+                            board[num[0] - 2][num[1]] = "tb" if board[num[0] - 2][num[1]] == "t" else "b"
                             board[num[0]][num[1]] = " "
                             board[num[0] - 1][num[1]] = "tp"
                         else:
-                            if board[num[0]][num[1]] == "p":
-                                board[num[0]][num[1]] = " "
-                            else:
-                                board[num[0]][num[1]] = "t"
-                            if board[num[0] - 1][num[1]] == "t":
-                                board[num[0] - 1][num[1]] = "tp"
-                            else:
-                                board[num[0] - 1][num[1]] = "p"
+                            board[num[0]][num[1]] = " " if board[num[0]][num[1]] == "p" else "t"
+                            board[num[0] - 1][num[1]] = "tp" if board[num[0] - 1][num[1]] == "t" else "p"
                     except IndexError:
                         await ctx.send("Cant do that", delete_after=5)
                         continue
