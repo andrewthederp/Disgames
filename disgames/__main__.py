@@ -1,8 +1,10 @@
 import aiohttp
 import argparse
+import disgames
 import platform
-from __init__ import VersionInfo
 from typing import Tuple
+
+VersionInfo = disgames.VersionInfo
 
 def version() -> None:
     entries = []
