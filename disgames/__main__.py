@@ -2,6 +2,7 @@ import aiohttp
 import argparse
 import platform
 from __init__ import VersionInfo
+from typing import Tuple
 
 def version() -> None:
     entries = []
