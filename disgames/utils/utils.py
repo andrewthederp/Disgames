@@ -1,12 +1,13 @@
+from ast import literal_eval
 from .board import Board
-# couldnt bother renaming it
+
 
 def edit_board(board, coors, replacment):
     """takes a list of coors and edits them to whatever replacment is"""
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-    bord = eval(str(board))
+    bord = literal_eval(str(board))
     bord = Board(
         len(bord) - 1,
         len(bord[0]) - 1,
@@ -23,7 +24,7 @@ def format_board(board):
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
     lst = []
-    bord = eval(str(board))
+    bord = literal_eval(str(board))
     for i in bord:
         scn_lst = []
         for thing in i:

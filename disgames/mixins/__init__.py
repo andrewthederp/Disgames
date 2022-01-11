@@ -28,6 +28,6 @@ __all__ = (
     "Sudoko",
     "TicTacToeReactions",
     "Battleships",
-    "Snake,
+    "Snake",
     "SNL",
 )
