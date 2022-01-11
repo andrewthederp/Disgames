@@ -3,7 +3,14 @@ from .constants import *
 from discord.ext import commands
 from .errors import PathNotFound
 from .mixins import TicTacToe, TicTacToeReactions
+from typing import NamedTuple
 
+
+__title__ = 'disgames'
+__author__ = 'andrewthederp'
+__license__ = 'Apache License 2.0'
+__copyright__ = 'Copyright 2021-2022 Andrewthederp and MarzaElise'
+__version__ = '2.2.2'
 
 def register_commands(
     bot, *, ignore: list = [], stockfish_path=None, ttt_reactions=False
@@ -23,3 +30,8 @@ def register_commands(
     if stockfish_path:
         g.stockfish_path = stockfish_path
     bot.add_cog(g)
+
+class VersionInfo(NamedTuple):
+    major: int
+    minor: int
+    micro: int
