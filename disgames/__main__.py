@@ -7,7 +7,7 @@ def version() -> None:
     entries = []
 
     entries.append('- Python v{0.major}.{0.minor}.{0.micro}-{0.releaselevel}'.format(sys.version_info))
-    version_info: VersionInfo = VersionInfo(major=2, minor=0, micro=1
+    version_info: VersionInfo = VersionInfo(major=2, minor=0, micro=1)
     entries.append('- Disgames v{0.major}.{0.minor}.{0.micro}'.format(version_info))
     entries.append(f'- aiohttp v{aiohttp.__version__}') 
     entries.append(f'- Chess v{chess.__version__}')
