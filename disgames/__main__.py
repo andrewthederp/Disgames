@@ -4,7 +4,7 @@ import disgames
 import platform
 from typing import Tuple
 
-version_info = disgames.VersionInfo
+VersionInfo = disgames.VersionInfo
 
 def version() -> None:
     entries = []
