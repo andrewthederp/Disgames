@@ -17,7 +17,7 @@ def version() -> None:
 
 def show_version(parser, args) -> None:
     if args.version:
-        show_version()
+        version()
 
 
 def parse_args() -> Tuple[argparse.ArgumentParser, argparse.Namespace]:
