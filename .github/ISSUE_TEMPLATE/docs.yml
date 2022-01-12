@@ -1,0 +1,53 @@
+name: Feature Request
+description: Suggest a feature for this library
+labels: feature request
+body:
+  - type: input
+    attributes:
+      label: Summary
+      description: >
+        A short summary of what you want the documentation should add
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      multiple: false
+      label: What is the feature request for?
+      options:
+        - A game (command)
+        - Grammar Mistakes
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label : Other
+      description: >
+        If you picked something else above. Please state what should be added below.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: The Problem
+      description: >
+        What problem is your feature trying to solve or help?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Pictures and Screenshots
+      description: Add pictures and screenshots if you can
+    validations:
+      required : false
+  - type: checkbox
+    attributes: 
+      multiple: true
+      label : Checklist
+      description : Let's make sure you've properly done due dilligence when reporting this request!
+      options:
+        - I have searched for duplicates.
+        - This request is not in progress.
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: If there is anything else to say, please do so here.
