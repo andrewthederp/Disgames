@@ -1,21 +1,21 @@
 from .board import Board
-# couldnt bother renaming it
+# couldn't bother renaming it
 
-def edit_board(board, coors, replacment):
-    """takes a list of coors and edits them to whatever replacment is"""
+def edit_board(board, coors, replacement):
+    """takes a list of coors and edits them to whatever replacement is"""
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-    bord = eval(str(board))
-    bord = Board(
-        len(bord) - 1,
-        len(bord[0]) - 1,
-        board.seperator,
+    board1 = eval(str(board))
+    board1 = Board(
+        len(board1) - 1,
+        len(board1[0]) - 1,
+        board.separator,
         coors,
-        replacment,
-        bord,
+        replacement,
+        board1,
     )
-    return bord
+    return board1
 
 
 def format_board(board):
@@ -23,12 +23,12 @@ def format_board(board):
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
     lst = []
-    bord = eval(str(board))
-    for i in bord:
+    board1 = eval(str(board))
+    for i in board1:
         scn_lst = []
         for thing in i:
-            if thing == f"{board.seperator}":
-                scn_lst.append(f"{board.seperator} ")
+            if thing == f"{board.separator}":
+                scn_lst.append(f"{board.separator} ")
             else:
                 scn_lst.append(thing)
         lst.append("".join(scn_lst))

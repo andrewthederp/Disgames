@@ -835,7 +835,7 @@ bearing
 bears
 beast
 beastality
-beastiality
+bestiality
 beat
 beatles
 beats
@@ -1325,7 +1325,7 @@ candles
 candy
 cannon
 canon
-cant
+can't
 canvas
 canyon
 cap
@@ -1562,7 +1562,7 @@ chief
 child
 childhood
 children
-childrens
+children
 chile
 china
 chinese
@@ -3620,7 +3620,7 @@ forward
 forwarding
 fossil
 foster
-foto
+photo
 fotos
 fought
 foul
@@ -5570,7 +5570,7 @@ memory
 memphis
 men
 mens
-ment
+meant
 mental
 mention
 mentioned
@@ -6216,7 +6216,7 @@ ongoing
 onion
 online
 only
-ons
+owns
 ontario
 onto
 oo
@@ -7710,7 +7710,7 @@ ross
 roster
 rotary
 rotation
-rouge
+rogue
 rough
 roughly
 roulette
@@ -8005,7 +8005,7 @@ september
 seq
 sequence
 sequences
-ser
+set
 serbia
 serial
 series
@@ -8926,7 +8926,7 @@ thank
 thanks
 thanksgiving
 that
-thats
+that's
 the
 theater
 theaters
@@ -9660,7 +9660,7 @@ walls
 walnut
 walt
 walter
-wan
+want
 wang
 wanna
 want
@@ -9765,7 +9765,7 @@ wet
 whale
 what
 whatever
-whats
+what's
 wheat
 wheel
 wheels
@@ -9836,7 +9836,7 @@ wise
 wish
 wishes
 wishlist
-wit
+with
 witch
 with
 withdrawal

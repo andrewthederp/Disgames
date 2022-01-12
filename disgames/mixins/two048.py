@@ -196,14 +196,14 @@ class _2048(commands.Cog):
                 await ctx.send("Game ended")
                 return
             elif str(reaction) == "⬆️":
-                ans, b = self.go_up(b)
+                and, b = self.go_up(b)
             elif str(reaction) == "⬇️":
-                ans, b = self.go_down(b)
+                and, b = self.go_down(b)
             elif str(reaction) == "➡️":
-                ans, b = self.go_right(b)
+                and, b = self.go_right(b)
             elif str(reaction) == "⬅️":
-                ans, b = self.go_left(b)
-            if ans:
+                and, b = self.go_left(b)
+            if and:
                 b = self.add_number(b)
             res = self.get_result(b)
             if res:

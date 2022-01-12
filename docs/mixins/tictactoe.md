@@ -15,7 +15,7 @@ Source: [Wikipedia](https://en.wikipedia.org/wiki/Sudoku)
 `{prefix}tictactoe [@user]`
 
 !!! info  inline end
-    Member is an opetional parameter.
+    Member is an optional parameter.
 
     If not member is inputted, you will play against the bot.
 

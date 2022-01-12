@@ -2,7 +2,7 @@
 
 ### What is Madlib
 
-Madlib is an api library that will allow you to create a paragraph by passing in a list of words as inputed.
+Madlib is an api library that will allow you to create a paragraph by passing in a list of words as inputted.
 
 ### How to play
 
