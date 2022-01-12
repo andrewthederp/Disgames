@@ -2,6 +2,7 @@ import aiohttp
 import argparse
 import disgames
 import platform
+import sys
 from typing import Tuple
 
 VersionInfo = disgames.VersionInfo
