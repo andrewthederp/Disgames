@@ -4,6 +4,13 @@ from discord.ext import commands
 from .errors import PathNotFound
 from .mixins import TicTacToe, TicTacToeReactions
 from typing import NamedTuple
+buttons = False
+try:
+    from discord.ui import Button
+    from discord.ui import View
+    buttons = True
+except ImportError:
+    pass
 
 
 __title__ = 'disgames'
@@ -13,11 +20,16 @@ __copyright__ = 'Copyright 2021-2022 Andrewthederp and MarzaElise'
 __version__ = '2.2.2'
 
 def register_commands(
-    bot, *, ignore: list = [], stockfish_path=None, ttt_reactions=False
+    bot, *, ignore: list = [], stockfish_path=None, ttt_reactions=False, button_commands=True
 ):
+    if button_commands:
+        ignore.extend(BUTTON_GAMES if not buttons else NON_BUTTON_GAMES)
+    else:
+        ignore.extend(BUTTON_GAMES)
     games = []
     if ttt_reactions:
         ignore.append(TicTacToe)
+        ignore.append(TicTacToeButtons)
         games.append(TicTacToeReactions)
     games += [game for game in ALL_GAMES if game not in ignore]
 
