@@ -1,5 +1,6 @@
 import aiohttp
 import argparse
+import chess
 import disgames
 import platform
 import sys
