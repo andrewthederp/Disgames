@@ -1,3 +1,4 @@
+from ast import literal_eval
 from .board import Board
 # couldn't bother renaming it
 
@@ -6,7 +7,7 @@ def edit_board(board, coors, replacement):
 
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
-    board1 = eval(str(board))
+    board1 = literal_eval(str(board))
     board1 = Board(
         len(board1) - 1,
         len(board1[0]) - 1,
@@ -23,9 +24,9 @@ def format_board(board):
     if not isinstance(board, Board):
         raise ValueError("board argument can only be a Board object")
     lst = []
-    board1 = eval(str(board))
+    board1 = literal_eval(str(board))
     for i in board1:
-        scn_lst = []
+        scn_lst = []    
         for thing in i:
             if thing == f"{board.separator}":
                 scn_lst.append(f"{board.separator} ")
