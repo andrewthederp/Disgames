@@ -47,7 +47,7 @@ body:
       options:
         - label: I have searched for duplicates.
           required: true
-        - label: - This request is not in progress.
+        - label: This request is not in progress.
           required: true
   - type: textarea
     attributes:
