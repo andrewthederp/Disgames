@@ -25,7 +25,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
-    install_requires=["discord.py","aiohttp", "chess", "stockfish"],
+    install_requires=["discord.py","aiohttp", "chess", "stockfish", "akinator.py"],
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
 )
