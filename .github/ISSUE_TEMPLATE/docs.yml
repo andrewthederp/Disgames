@@ -40,13 +40,15 @@ body:
     validations:
       required : false
   - type: checkboxes
-    attributes: 
-      multiple: true
-      label : Checklist
-      description : Let's make sure you've properly done due dilligence when reporting this request!
+    attributes:
+      label: Checklist
+      description: >
+        Let's make sure you've properly done due dilligence when reporting this issue!
       options:
-        - I have searched for duplicates.
-        - This request is not in progress.
+        - label: I have searched for duplicates.
+          required: true
+        - label: - This request is not in progress.
+          required: true
   - type: textarea
     attributes:
       label: Additional Context
