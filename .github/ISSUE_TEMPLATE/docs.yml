@@ -1,6 +1,6 @@
-name: Feature Request
-description: Suggest a feature for this library
-labels: feature request
+name: Documentation Change
+description: A change in our documentation
+labels: documentation
 body:
   - type: input
     attributes:
@@ -39,7 +39,7 @@ body:
       description: Add pictures and screenshots if you can
     validations:
       required : false
-  - type: checkbox
+  - type: checkboxes
     attributes: 
       multiple: true
       label : Checklist
