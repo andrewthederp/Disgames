@@ -1,6 +1,5 @@
 name: Feature Request
 description: Suggest a feature for this library
-labels:
 body:
   - type: input
     attributes:
