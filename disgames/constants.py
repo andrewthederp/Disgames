@@ -16,4 +16,21 @@ ALL_GAMES = [
     Battleships,
     Snake,
     SNL,
+    TicTacToeButtons,
+    Akinator,
+    AkinatorButtons,
+    BlackJack,
+    BlackJackButtons
+]
+
+BUTTON_GAMES = [
+    TicTacToeButtons,
+    AkinatorButtons,
+    BlackJackButtons
+]
+
+NON_BUTTON_GAMES = [
+    TicTacToe,
+    Akinator,
+    BlackJack
 ]
