@@ -6,7 +6,7 @@ body:
     attributes:
       label: Summary
       description: >
-        A short summary of what you want the documentation should add
+        A short summary of what you add to the documentation.
     validations:
       required: true
   - type: dropdown
