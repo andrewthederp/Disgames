@@ -164,7 +164,7 @@ class Connect4(commands.Cog):
             for x, y in self.get_empty_connect4(board):
                 board[x][y] = "b"
                 thing = functools.partial(self.minimax_connect4, board, 0, False)
-                score = await bot.loop.run_in_executor(None, thing)
+                score = await self.bot.loop.run_in_executor(None, thing)
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
