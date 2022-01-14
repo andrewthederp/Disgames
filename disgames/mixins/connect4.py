@@ -161,7 +161,9 @@ class Connect4(commands.Cog):
         else:
             bestScore = -800
             bestMove = 0
-            for x, y in self.get_empty_connect4(board):
+            moves = list(self.get_empty_connect4(board))
+            random.shuffle(moves)
+            for x, y in moves:
                 board[x][y] = "b"
                 thing = functools.partial(self.minimax_connect4, board, 0, False)
                 score = await self.bot.loop.run_in_executor(None, thing)
