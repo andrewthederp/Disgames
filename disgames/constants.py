@@ -22,7 +22,6 @@ ALL_GAMES = [
     BlackJack,
     BlackJackButtons,
     RPSButtons,
-    Uno
 ]
 
 BUTTON_GAMES = [
