@@ -24,7 +24,7 @@ try:
             else:
                 view.stop()
                 view.clear_items()
-                return await interaction.response.edit_message(f"{view.player1.mention}: {view.plays[view.player1]}\n{view.player2.mention}: {view.plays[view.player2]}\n\nWinner: {winner}", view=view)
+                return await interaction.response.edit_message(content=f"{view.player1.mention}: {view.plays[view.player1]}\n{view.player2.mention}: {view.plays[view.player2]}\n\nWinner: {winner}", view=view)
 
     class RPSView(discord.ui.View):
         def __init__(self, player1, player2):
