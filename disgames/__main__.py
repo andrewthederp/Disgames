@@ -1,11 +1,15 @@
 import aiohttp
 import argparse
+import chess
+import disgames
 import platform
-from disgames import VersionInfo
+import sys
 from typing import Tuple
 import chess
 import akinator
 import sys
+
+VersionInfo = disgames.VersionInfo
 
 def version() -> None:
     entries = [
@@ -23,6 +27,7 @@ def version() -> None:
 
     uname = platform.uname()
     entries.append('- System Info: {0.system} {0.release} {0.version}'.format(uname))
+    print('\n'.join(entries))
 
 def show_version(parser, args) -> None:
     if args.version:

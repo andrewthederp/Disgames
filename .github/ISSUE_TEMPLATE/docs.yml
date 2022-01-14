@@ -1,0 +1,55 @@
+name: Documentation Change
+description: A change in our documentation
+labels: documentation
+body:
+  - type: input
+    attributes:
+      label: Summary
+      description: >
+        A short summary of what you add to the documentation.
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      multiple: false
+      label: What is the feature request for?
+      options:
+        - A game (command)
+        - Grammar Mistakes
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label : Other
+      description: >
+        If you picked something else above. Please state what should be added below.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: The Problem
+      description: >
+        What problem is your feature trying to solve or help?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Pictures and Screenshots
+      description: Add pictures and screenshots if you can
+    validations:
+      required : false
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: >
+        Let's make sure you've properly done due dilligence when reporting this issue!
+      options:
+        - label: I have searched for duplicates.
+          required: true
+        - label: This request is not in progress.
+          required: true
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: If there is anything else to say, please do so here.

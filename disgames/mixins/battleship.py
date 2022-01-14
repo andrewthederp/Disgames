@@ -125,7 +125,7 @@ class Battleships(commands.Cog):
             )
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await ctx.author.send(
-                    "Invalid syntax: Thats not a valid direction, try again",
+                    "Invalid syntax: That's not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -142,7 +142,7 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x not in range(8) or y not in range(8):
                         await ctx.author.send(
-                            "Invalid syntax: Cant add the ships there, try again!",
+                            "Invalid syntax: Can't add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -150,7 +150,7 @@ class Battleships(commands.Cog):
                         continue
                     if self.boards[ctx.author.id][0][x][y] != "🌊":
                         await ctx.author.send(
-                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
+                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -159,7 +159,7 @@ class Battleships(commands.Cog):
                     self.boards[ctx.author.id][0][x][y] = ship[num]
                 except IndexError:
                     await ctx.author.send(
-                        "Invalid syntax: Cant add the ships there, try again!",
+                        "Invalid syntax: Can't add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)
@@ -205,7 +205,7 @@ class Battleships(commands.Cog):
             )
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await member.send(
-                    "Invalid syntax: Thats not a valid direction, try again",
+                    "Invalid syntax: That's not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -222,7 +222,7 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x < 0 or y < 0:
                         await member.send(
-                            "Invalid syntax: Cant add the ships there, try again!",
+                            "Invalid syntax: Can't add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -230,7 +230,7 @@ class Battleships(commands.Cog):
                         continue
                     if self.boards[member.id][0][x][y] != "🌊":
                         await member.send(
-                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
+                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -239,7 +239,7 @@ class Battleships(commands.Cog):
                     self.boards[member.id][0][x][y] = ship[num]
                 except IndexError:
                     await member.send(
-                        "Invalid syntax: Cant add the ships there, try again!",
+                        "Invalid syntax: Can't add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)

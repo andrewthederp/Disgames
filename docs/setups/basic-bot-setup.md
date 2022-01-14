@@ -56,7 +56,7 @@ If you don't know what you are doing, you might wanna read everything
 
     client = commands.Bot(command_prefix='your bot prefix', intents=discord.Intents.all())
 
-    register_commands(client, ignore=[], stockfish_path=None, ttt_reactions=False) # defualt
+    register_commands(client, ignore=[], stockfish_path=None, ttt_reactions=False) # default
 
 
     client.run('your token here')

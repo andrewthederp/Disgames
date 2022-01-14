@@ -191,7 +191,7 @@ class Minesweeper(commands.Cog):
                     flags -= 1
                 else:
                     await ctx.send(
-                        f"Invalid syntax: {type_} isnt a valid move type",
+                        f"Invalid syntax: {type_} isn't a valid move type",
                         delete_after=5,
                     )
             if self.has_won_minesweeper(visible_board, grid):

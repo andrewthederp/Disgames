@@ -55,7 +55,7 @@ register_commands(bot)
 
 More examples on customizing the commands added to your bot can be seen in [`examples/`](./examples/)
 
-And thats it! now your bot has the games implemented in [`disgames/mixins/`](./disgames/mixins/)
+And that's it! now your bot has the games implemented in [`disgames/mixins/`](./disgames/mixins/)
 
 ## Extra
 
