@@ -162,7 +162,7 @@ class Connect4(commands.Cog):
             bestScore = -800
             bestMove = 0
             for x, y in self.get_empty_connect4(board):
-                board[x][y] = "o"
+                board[x][y] = "b"
                 thing = functools.partial(self.minimax_connect4, board, 0, False)
                 score = await bot.loop.run_in_executor(None, thing)
                 board[x][y] = " "
