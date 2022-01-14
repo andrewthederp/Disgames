@@ -18,7 +18,7 @@ try:
             if view.player2.bot:
                 view.plays[view.player2] = random.choice(list(self.conversion))
             try:
-                winner = view.has_won_rps(view.player1, view.player2)
+                winner = view.has_won_rps_buttons(view.player1, view.player2)
             except KeyError:
                 return await interaction.response.send_message(f"Waiting for {view.player2.mention if interaction.user == view.player1 else view.player1.mention}", ephemeral=True)
             else:
