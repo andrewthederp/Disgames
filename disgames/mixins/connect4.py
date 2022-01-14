@@ -152,7 +152,7 @@ class Connect4(commands.Cog):
                     bestScore = score
             return bestScore
 
-    def make_bot_move_connect4(self, board, difficulty):
+    async def make_bot_move_connect4(self, board, difficulty):
         """Returns the best move the bot can take"""
         if difficulty == 1:
             x, y = random.choice([move for move in self.get_empty_connect4(board)])
@@ -163,7 +163,8 @@ class Connect4(commands.Cog):
             bestMove = 0
             for x, y in self.get_empty_connect4(board):
                 board[x][y] = "o"
-                score = self.minimax_connect4(board, 0, False)
+                thing = functools.partial(self.minimax_connect4, board, 0, False)
+                score = await bot.loop.run_in_executor(None, thing)
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
@@ -230,7 +231,7 @@ class Connect4(commands.Cog):
                         else:
                             y += 1
                 else:
-                    board = self.make_bot_move_connect4(board, difficulty)
+                    board = await self.make_bot_move_connect4(board, difficulty)
 
                 won = self.has_won_connect4(board)
                 if won[0]:
