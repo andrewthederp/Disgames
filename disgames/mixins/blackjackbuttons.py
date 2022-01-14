@@ -90,7 +90,7 @@ try:
             bot_am = random.randint(1,10)
             hum_am = random.randint(1,10)
             embed = discord.Embed(title='BlackJack', color=discord.Color.blurple())
-            embed.add_field(name=bot.user.display_name, value="`???`")
+            embed.add_field(name=self.bot.user.display_name, value="`???`")
             embed.add_field(name=ctx.author.display_name, value="`"+str(hum_am)+"`")
             await ctx.send(embed=embed, view=BJView(embed, bot_am, hum_am, ctx))
 except AttributeError:
