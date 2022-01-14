@@ -1,7 +1,8 @@
 from discord.ext import commands
-from .constants import ALL_GAMES
+from .constants import ALL_GAMES, BUTTON_GAMES
 from .mixins import TicTacToeReactions
 
+ALL_GAMES = [game for game in ALL_GAMES if game not in BUTTON_GAMES]
 ALL_GAMES.remove(TicTacToeReactions)
 
 

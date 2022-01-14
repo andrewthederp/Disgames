@@ -1,4 +1,4 @@
-import discord, random
+import discord, random, functools
 from discord.ext import commands
 
 
@@ -112,9 +112,9 @@ class Connect4(commands.Cog):
 
     def get_empty_connect4(self, board):
         """Yields every empty index on the board"""
-        for x, _ in enumerate(board):
+        for x in range(len(board)+1):
             y = 0
-            while y != 6:
+            for y in range(7):
                 if board[5 - y][x] == " ":
                     yield 5-y, x
                     break
@@ -152,7 +152,7 @@ class Connect4(commands.Cog):
                     bestScore = score
             return bestScore
 
-    def make_bot_move_connect4(self, board, difficulty):
+    async def make_bot_move_connect4(self, board, difficulty):
         """Returns the best move the bot can take"""
         if difficulty == 1:
             x, y = random.choice([move for move in self.get_empty_connect4(board)])
@@ -162,8 +162,9 @@ class Connect4(commands.Cog):
             bestScore = -800
             bestMove = 0
             for x, y in self.get_empty_connect4(board):
-                board[x][y] = "o"
-                score = self.minimax_connect4(board, 0, False)
+                board[x][y] = "b"
+                thing = functools.partial(self.minimax_connect4, board, 0, False)
+                score = await bot.loop.run_in_executor(None, thing)
                 board[x][y] = " "
                 if score > bestScore:
                     bestScore = score
@@ -230,7 +231,7 @@ class Connect4(commands.Cog):
                         else:
                             y += 1
                 else:
-                    board = self.make_bot_move_connect4(board, difficulty)
+                    board = await self.make_bot_move_connect4(board, difficulty)
 
                 won = self.has_won_connect4(board)
                 if won[0]:
@@ -256,13 +257,13 @@ class Connect4(commands.Cog):
             )
         else:
             board = [[" " for _ in range(7)] for i in range(6)]
+            turn = ctx.author
             e = discord.Embed(
                 title="Connect4",
                 description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                 color=discord.Color.blurple(),
             ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             msg = await ctx.send(embed=e)
-            turn = ctx.author
             while True:
                 e = discord.Embed(
                     title="Connect4",
