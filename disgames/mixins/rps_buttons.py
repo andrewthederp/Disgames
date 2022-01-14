@@ -52,7 +52,7 @@ try:
         async def rps(self, ctx, member:discord.Member=None):
             if member and (member.bot or member == ctx.author):
                 return await ctx.send("Invalid syntax: can't play again "+member.display_name)
-            await ctx.send('Rock Paper Scissors', view=RPSView(ctx.author, member or bot.user))
+            await ctx.send('Rock Paper Scissors', view=RPSView(ctx.author, member or self.bot.user))
 
 except AttributeError:
     class RPSButtons:
