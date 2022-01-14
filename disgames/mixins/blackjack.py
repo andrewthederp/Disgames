@@ -31,22 +31,22 @@ class BlackJack(commands.Cog):
                 embed._fields[1]['value'] = "`"+str(hum_am)+"`"
                 if bot_has_lost:
                     embed._fields[0]['value'] = "`"+str(bot_am)+"`"
-                    return await ctx.send("The bot lost", embed=embed)
+                    return await ctx.send("The bot went over 21", embed=embed)
                 elif bot_has_lost == False:
                     embed._fields[0]['value'] = "`"+str(bot_am)+"`"
-                    return await ctx.send("The bot won", embed=embed)
+                    return await ctx.send("The bot hit 21", embed=embed)
                 if hum_has_lost:
                     embed._fields[0]['value'] = "`"+str(bot_am)+"`"
-                    return await ctx.send("The human lost", embed=embed)
+                    return await ctx.send("You went over 21", embed=embed)
                 elif hum_has_lost == False:
                     embed._fields[0]['value'] = "`"+str(bot_am)+"`"
-                    return await ctx.send("The hum won", embed=embed)
+                    return await ctx.send("You hit 21", embed=embed)
             else:
                 embed._fields[0]['value'] = "`"+str(bot_am)+"`"
                 if bot_am == hum_am:
                     return await ctx.send("Tie",embed=embed)
                 elif bot_am > hum_am:
-                    return await ctx.send("Bot won",embed=embed)
+                    return await ctx.send("The bot won",embed=embed)
                 else:
                     return await ctx.send("You won",embed=embed)
         embed._fields[0]['value'] = "`"+str(bot_am)+"`"
