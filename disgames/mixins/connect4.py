@@ -124,7 +124,7 @@ class Connect4(commands.Cog):
     def minimax_connect4(self, board, depth, isMaximizing):
         """The minimax algorithm for ttt"""
         won = self.has_won_connect4(board, True)
-        if depth == 6:
+        if depth == 4:
             return 1
         elif won[0] and won[3] == "r":
             return -1
