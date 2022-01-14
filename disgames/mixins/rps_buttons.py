@@ -37,10 +37,12 @@ try:
 
         def has_won_rps_buttons(self, player1, player2):
             """Returns the winner"""
+            if not self.plays[player1] or not self.plays[player2]:
+                raise KeyError
             dct = {"✂️":"📜","🪨":"✂️","📜":"🪨"}
             if dct[self.plays[player1]] == dct[self.plays[player2]]:
                 return "Draw"
-            elif dct[self.plays[player1]] == dct[self.plays[player2]]:
+            elif dct[self.plays[player1]] == self.plays[player2]:
                 return player1.mention
             return player2.mention
 
