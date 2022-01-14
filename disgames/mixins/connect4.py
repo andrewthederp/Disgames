@@ -112,9 +112,9 @@ class Connect4(commands.Cog):
 
     def get_empty_connect4(self, board):
         """Yields every empty index on the board"""
-        for x, _ in enumerate(board):
+        for x in range(len(board)+1):
             y = 0
-            while y != 6:
+            for y in range(7):
                 if board[5 - y][x] == " ":
                     yield 5-y, x
                     break
