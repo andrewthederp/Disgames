@@ -5,8 +5,8 @@ import random
 try:
     class RPSButton(discord.ui.Button):
         def __init__(self, emoji):
-            conversion = {"✂️":'Scissors',"📜":'Paper',"🪨":"Rock"}
-            super().__init__(label=conversion[emoji], emoji=emoji, style=discord.ButtonStyle.primary)
+            self.conversion = {"✂️":'Scissors',"📜":'Paper',"🪨":"Rock"}
+            super().__init__(label=self.conversion[emoji], emoji=emoji, style=discord.ButtonStyle.primary)
 
         async def callback(self, interaction):
             view = self.view
@@ -16,7 +16,7 @@ try:
                 return await interaction.response.send_message("You already chose", ephemeral=True)
             view.plays[interaction.user] = str(self.emoji)
             if view.player2.bot:
-                view.plays[view.player2] = random.choice(list(conversion))
+                view.plays[view.player2] = random.choice(list(self.conversion))
             try:
                 winner = view.has_won_rps(view.player1, view.player2)
             except KeyError:
