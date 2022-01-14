@@ -20,17 +20,21 @@ ALL_GAMES = [
     Akinator,
     AkinatorButtons,
     BlackJack,
-    BlackJackButtons
+    BlackJackButtons,
+    RPSButtons,
+    Uno
 ]
 
 BUTTON_GAMES = [
     TicTacToeButtons,
     AkinatorButtons,
-    BlackJackButtons
+    BlackJackButtons,
+    RPSButtons
 ]
 
 NON_BUTTON_GAMES = [
     TicTacToe,
     Akinator,
-    BlackJack
+    BlackJack,
+    RPS
 ]
