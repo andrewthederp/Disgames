@@ -1,4 +1,4 @@
-import discord, random
+import discord, random, functools
 from discord.ext import commands
 
 
