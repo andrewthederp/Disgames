@@ -256,13 +256,13 @@ class Connect4(commands.Cog):
             )
         else:
             board = [[" " for _ in range(7)] for i in range(6)]
+            turn = ctx.author
             e = discord.Embed(
                 title="Connect4",
                 description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                 color=discord.Color.blurple(),
             ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
             msg = await ctx.send(embed=e)
-            turn = ctx.author
             while True:
                 e = discord.Embed(
                     title="Connect4",
