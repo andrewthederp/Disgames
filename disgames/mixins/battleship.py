@@ -96,10 +96,14 @@ class Battleships(commands.Cog):
         try:
             msg_1 = await ctx.author.send(embed=embed)
         except discord.Forbidden:
+            del self.boards[ctx.author.id]
+            del self.boards[member.id]
             return await ctx.send(f"I was unable to dm {ctx.author.display_name}")
         try:
             msg_2 = await member.send(f"Waiting for {ctx.author.display_name}")
         except discord.Forbidden:
+            del self.boards[ctx.author.id]
+            del self.boards[member.id]
             return await ctx.send(f"I was unable to dm {member.display_name}")
         turn = ctx.author
         other_turn = member
@@ -117,15 +121,33 @@ class Battleships(commands.Cog):
             )
             await ctx.author.send("Enter coordinates:")
             inp = await self.bot.wait_for(
-                "message", check=lambda m: m.author == ctx.author and m.guild is None
+                "message", check=lambda m: m.author in [ctx.author, member] and m.guild is None
             )
+            if inp.content in ['end','stop','cancel']:
+                await ctx.author.send(f"{inp.author.display_name} has ended the game")
+                await member.send(f"{inp.author.display_name} has ended the game")
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
+                return
+            if inp.content.author != ctx.author:
+                ships_copy.insert(i, ship)
+                continue
             await ctx.author.send("up/down/left/right:")
             tru_dir = await self.bot.wait_for(
-                "message", check=lambda m: m.author == ctx.author and m.guild is None
+                "message", check=lambda m: m.author in [ctx.author, member] and m.guild is None
             )
+            if tru_dir.content in ['end','stop','cancel']:
+                await ctx.author.send(f"{tru_dir.author.display_name} has ended the game")
+                await member.send(f"{tru_dir.author.display_name} has ended the game")
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
+                return
+            if tru_dir.content.author != ctx.author:
+                ships_copy.insert(i, ship)
+                continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await ctx.author.send(
-                    "Invalid syntax: That's not a valid direction, try again",
+                    "Invalid syntax: Thats not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -142,34 +164,34 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x not in range(8) or y not in range(8):
                         await ctx.author.send(
-                            "Invalid syntax: Can't add the ships there, try again!",
+                            "Invalid syntax: Cant add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
                         self.boards[ctx.author.id][0] = brd
-                        continue
+                        break
                     if self.boards[ctx.author.id][0][x][y] != "🌊":
                         await ctx.author.send(
-                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
+                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
                         self.boards[ctx.author.id][0] = brd
-                        continue
+                        break
                     self.boards[ctx.author.id][0][x][y] = ship[num]
                 except IndexError:
                     await ctx.author.send(
-                        "Invalid syntax: Can't add the ships there, try again!",
+                        "Invalid syntax: Cant add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)
                     self.boards[ctx.author.id][0] = brd
-                    continue
+                    break
                 except ValueError:
                     await ctx.author.send("Invalid syntax: invalid coordinates entered")
                     ships_copy.insert(i, ship)
                     self.boards[ctx.author.id][0] = brd
-                    continue
+                    break
 
             await msg_1.edit(
                 embed=discord.Embed(
@@ -197,15 +219,33 @@ class Battleships(commands.Cog):
             brd = copy.deepcopy(self.boards[member.id][0])
             await member.send("Enter coordinates:")
             inp = await self.bot.wait_for(
-                "message", check=lambda m: m.author == member and m.guild is None
+                "message", check=lambda m: m.author in [ctx.author, member] and m.guild is None
             )
-            await member.send("up/down/left/right:")
+            if inp.content in ['end','stop','cancel']:
+                await ctx.author.send(f"{inp.author.display_name} has ended the game")
+                await member.send(f"{inp.author.display_name} has ended the game")
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
+                return
+            if inp.content.author != ctx.author:
+                ships_copy.insert(i, ship)
+                continue
+            await ctx.author.send("up/down/left/right:")
             tru_dir = await self.bot.wait_for(
-                "message", check=lambda m: m.author == member and m.guild is None
+                "message", check=lambda m: m.author in [ctx.author, member] and m.guild is None
             )
+            if tru_dir.content in ['end','stop','cancel']:
+                await ctx.author.send(f"{tru_dir.author.display_name} has ended the game")
+                await member.send(f"{tru_dir.author.display_name} has ended the game")
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
+                return
+            if tru_dir.content.author != ctx.author:
+                ships_copy.insert(i, ship)
+                continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await member.send(
-                    "Invalid syntax: That's not a valid direction, try again",
+                    "Invalid syntax: Thats not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -222,34 +262,34 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x < 0 or y < 0:
                         await member.send(
-                            "Invalid syntax: Can't add the ships there, try again!",
+                            "Invalid syntax: Cant add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
                         self.boards[member.id][0] = brd
-                        continue
+                        break
                     if self.boards[member.id][0][x][y] != "🌊":
                         await member.send(
-                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
+                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
                         self.boards[member.id][0] = brd
-                        continue
+                        break
                     self.boards[member.id][0][x][y] = ship[num]
                 except IndexError:
                     await member.send(
-                        "Invalid syntax: Can't add the ships there, try again!",
+                        "Invalid syntax: Cant add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)
                     self.boards[member.id][0] = brd
-                    continue
+                    break
                 except ValueError:
                     await member.send("Invalid syntax: invalid coordinates entered")
                     ships_copy.insert(i, ship)
                     self.boards[member.id][0] = brd
-                    continue
+                    break
 
             await msg_2.edit(
                 embed=discord.Embed(
@@ -271,9 +311,13 @@ class Battleships(commands.Cog):
         await msg_2.add_reaction("2️⃣")
         while True:
             m = await turn.send("Enter coordinates to attack:")
-            inp = await self.bot.wait_for(
-                "message", check=lambda m: m.author == turn and m.guild is None
-            )
+            try:
+                inp = await self.bot.wait_for(
+                    "message", check=lambda m: m.author == turn and m.guild is None, timeout=15*60
+                )
+            except asyncio.TimeoutError:
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
             if inp.content.lower() in ["end", "stop", "cancel"]:
                 await turn.send("You ended the game")
                 await other_turn.send(f"{turn.display_name} ended the game")
@@ -304,6 +348,8 @@ class Battleships(commands.Cog):
             if self.has_won_battleship(self.boards[other_turn.id][0]):
                 await ctx.author.send(f"{turn.display_name} has won!!!")
                 await member.send(f"{turn.display_name} has won!!!")
+                del self.boards[ctx.author.id]
+                del self.boards[member.id]
                 return
             other_turn = turn
             turn = member if turn == ctx.author else ctx.author

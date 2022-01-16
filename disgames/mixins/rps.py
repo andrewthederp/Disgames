@@ -43,13 +43,13 @@ class RPS(commands.Cog):
                 for i in ["✂️", "🪨", "📜"]:
                     await msg1.add_reaction(i)
             except discord.Forbidden:
-                return await ctx.send(f"I couldn't dm {ctx.author.display_name}")
+                return await ctx.send(f"I couldnt dm {ctx.author.display_name}")
             try:
                 msg2 = await member.send("Please react with your choice:")
                 for i in ["✂️", "🪨", "📜"]:
                     await msg2.add_reaction(i)
             except discord.Forbidden:
-                return await ctx.send(f"I couldn't dm {member.display_name}")
+                return await ctx.send(f"I couldnt dm {member.display_name}")
 
             def check(payload):
                 return (

@@ -217,14 +217,14 @@ class Connect4(commands.Cog):
                         continue
                     if not x in range(7):
                         await ctx.send(
-                            f"Invalid syntax: {inp.content} isn't a valid place on the board"
+                            f"Invalid syntax: {inp.content} isnt a valid place on the board"
                         )
                         continue
                     y = 0
                     while y <= 6:
                         if y == 6:
                             await ctx.send(
-                                "Invalid Syntax: Can't add to this column anymore"
+                                "Invalid Syntax: Cant add to this column anymore"
                             )
                             break
                         if board[5 - y][x] == " ":
@@ -288,14 +288,14 @@ class Connect4(commands.Cog):
                     continue
                 if x not in range(7):
                     await ctx.send(
-                        f"Invalid syntax: {inp.content} isn't a valid place on the board"
+                        f"Invalid syntax: {inp.content} isnt a valid place on the board"
                     )
                     continue
                 y = 0
                 while y <= 6:
                     if y == 6:
                         await ctx.send(
-                            "Invalid Syntax: Can't add to this column anymore"
+                            "Invalid Syntax: Cant add to this column anymore"
                         )
                         break
                     if board[5 - y][x] == " ":

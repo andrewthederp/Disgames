@@ -8,8 +8,8 @@ from .ttt import TicTacToe
 from .chess import Chess
 from .minesweeper import Minesweeper
 from .soko import Sokoban
-from .rps_buttons import RPSButtons
 from .rps import RPS
+from .rps_buttons import RPSButtons
 from .two048 import _2048
 from .connect4 import Connect4
 from .checkers import Checkers
@@ -31,8 +31,8 @@ __all__ = (
     "Chess",
     "Minesweeper",
     "Sokoban",
-    "RPSButtons",
     "RPS",
+    "RPSButtons",
     "_2048",
     "Connect4",
     "Checkers",

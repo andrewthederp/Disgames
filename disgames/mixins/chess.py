@@ -37,7 +37,7 @@ class Chess(commands.Cog):
         elif board.is_seventyfive_moves():
             value = f"75-moves rule | Score: `{results}`"
         elif board.is_fivefold_repetition():
-            value = f"Five-fold repetition. | Score: `{results}`"
+            value = f"Five-fold repitition. | Score: `{results}`"
         return value
 
     def create_chess_board(self, board, turn, member):

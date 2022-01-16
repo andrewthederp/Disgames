@@ -154,7 +154,7 @@ class Sudoko(commands.Cog):
                     continue
                 except IndexError:
                     await ctx.send(
-                        "Invalid syntax: Can't go back any further", delete_after=5
+                        "Invalid syntax: Cant go back any further", delete_after=5
                     )
                     continue
             elif inp.content.lower() in ["end", "stop", "cancel"]:
@@ -177,7 +177,7 @@ class Sudoko(commands.Cog):
             steps.append((x, y))
             if int(board[x][y]) != 0:
                 await ctx.send(
-                    "Invalid syntax: Can't put a number there", delete_after=5
+                    "Invalid syntax: Cant put a number there", delete_after=5
                 )
                 continue
             elif str(num) in board[x]:
