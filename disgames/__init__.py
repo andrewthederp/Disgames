@@ -17,7 +17,7 @@ __title__ = 'disgames'
 __author__ = 'andrewthederp'
 __license__ = 'Apache License 2.0'
 __copyright__ = 'Copyright 2021-2022 Andrewthederp and MarzaElise'
-__version__ = '2.2.2'
+__version__ = '2.3.0'
 
 def register_commands(
     bot, *, ignore: list = [], stockfish_path=None, ttt_reactions=False, button_commands=True
