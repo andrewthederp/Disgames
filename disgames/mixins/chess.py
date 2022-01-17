@@ -42,8 +42,7 @@ class Chess(commands.Cog):
 
     def create_chess_board(self, board, turn, member):
         """Creates the chess embed"""
-        fen = board.fen()
-        url = f"http://www.fen-to-image.com/image/64/double/coords/{fen}"
+        url = f"http://www.fen-to-image.com/image/64/double/coords/{board.board_fen()}"
         e = discord.Embed(
             title="Chess",
             description="To move a piece get it's current coordinates and the coordinates of where you want it to be, eg: `a2a4`",
