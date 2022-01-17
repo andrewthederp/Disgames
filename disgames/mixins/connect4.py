@@ -192,14 +192,14 @@ class Connect4(commands.Cog):
                 title="Connect4",
                 description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                 color=discord.Color.blurple(),
-            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
             msg = await ctx.send(embed=e)
             while True:
                 e = discord.Embed(
                     title="Connect4",
                     description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                     color=discord.Color.blurple(),
-                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
                 await msg.edit(embed=e)
                 if turn == ctx.author:
                     inp = await self.bot.wait_for(
@@ -208,6 +208,9 @@ class Connect4(commands.Cog):
                     )
                     if inp.content.lower() in ["stop", "end", "cancel"]:
                         return await ctx.send("Ended the game")
+                    elif inp.content.lower() in ['re','re-send','resend']:
+                        msg = await ctx.send(embed=e)
+                        continue
                     if not len(inp.content) == 1:
                         continue
                     try:
@@ -264,14 +267,14 @@ class Connect4(commands.Cog):
                 title="Connect4",
                 description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                 color=discord.Color.blurple(),
-            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
             msg = await ctx.send(embed=e)
             while True:
                 e = discord.Embed(
                     title="Connect4",
                     description=f"How to play: type a number 1-7 to drop a token inside that column\nturn: `{turn.display_name}`\n\n{self.format_connect4_board(board)}",
                     color=discord.Color.blurple(),
-                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
                 await msg.edit(embed=e)
                 inp = await self.bot.wait_for(
                     "message",
@@ -279,6 +282,9 @@ class Connect4(commands.Cog):
                 )
                 if inp.content.lower() in ["stop", "end", "cancel"]:
                     return await ctx.send("Ended the game")
+                elif inp.content.lower() in ['re','re-send','resend']:
+                    msg = await ctx.send(embed=e)
+                    continue
                 if not len(inp.content) == 1:
                     continue
                 try:
