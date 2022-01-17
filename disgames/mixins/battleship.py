@@ -129,7 +129,7 @@ class Battleships(commands.Cog):
                 del self.boards[ctx.author.id]
                 del self.boards[member.id]
                 return
-            if inp.content.author != ctx.author:
+            if inp.author != ctx.author:
                 ships_copy.insert(i, ship)
                 continue
             await ctx.author.send("up/down/left/right:")
@@ -227,7 +227,7 @@ class Battleships(commands.Cog):
                 del self.boards[ctx.author.id]
                 del self.boards[member.id]
                 return
-            if inp.content.author != ctx.author:
+            if inp.author != ctx.author:
                 ships_copy.insert(i, ship)
                 continue
             await ctx.author.send("up/down/left/right:")
