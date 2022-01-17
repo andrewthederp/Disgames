@@ -107,7 +107,7 @@ class Chess(commands.Cog):
                 if turn == ctx.author:
                     def check(m):
                         try:
-                            if board.parse_uci(m.content.lower()):
+                            if board.parse_uci(m.content.lower()) or m.content.lower() in ['end','stop','cancel','re','re-send','resend','back']:
                                 return m.author == turn and m.channel == ctx.channel
                             else:
                                 return False
@@ -165,7 +165,7 @@ class Chess(commands.Cog):
             while True:
                 def check(m):
                     try:
-                        if board.parse_uci(m.content.lower()):
+                        if board.parse_uci(m.content.lower()) or m.content.lower() in ['end','stop','cancel','re','re-send','resend','back']:
                             return m.author == turn and m.channel == ctx.channel
                         else:
                             return False
