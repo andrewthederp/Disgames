@@ -52,7 +52,7 @@ class Checkers(commands.Cog):
             title="Checkers",
             description=f"How to play: send the coordinates of the piece you want to move and the direction where it moves in this format `[x][y] [direction]`, eg: `61 ur`\n\nTurn: `{ctx.author.display_name if turn == 'r' else member.display_name}`\n{self.format_checkers_board(board)}",
             color=discord.Color.blurple(),
-        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
         msg = await ctx.send(embed=e)
         opts = {"ul": 1, "ur": 2, "dl": 3, "dr": 4}
         while True:
@@ -60,7 +60,7 @@ class Checkers(commands.Cog):
                 title="Checkers",
                 description=f"How to play: send the coordinates of the piece you want to move and the direction where it moves in this format `[x][y] [direction]`, eg: `61 ur`\n\nTurn: `{ctx.author.display_name if turn == 'r' else member.display_name}`\n```\n{self.format_checkers_board(board)}\n```",
                 color=discord.Color.blurple(),
-            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
             await msg.edit(embed=e)
             inp = await self.bot.wait_for(
                 "message",
@@ -70,6 +70,9 @@ class Checkers(commands.Cog):
             if inp.content.lower() in ["end", "stop", "cancel"]:
                 await ctx.send("Ended the game")
                 return
+            elif inp.content.lower() in ['re','re-send','resend']:
+                msg = await ctx.send(embed=e)
+                continue
             try:
                 coors, direction = inp.content.split(" ")[0], inp.content.split(" ")[1]
             except Exception:
