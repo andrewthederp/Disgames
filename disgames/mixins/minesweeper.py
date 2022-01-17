@@ -136,7 +136,7 @@ class Minesweeper(commands.Cog):
             title="Minesweeper",
             description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\nFlags: `{flags}`\n{self.format_minesweeper_board(visible_board)}",
             color=discord.Color.blurple(),
-        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+        ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
         msg = await ctx.send(embed=em)
         while True:
             inp = await self.bot.wait_for(
@@ -149,6 +149,9 @@ class Minesweeper(commands.Cog):
                 pass
             if inp.content.lower() in ["end", "stop", "cancel"]:
                 return await ctx.send("Ended the game")
+            elif inp.content.lower() in ['re','re-send','resend']:
+                msg = await ctx.send(embed=em)
+                continue
             lst = inp.content.split()
             type_ = lst[0]
             xy = lst[1:]
@@ -212,5 +215,5 @@ class Minesweeper(commands.Cog):
                     title="Minesweeper",
                     description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\nFlags: `{flags}`\n{self.format_minesweeper_board(visible_board)}",
                     color=discord.Color.blurple(),
-                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game')
+                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
             )
