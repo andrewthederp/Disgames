@@ -12,12 +12,12 @@ class Chess(commands.Cog):
         self.bot = bot
         self.stockfish_path = None
         try:
-            h = os.getcwd().split("\\")[2]
+            path = os.getcwd().split("\\")[2]
         except IndexError:
             pass
         else:
             stockfish_path = sorted(
-                Path(f"C:\\Users\\{h}").rglob("stockfish_20011801_32bit.exe")
+                Path(f"C:\\Users\\{path}").rglob("stockfish_20011801_32bit.exe")
             )
             if stockfish_path:
                 self.stockfish_path = stockfish_path[0]
@@ -42,7 +42,7 @@ class Chess(commands.Cog):
 
     def create_chess_board(self, board, turn, member):
         """Creates the chess embed"""
-        fen = board.fen().split(" ")[0]
+        fen = board.fen()
         url = f"http://www.fen-to-image.com/image/64/double/coords/{fen}"
         e = discord.Embed(
             title="Chess",
@@ -64,20 +64,14 @@ class Chess(commands.Cog):
             e.add_field(name="Winner", value=gameOver)
         e.set_image(url=url)
         e.set_footer(
-            text='Send "end"/"stop"/"cancel" to stop the game | "back" to go back a step'
+            text='Send "end"/"stop"/"cancel" to stop the game | "back" to go back a step | "re"/"re-send"/"resend" to send a new embed'
         )
         return e
 
-    def get_best_chess_move(self, board, smort_level):
-        """Gets the best move using the stockfish_20011801_32bit.exe raises PathNotFound if the path provided is wrong"""
-        try:
-            stockfish = Stockfish(
-                str(self.stockfish_path), parameters={"Skill Level": smort_level}
-            )
-            stockfish.set_fen_position(board.fen())
-            return stockfish.get_best_move()
-        except (AttributeError, FileNotFoundError):
-            raise PathNotFound
+    def get_best_chess_move(self, stockfish, board):
+        """Gets the best move using the stockfish_20011801_32bit.exe"""
+        stockfish.set_fen_position(board.fen())
+        return stockfish.get_best_move()
 
     @commands.command("chess")
     async def chess(self, ctx, member: discord.Member = None):
@@ -97,6 +91,13 @@ class Chess(commands.Cog):
             else:
                 if smort_level not in range(21):
                     return await ctx.send("difficulty needs to be in 0-20")
+            try:
+                stockfish = Stockfish(
+                    str(self.stockfish_path), parameters={"Skill Level": smort_level}
+                )
+            except (AttributeError, FileNotFoundError):
+                raise PathNotFound
+
             board = chess.Board()
             turn = ctx.author
             e = self.create_chess_board(
@@ -105,11 +106,15 @@ class Chess(commands.Cog):
             msg = await ctx.send(embed=e)
             while True:
                 if turn == ctx.author:
-                    inp = await self.bot.wait_for(
-                        "message",
-                        check=lambda m: m.author == ctx.author
-                        and m.channel == ctx.channel,
-                    )
+                    def check(m):
+                        try:
+                            if board.parse_uci(m.content.lower()):
+                                return m.author == turn and m.channel == ctx.channel
+                            else:
+                                return False
+                        except ValueError:
+                            return False
+                    inp = await self.bot.wait_for("message",check=check)
                     if inp.content.lower() in ["stop", "cancel", "end"]:
                         return await ctx.send("Game ended", delete_after=5)
                     elif inp.content.lower() == "back":
@@ -120,19 +125,18 @@ class Chess(commands.Cog):
                         except IndexError:
                             await ctx.send("Can't go back", delete_after=5)
                             continue
+                    elif inp.content.lower() in ['re','re-send','resend']:
+                        e = self.create_chess_board(board, turn, member if turn == ctx.author else ctx.author)
+                        msg = await ctx.send(embed=e)
+                        continue
                     else:
-                        try:
-                            move = chess.Move.from_uci(inp.content.lower())
-                            board.push(move)
-                        except ValueError:
-                            await ctx.send("Invalid move", delete_after=5)
-                            continue
+                        board.push_uci(inp.content.lower())
                         try:
                             await inp.delete()
                         except discord.Forbidden:
                             pass
                 else:
-                    move = self.get_best_chess_move(board, smort_level)
+                    move = self.get_best_chess_move(stockfish, board)
                     move = chess.Move.from_uci(str(move))
                     board.push(move)
                 turn = ctx.bot.user if turn == ctx.author else ctx.author
@@ -160,10 +164,17 @@ class Chess(commands.Cog):
             )
             msg = await ctx.send(embed=e)
             while True:
+                def check(m):
+                    try:
+                        if board.parse_uci(m.content.lower()):
+                            return m.author == turn and m.channel == ctx.channel
+                        else:
+                            return False
+                    except ValueError:
+                        return False
                 inp = await ctx.bot.wait_for(
                     "message",
-                    check=lambda m: m.author in [ctx.author, member]
-                    and m.channel == ctx.channel,
+                    check=check
                 )
                 if inp.content.lower() in ["stop", "end", "cancel"]:
                     return await ctx.send("Game ended", delete_after=5)
@@ -173,14 +184,13 @@ class Chess(commands.Cog):
                     except IndexError:
                         await ctx.send("Can't go back", delete_after=5)
                         continue
+                elif inp.content.lower() in ['re','re-send','resend']:
+                    e = self.create_chess_board(board, turn, member if turn == ctx.author else ctx.author)
+                    msg = await ctx.send(embed=e)
+                    continue
                 else:
                     if inp.author == turn:
-                        try:
-                            move = chess.Move.from_uci(inp.content.lower())
-                            board.push(move)
-                        except ValueError:
-                            await ctx.send("Invalid move", delete_after=5)
-                            continue
+                        board.push_uci(inp.content.lower())
                         try:
                             await inp.delete()
                         except discord.Forbidden:
