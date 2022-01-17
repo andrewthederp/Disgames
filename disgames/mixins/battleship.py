@@ -142,7 +142,7 @@ class Battleships(commands.Cog):
                 del self.boards[ctx.author.id]
                 del self.boards[member.id]
                 return
-            if tru_dir.content.author != ctx.author:
+            if tru_dir.author != ctx.author:
                 ships_copy.insert(i, ship)
                 continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
@@ -240,7 +240,7 @@ class Battleships(commands.Cog):
                 del self.boards[ctx.author.id]
                 del self.boards[member.id]
                 return
-            if tru_dir.content.author != ctx.author:
+            if tru_dir.author != ctx.author:
                 ships_copy.insert(i, ship)
                 continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
