@@ -107,12 +107,12 @@ class Chess(commands.Cog):
                 if turn == ctx.author:
                     def check(m):
                         try:
-                            if board.parse_uci(m.content.lower()) or m.content.lower() in ['end','stop','cancel','re','re-send','resend','back']:
+                            if board.parse_uci(m.content.lower()):
                                 return m.author == turn and m.channel == ctx.channel
                             else:
                                 return False
                         except ValueError:
-                            return False
+                            return m.content.lower() in ['end','stop','cancel','re','re-send','resend','back']
                     inp = await self.bot.wait_for("message",check=check)
                     if inp.content.lower() in ["stop", "cancel", "end"]:
                         return await ctx.send("Game ended", delete_after=5)
@@ -170,7 +170,7 @@ class Chess(commands.Cog):
                         else:
                             return False
                     except ValueError:
-                        return False
+                        return m.content.lower() in ['end','stop','cancel','re','re-send','resend','back']
                 inp = await ctx.bot.wait_for(
                     "message",
                     check=check
