@@ -1,4 +1,4 @@
-import copy, discord
+import asyncio, copy, discord
 from discord.ext import commands
 
 
