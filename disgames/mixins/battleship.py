@@ -270,7 +270,7 @@ class Battleships(commands.Cog):
                         break
                     if self.boards[member.id][0][x][y] != "🌊":
                         await member.send(
-                            "Invalid syntax: Can't have 2 ships overlap eachother, try again!",
+                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
