@@ -4,6 +4,10 @@ import pathlib
 here = pathlib.Path(__file__).parent.resolve()
 desc = (here / "README.md").read_text(encoding="utf-8")
 
+requirements = []
+with open('requirements.txt') as f:
+  requirements = f.read().splitlines()
+
 setup(
     name="disgames",
     version="2.3.0",
@@ -25,7 +29,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
-    install_requires=["discord.py","aiohttp", "chess", "stockfish","akinator.py"],
+    install_requires=requirements,
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
 )
