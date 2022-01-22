@@ -1,0 +1,4 @@
+discord.py>=1.7.0
+chess>=1.7.0
+stockfish>=3.22.1
+akinator.py>=5.0.0
