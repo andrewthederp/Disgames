@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-class SnakeGame(commands.Cog):
+class SnakeGame:
 	def __init__(self, board):
 		self.length = 1
 		self.snake =  [[len(board)//2,len(board[0])//2]]
