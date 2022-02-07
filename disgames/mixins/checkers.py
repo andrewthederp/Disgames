@@ -117,29 +117,29 @@ class Checkers(commands.Cog):
             else:
                 if x not in range(8) or y not in range(8):
                     await ctx.send(
-                        f"Invalid syntax: {x+1}{y+1} isn't a valid place on the board",
+                        f"Invalid syntax: {x+1}{y+1} isnt a valid place on the board",
                         delete_after=5,
                     )
             if board[x][y] not in [turn, turn + "k"]:
-                await ctx.send("That's not your token", delete_after=5)
+                await ctx.send("Thats not your token", delete_after=5)
                 continue
             if board[x][y] == turn + "k":
                 try:
                     if board[x + inc[1]][y + inc[0]] == " ":
                         if y + inc[0] < 0:
-                            await ctx.send("Can't go in that direction", delete_after=5)
+                            await ctx.send("Cant go in that direction", delete_after=5)
                             continue
                         board[x][y] = " "
                         board[x + inc[1]][y + inc[0]] = turn + "k"
                     else:
                         if board[x + inc[1] * 2][y + inc[0] * 2] != " ":
-                            await ctx.send("Can't do that jump", delete_after=5)
+                            await ctx.send("Cant do that jump", delete_after=5)
                             continue
                         board[x][y] = " "
                         board[x + inc[1]][y + inc[0]] = " "
                         board[x + inc[1] * 2][y + inc[0] * 2] = turn + "k"
                 except IndexError:
-                    await ctx.send("Can't go in that direction", delete_after=5)
+                    await ctx.send("Cant go in that direction", delete_after=5)
                     continue
             else:
                 if (
@@ -155,7 +155,7 @@ class Checkers(commands.Cog):
                         if board[x + inc[1]][y + inc[0]] == " ":
                             if y + inc[0] < 0:
                                 await ctx.send(
-                                    "Can't go in that direction", delete_after=5
+                                    "Cant go in that direction", delete_after=5
                                 )
                                 continue
                             board[x][y] = " "
@@ -165,11 +165,11 @@ class Checkers(commands.Cog):
                             elif turn == "b" and x + inc[1] == 7:
                                 board[x + inc[1]][y + inc[0]] = turn + "k"
                         elif board[x + inc[1]][y + inc[0]] in [turn, turn + "k"]:
-                            await ctx.send("Can't move there", delete_after=5)
+                            await ctx.send("Cant move there", delete_after=5)
                             continue
                         else:
                             if board[x + inc[1] * 2][y + inc[0] * 2] != " ":
-                                await ctx.send("Can't do that jump")
+                                await ctx.send("Cant do that jump")
                                 continue
                             board[x][y] = " "
                             board[x + inc[1]][y + inc[0]] = " "
@@ -179,7 +179,7 @@ class Checkers(commands.Cog):
                             elif turn == "b" and x + inc[1] * 2 == 7:
                                 board[x + inc[1] * 2][y + inc[0] * 2] = turn + "k"
                     except IndexError:
-                        await ctx.send("Can't move there", delete_after=5)
+                        await ctx.send("Cant move there", delete_after=5)
                         continue
             if self.has_won_checkers(board):
                 e = discord.Embed(

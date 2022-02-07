@@ -79,7 +79,7 @@ try:
 
 	class TicTacToe(discord.ui.View):
 		def __init__(self, ctx, players):
-			super().__init__()
+			super().__init__(timeout=None)
 			self.current_player = players[0]
 			self.players = players
 			self.board = [[0 for i in range(3)] for i in range(3)]

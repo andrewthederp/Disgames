@@ -218,23 +218,27 @@ class Connect4(commands.Cog):
                     except ValueError:
                         await ctx.send(f"Invalid Syntax: {inp.content} is not a number")
                         continue
-                    if not x in range(7):
+                    if not x in range(1, 7):
                         await ctx.send(
-                            f"Invalid syntax: {inp.content} isn't a valid place on the board"
+                            f"Invalid syntax: {inp.content} isnt a valid place on the board"
                         )
                         continue
                     y = 0
+                    continue_ = False
                     while y <= 6:
                         if y == 6:
                             await ctx.send(
-                                "Invalid Syntax: Can't add to this column anymore"
+                                "Invalid Syntax: Cant add to this column anymore"
                             )
+                            continue_ = True
                             break
                         if board[5 - y][x] == " ":
                             board[5 - y][x] = "r" if turn == ctx.author else "b"
                             break
                         else:
                             y += 1
+                    if continue_:
+                        continue
                 else:
                     board = await self.make_bot_move_connect4(board, difficulty)
 
@@ -294,21 +298,25 @@ class Connect4(commands.Cog):
                     continue
                 if x not in range(7):
                     await ctx.send(
-                        f"Invalid syntax: {inp.content} isn't a valid place on the board"
+                        f"Invalid syntax: {inp.content} isnt a valid place on the board"
                     )
                     continue
                 y = 0
+                continue_ = False
                 while y <= 6:
                     if y == 6:
                         await ctx.send(
-                            "Invalid Syntax: Can't add to this column anymore"
+                            "Invalid Syntax: Cant add to this column anymore"
                         )
+                        continue_ = True
                         break
                     if board[5 - y][x] == " ":
                         board[5 - y][x] = "r" if turn == ctx.author else "b"
                         break
                     else:
                         y += 1
+                if continue_:
+                    continue
                 won = self.has_won_connect4(board)
                 if won[0]:
                     await ctx.send(f"{turn.mention} connected 4 {won[2]}")

@@ -28,7 +28,7 @@ try:
 
     class RPSView(discord.ui.View):
         def __init__(self, player1, player2):
-            super().__init__()
+            super().__init__(timeout=None)
             for emoji in ["✂️", "📜", "🪨"]:
                 self.add_item(RPSButton(emoji))
             self.plays = {player1:'',player2:''}

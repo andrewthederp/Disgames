@@ -194,7 +194,7 @@ class Minesweeper(commands.Cog):
                     flags -= 1
                 else:
                     await ctx.send(
-                        f"Invalid syntax: {type_} isn't a valid move type",
+                        f"Invalid syntax: {type_} isnt a valid move type",
                         delete_after=5,
                     )
             if self.has_won_minesweeper(visible_board, grid):
@@ -210,10 +210,9 @@ class Minesweeper(commands.Cog):
                     embed=em,
                 )
                 return
-            await msg.edit(
-                embed=discord.Embed(
-                    title="Minesweeper",
-                    description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\nFlags: `{flags}`\n{self.format_minesweeper_board(visible_board)}",
-                    color=discord.Color.blurple(),
-                ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
-            )
+            em = discord.Embed(
+                title="Minesweeper",
+                description=f"to reveal a place send the coordinates, eg: `reveal d5 7a 3h`\nto flag a place send the coordinates, eg: `flag d5 7a 3h`\n\nFlags: `{flags}`\n{self.format_minesweeper_board(visible_board)}",
+                color=discord.Color.blurple(),
+            ).set_footer(text='Send "end"/"stop"/"cancel" to stop the game | "re"/"re-send"/"resend" to resend the embed')
+            await msg.edit(embed=em)

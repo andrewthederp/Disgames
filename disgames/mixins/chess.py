@@ -37,7 +37,7 @@ class Chess(commands.Cog):
         elif board.is_seventyfive_moves():
             value = f"75-moves rule | Score: `{results}`"
         elif board.is_fivefold_repetition():
-            value = f"Five-fold repetition. | Score: `{results}`"
+            value = f"Five-fold repitition. | Score: `{results}`"
         return value
 
     def create_chess_board(self, board, turn, member):
@@ -51,7 +51,7 @@ class Chess(commands.Cog):
         e.add_field(name="Turn", value=turn.mention, inline=False)
         e.add_field(
             name=f"Legal moves",
-            value=", ".join([f"`{str(i)}`" for i in board.legal_moves]),
+            value=", ".join([f"`{str(i)}`" for i in board.legal_moves]) or 'No legal moves',
             inline=False,
         )
         e.add_field(name="Check", value=board.is_check(), inline=False)

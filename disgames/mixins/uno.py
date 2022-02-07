@@ -3,11 +3,10 @@ from discord.ext import commands
 import random
 
 colors = ['red','yellow','blue','green','']
-numbers = ['draw2','reverse','skip','wild','draw4'] + [str(i) for i in range(1,10)]
+numbers = ['draw2','reverse','skip','wild','draw4'] + [str(i) for i in range(1,10)] # Names could be deceiving
 
 class Card:
     def __init__(self, color, number):
-        print(number, number in ['wild','draw4'])
         if number in ['wild','draw4']:
             self.color = ''
         else:
@@ -40,7 +39,7 @@ class Uno(commands.Cog):
                 if string.endswith(special) and string[:-len(special)] in colors:
                     return Card(string[:-len(special)], special)
 
-    def cycle_turns(self, lst):
+    def cycle_uno_turns(self, lst):
         lst.append(lst[0])
         lst.pop(0)
         return lst, lst[0]
@@ -51,7 +50,7 @@ class Uno(commands.Cog):
     @commands.command()
     async def uno(self, ctx, players:commands.Greedy[discord.Member]):
         for player in players:
-            if player.bot or player == ctx.author or not isinstance(player, discord.Member):
+            if player.bot or player == ctx.author or not isinstance(player, discord.Member) or player in players:
                 players.remove(player)
         if len(players) > 4:
             return await ctx.send("A maximum of 5 people that can play at the same time")
@@ -79,7 +78,7 @@ class Uno(commands.Cog):
                 for player in players:
                     await player.send(f"{turn.display_name}'s turn has been skipped")
                 decks[turn].play = True
-                players, turn = self.cycle_turns(players)
+                players, turn = self.cycle_uno_turns(players)
                 continue
             if send:
                 embed = discord.Embed(title=f'{turn.display_name} Inventory', description='\n'.join(decks[turn].inv), color=discord.Color.blurple())
@@ -98,6 +97,7 @@ class Uno(commands.Cog):
                 players.remove(inp.author)
                 for player in players:
                     await player.send(f"{inp.author.display_name} leaves the game")
+                continue
             else:
                 if inp.author != turn:
                     continue
@@ -124,7 +124,7 @@ class Uno(commands.Cog):
                                     break
                             for player in players:
                                 await player.send(f"{turn.display_name} played a {card.name}")
-                            players, turn = self.cycle_turns(players)
+                            players, turn = self.cycle_uno_turns(players)
                         else:
                             await inp.author.send("That card cannot be played")
                     elif card.type == 'draw2':
@@ -145,7 +145,7 @@ class Uno(commands.Cog):
                                     break
                             for player in players:
                                 await player.send(f"{turn.display_name} played a {card.name}")
-                            players, turn = self.cycle_turns(players)
+                            players, turn = self.cycle_uno_turns(players)
                         else:
                             await inp.author.send("That card cannot be played")
                     elif card.type == 'reverse':
@@ -176,13 +176,13 @@ class Uno(commands.Cog):
                                     break
                             for player in players:
                                 await player.send(f"{turn.display_name} played a {card.name}")
-                            players, turn = self.cycle_turns(players)
+                            players, turn = self.cycle_uno_turns(players)
                         else:
                             await inp.author.send("That card cannot be played")
                     elif card.type == 'wild':
                         await inp.author.send("Send the color to change to")
                         inp = await self.bot.wait_for('message', check=lambda m: m.author == inp.author and m.guild is None)
-                        while inp.content not in colors:
+                        while inp.content.lower() not in colors:
                             await inp.author.send("Invalid, send the color to change to")
                             inp = await self.bot.wait_for('message', check=lambda m: m.author == inp.author and m.guild is None)
                         top_card = Card(inp.content, '')
@@ -194,7 +194,7 @@ class Uno(commands.Cog):
                                 break
                         for player in players:
                             await player.send(f"{turn.display_name} played a {card.name}")
-                        players, turn = self.cycle_turns(players)
+                        players, turn = self.cycle_uno_turns(players)
                     elif card.type == 'draw4':
                         await inp.author.send("Send the color to change to")
                         inp = await self.bot.wait_for('message', check=lambda m: m.author == inp.author and m.guild is None)
@@ -217,4 +217,4 @@ class Uno(commands.Cog):
                                 break
                         for player in players:
                             await player.send(f"{turn.display_name} played a {card.name}")
-                        players, turn = self.cycle_turns(players)
+                        players, turn = self.cycle_uno_turns(players)

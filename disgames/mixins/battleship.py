@@ -1,4 +1,4 @@
-import asyncio, copy, discord
+import copy, discord
 from discord.ext import commands
 
 
@@ -147,7 +147,7 @@ class Battleships(commands.Cog):
                 continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await ctx.author.send(
-                    "Invalid syntax: That's not a valid direction, try again",
+                    "Invalid syntax: Thats not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -164,7 +164,7 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x not in range(8) or y not in range(8):
                         await ctx.author.send(
-                            "Invalid syntax: Can't add the ships there, try again!",
+                            "Invalid syntax: Cant add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -172,7 +172,7 @@ class Battleships(commands.Cog):
                         break
                     if self.boards[ctx.author.id][0][x][y] != "🌊":
                         await ctx.author.send(
-                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
+                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -181,7 +181,7 @@ class Battleships(commands.Cog):
                     self.boards[ctx.author.id][0][x][y] = ship[num]
                 except IndexError:
                     await ctx.author.send(
-                        "Invalid syntax: Can't add the ships there, try again!",
+                        "Invalid syntax: Cant add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)
@@ -245,7 +245,7 @@ class Battleships(commands.Cog):
                 continue
             if tru_dir.content.lower() not in ["up", "down", "left", "right"]:
                 await member.send(
-                    "Invalid syntax: That's not a valid direction, try again",
+                    "Invalid syntax: Thats not a valid direction, try again",
                     delete_after=7.5,
                 )
                 ships_copy.insert(i, ship)
@@ -262,7 +262,7 @@ class Battleships(commands.Cog):
                         y = (int(inp.content[1]) - 1) - dct[direction][1] * num
                     if x < 0 or y < 0:
                         await member.send(
-                            "Invalid syntax: Can't add the ships there, try again!",
+                            "Invalid syntax: Cant add the ships there, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -270,7 +270,7 @@ class Battleships(commands.Cog):
                         break
                     if self.boards[member.id][0][x][y] != "🌊":
                         await member.send(
-                            "Invalid syntax: Can't have 2 ships overlap each other, try again!",
+                            "Invalid syntax: Cant have 2 ships overlap eachother, try again!",
                             delete_after=7.5,
                         )
                         ships_copy.insert(i, ship)
@@ -279,7 +279,7 @@ class Battleships(commands.Cog):
                     self.boards[member.id][0][x][y] = ship[num]
                 except IndexError:
                     await member.send(
-                        "Invalid syntax: Can't add the ships there, try again!",
+                        "Invalid syntax: Cant add the ships there, try again!",
                         delete_after=7.5,
                     )
                     ships_copy.insert(i, ship)
@@ -313,15 +313,17 @@ class Battleships(commands.Cog):
             m = await turn.send("Enter coordinates to attack:")
             try:
                 inp = await self.bot.wait_for(
-                    "message", check=lambda m: m.author == turn and m.guild is None, timeout=15*60
+                    "message", check=lambda m: m.author in [member, ctx.author] and m.guild is None, timeout=15*60
                 )
             except asyncio.TimeoutError:
                 del self.boards[ctx.author.id]
                 del self.boards[member.id]
             if inp.content.lower() in ["end", "stop", "cancel"]:
-                await turn.send("You ended the game")
-                await other_turn.send(f"{turn.display_name} ended the game")
+                await member.send(f"{inp.author.display_name} ended the game")
+                await ctx.author.send(f"{inp.author.display_name} ended the game")
                 return
+            if inp.author != turn:
+                continue
             await m.delete()
             try:
                 x, y = int(inp.content[0]) - 1, int(inp.content[1]) - 1
