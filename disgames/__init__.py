@@ -22,12 +22,12 @@ __version__ = '2.3.1'
 async def register_commands(
     bot, *, ignore: list = [], stockfish_path=None, ttt_reactions=False, button_commands=True
 ):
+    games = []
     if button_commands and buttons:
         ignore.extend(NON_BUTTON_GAMES)
         games.append(TicTacToeButtons)
     else:
         ignore.extend(BUTTON_GAMES)
-    games = []
     if ttt_reactions:
         ignore.append(TicTacToe)
         ignore.append(TicTacToeButtons)
