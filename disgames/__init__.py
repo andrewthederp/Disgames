@@ -25,7 +25,6 @@ async def register_commands(
     games = []
     if button_commands and buttons:
         ignore.extend(NON_BUTTON_GAMES)
-        games.append(TicTacToeButtons)
     else:
         ignore.extend(BUTTON_GAMES)
     if ttt_reactions:
