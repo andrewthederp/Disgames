@@ -25,6 +25,12 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
+    include_package_data=True,
+    package_data={
+        '': [
+            'assets/**'
+        ]
+    },
     install_requires=["aiohttp", "chess", "akinator.py"],
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
