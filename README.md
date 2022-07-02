@@ -38,12 +38,12 @@ More examples can be seen in [`examples/`](./examples/)
 
 ## Configuration
 You can configure some variables that are used throughout the module
-`disgames.ongoing_game_color` The color of the embed while the game is still running
-`disgames.lost_game_color` The color of the embed when the player looses (only used in singleplayer games)
-`disgames.won_game_color` The color of the embed when the player wins
-`disgames.drawn_game_color` The color of the embed when the game draws
-`disgames.resend_embed_list` A list of strings, if the player sends a message which is in the list. The game embed will be re-sent (only used in message games)
-`disgames.end_game_list` A list of strings, if the player sends a message which is in the list. The game will end (only used in message games)
+- `disgames.ongoing_game_color` The color of the embed while the game is still running
+- `disgames.lost_game_color` The color of the embed when the player looses (only used in singleplayer games)
+- `disgames.won_game_color` The color of the embed when the player wins
+- `disgames.drawn_game_color` The color of the embed when the game draws
+- `disgames.resend_embed_list` A list of strings, if the player sends a message which is in the list. The game embed will be re-sent (only used in message games)
+- `disgames.end_game_list` A list of strings, if the player sends a message which is in the list. The game will end (only used in message games)
 
 Example of changing a variable: `disgames.drawn_drawn_game = 0x000000`
 
