@@ -1,6 +1,6 @@
 ## Message games documentation!
 ---
-### Akinator
+# Akinator
 The Akinator class takes 1 arg and 2 kwargs
 - Args
 	- ctx (The command's context)
@@ -14,7 +14,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game message if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Checkers
+# Checkers
 The Checkers class takes 1 arg and 3 kwargs
 - Args
 	- ctx (The command's context)
@@ -29,7 +29,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Chess
+# Chess
 The Chess class takes 1 arg and 4 kwargs
 - Args
 	- ctx (The command's context)
@@ -45,7 +45,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Connect4
+# Connect4
 The Connect4 class takes 1 arg and 3 kwargs
 - Args
 	- ctx (The command's context)
@@ -60,7 +60,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Hangman
+# Hangman
 The Hangman class takes 1 arg and 3 kwargs
 - Args
 	- ctx (The command's context)
@@ -75,7 +75,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Minesweeper
+# Minesweeper
 The Minesweeper class takes 1 arg and 2 kwargs
 - Args
 	- ctx (The command's context)
@@ -89,7 +89,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Snake
+# Snake
 The Snake class takes 1 arg and 2 kwargs
 - Args
 	- ctx (The command's context)
@@ -118,7 +118,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### TicTacToe
+# TicTacToe
 The TicTacToe class takes 1 arg and 3 kwargs
 - Args
 	- ctx (The command's context)
@@ -133,7 +133,7 @@ The start function of the Akinator class takes 0 args and 3 kwargs
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
 	- resend_embed_option (If set to `True` then the bot will re-send the game embed if the player's message was inside `disgames.resend_embed_list`. `False` by default)
 
-### Wordle
+# Wordle
 The Wordle class takes 1 arg and 2 kwargs
 - Args
 	- ctx (The command's context)
