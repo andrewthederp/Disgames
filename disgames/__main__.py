@@ -1,33 +1,20 @@
 import aiohttp
 import argparse
-import chess
-import disgames
 import platform
-import sys
+from __init__ import VersionInfo
 from typing import Tuple
-import chess
-import akinator
-import sys
-
-VersionInfo = disgames.VersionInfo
 
 def version() -> None:
-    entries = [
-        '- Python v{0.major}.{0.minor}.{0.micro}-{0.releaselevel}'.format(
-            sys.version_info
-        )
-    ]
+    entries = []
 
-
-    version_info: VersionInfo = VersionInfo(major=2, minor=3, micro=1)
+    entries.append('- Python v{0.major}.{0.minor}.{0.micro}-{0.releaselevel}'.format(sys.version_info))
+    version_info: VersionInfo = VersionInfo(major=3, minor=0, micro=0)
     entries.append('- Disgames v{0.major}.{0.minor}.{0.micro}'.format(version_info))
-    entries.append(f'- aiohttp v{aiohttp.__version__}')
+    entries.append(f'- aiohttp v{aiohttp.__version__}') 
     entries.append(f'- Chess v{chess.__version__}')
-    entries.append(f'- Akinator v{akinator.__version__}')
 
     uname = platform.uname()
     entries.append('- System Info: {0.system} {0.release} {0.version}'.format(uname))
-    print('\n'.join(entries))
 
 def show_version(parser, args) -> None:
     if args.version:
