@@ -45,7 +45,7 @@ You can configure some variables that are used throughout the module
 - `disgames.resend_embed_list` A list of strings, if the player sends a message which is in the list. The game embed will be re-sent (only used in message games)
 - `disgames.end_game_list` A list of strings, if the player sends a message which is in the list. The game will end (only used in message games)
 
-Example of changing a variable: `disgames.drawn_drawn_game = 0x000000`
+Example of changing a variable: `disgames.drawn_game_color = 0x000000`
 
 ## Extra
 Note that this package only works with [discord.py](https://pypi.org/project/discord.py) and other modules that use the `discord` namespace
