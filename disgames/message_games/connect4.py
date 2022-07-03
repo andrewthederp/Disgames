@@ -85,8 +85,10 @@ class Connect4:
 					pass
 
 			if end_game_option and inp.content.lower() in end_game_list:
-				embed = discord.Embed(title='Connect4', description=f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=lost_game_color)
-				return await self.msg.edit(content='Game ended!', embed=embed)
+				embed = discord.Embed(title='Connect4', description=f'Game ended by: {inp.author.mention}\n'+self.format_board(), color=lost_game_color)
+				await self.msg.edit(content='Game ended!', embed=embed)
+				self.winner = self.turns['r'] if self.turns['b'] == inp.author else self.turns['b']
+				break
 			elif resend_embed_option and inp.content.lower() in resend_embed_list:
 				embed = discord.Embed(title='Connect4', description = f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=ongoing_game_color)
 				self.msg = await self.ctx.send(embed=embed)
@@ -101,9 +103,12 @@ class Connect4:
 					if won == False:
 						embed = discord.Embed(title='Connect4', description=f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=drawn_game_color)
 						await self.msg.edit(content='Tie!', embed=embed)
+						self.winner = None
 						break
 					else:
 						embed = discord.Embed(title='Connect4', description=f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=won_game_color)
 						await self.msg.edit(content=f'{self.turns[self.turn].mention} connected 4 {won[1]}', embed=embed)
+						self.winner = self.turns[self.turn]
 						break
 				self.turn = 'b' if self.turn == 'r' else 'r'
+		return self.winner

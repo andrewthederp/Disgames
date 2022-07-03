@@ -21,6 +21,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			return await interaction.response.edit_message(embed=embed, view=view)
 
 		if inp == view.word:
+			view.winner = True
 			view.stop()
 			view.clear_items()
 			embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=won_game_color)
@@ -34,6 +35,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 							view.revealed_word[num] = f":regional_indicator_{letter}:"
 					view.revealed_word = ''.join(view.revealed_word)
 					if '🟦' not in view.revealed_word:
+						view.winner = True
 						view.stop()
 						view.clear_items()
 						embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=won_game_color)
@@ -44,6 +46,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			else:
 				view.errors += 1
 		if view.errors == 6:
+			view.winner = False
 			view.stop()
 			view.clear_items()
 			embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=lost_game_color)
@@ -89,6 +92,7 @@ class HangmanView(discord.ui.View):
 		self.stop()
 		for child in self.children:
 			child.disabled = True
+		self.winner = False
 		embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in self.word)}", color=lost_game_color)
 		await interaction.response.edit_message(content='Game ended', embed=embed, view=self)
 
@@ -120,3 +124,5 @@ class Hangman:
 		view = HangmanView(self.ctx, self.word, end_game_option)
 		embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{view.revealed_word}", color=ongoing_game_color)
 		await self.ctx.send(embed=embed, view=view)
+		await view.wait()
+		return view.winner

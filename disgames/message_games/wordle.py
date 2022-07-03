@@ -137,7 +137,8 @@ class Wordle:
             if end_game_option and inp.content.lower() in end_game_list:
                 embed = self.make_embed()
                 embed.color = lost_game_color
-                return await self.msg.edit(content='Game ended', embed=embed)
+                await self.msg.edit(content='Game ended', embed=embed)
+                return False
 
             if not (inp.content.isalpha() and len(inp.content) == 5):
                 continue
@@ -154,3 +155,7 @@ class Wordle:
             await self.send_embed(self.has_won(filter_word), self.tries==6)
             if self.has_won(filter_word) or self.tries == 6:
                 break
+        if self.has_won(filter_word):
+            return True
+        else:
+            return False

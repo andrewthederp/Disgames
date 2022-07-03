@@ -13,6 +13,7 @@ class Akinator:
 		self.language = language
 		self.language = language
 		self.aki = akinator.Akinator()
+		self.winner = None
 
 	async def start(self, *, delete_input=False, end_game_option=False, resend_embed_option=False):
 		q = self.aki.start_game(child_mode=self.child_mode, language=self.language)
@@ -31,7 +32,8 @@ class Akinator:
 				except discord.Forbidden:
 					pass
 			if end_game_option and inp.content.lower() in end_game_list:
-				return await self.ctx.send("Ended the game")
+				await self.ctx.send("Ended the game")
+				break
 			elif resend_embed_option and inp.content.lower() in resend_embed_list:
 				self.msg = await self.ctx.send(f"{self.ctx.author.mention}: **#{self.aki.step+1}.** {q}\nYes, No, I don't know, Probably, Probably not, Back")
 			if inp.content.lower() == 'back':
@@ -48,3 +50,4 @@ class Akinator:
 		em = discord.Embed(title=f"It's {self.aki.first_guess['name']}", description=f"{self.aki.first_guess['description']}!", color=won_game_color)
 		em.set_thumbnail(url=self.aki.first_guess['absolute_picture_path'])
 		await self.ctx.send(embed=em)
+		return self.winner

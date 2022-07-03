@@ -14,22 +14,27 @@ class Connect4Modal(discord.ui.Modal, title='Connect4'):
 		inp = self.inp.value
 		view = self.button.view
 
+		if interaction.user != view.turns[view.turn]:
+			return await interaction.response.send_message(content="It's not your turn", ephemeral=True)
 		if inp.isdigit() and int(inp)-1 in range(7):
 			done = view.move(int(inp)-1)
 			if not done:
 				return await interaction.response.send_message(content=f"Can't put in that column anymore", ephemeral=True)
 			won = view.has_won()
 			if won != None:
-				view.stop()
 				for child in view.children:
 					child.disabled = True
 				if won == False:
 					embed = discord.Embed(title='Connect4', description=f'Turn: {view.turns[view.turn].mention}\n'+view.format_board(), color=drawn_game_color)
 					await interaction.response.edit_message(content='Tie!', embed=embed, view=view)
+					view.winner = None
+					view.stop()
 					return
 				else:
 					embed = discord.Embed(title='Connect4', description=f'Turn: {view.turns[view.turn].mention}\n'+view.format_board(), color=won_game_color)
 					await interaction.response.edit_message(content=f'{view.turns[view.turn].mention} connected 4 {won[1]}', embed=embed, view=view)
+					view.winner = interaction.user
+					view.stop()
 					return
 			view.turn = 'b' if view.turn == 'r' else 'r'
 			embed = discord.Embed(title='Connect4', description=f'Turn: {view.turns[view.turn].mention}\n'+view.format_board(), color=ongoing_game_color)
@@ -62,6 +67,7 @@ class Connect4(discord.ui.View):
 		await interaction.response.send_modal(Connect4Modal(button))
 
 	async def end_game(self, interaction):
+		self.winner = self.turns['r'] if interaction.user == self.turns['b'] else self.turns['b']
 		self.stop()
 		for child in self.children:
 			child.disabled = True
@@ -71,8 +77,6 @@ class Connect4(discord.ui.View):
 	async def interaction_check(self, interaction):
 		if interaction.user not in list(self.turns.values()):
 			await interaction.response.send_message(content="You're not playing in this game", ephemeral=True)
-		elif interaction.user != self.turns[self.turn]:
-			await interaction.response.send_message(content="It's not your turn", ephemeral=True)
 		else:
 			return True
 
@@ -137,3 +141,5 @@ class Connect4(discord.ui.View):
 			self.add_item(button)
 		embed = discord.Embed(title='Connect4', description = f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=ongoing_game_color)
 		self.msg = await self.ctx.send(embed=embed, view=self)
+		await self.wait()
+		return self.winner

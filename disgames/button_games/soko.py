@@ -21,10 +21,10 @@ class SokobanButton(discord.ui.Button):
 			direction = view.controls[inp]
 			view.move(direction, 1)
 			if view.has_won():
+				view.winner.append(True)
 				if view.play_forever:
 					view.board = view.create_board()
 					view.original_board = copy.deepcopy(view.board)
-					view.won = False
 				else:
 					view.stop()
 					view.clear_items()
@@ -62,6 +62,7 @@ class SokobanView(discord.ui.View):
 							'⬅':'l',
 							'➡':'r'
 							}
+		self.winner = []
 
 		self.add_item(SokobanButton(None,1))
 		self.add_item(SokobanButton('⬆',1))
@@ -84,8 +85,8 @@ class SokobanView(discord.ui.View):
 		self.clear_items()
 		embed = discord.Embed(title='Sokoban', description=self.format_board(), color=lost_game_color)
 		await interaction.response.edit_message(content='Game ended!', embed=embed, view=self)
-		self.won = False
-		return self.stop()
+		self.winner.append(False)
+		self.stop()
 
 	def create_board(self):
 		board = [[' ' for _ in range(5)] for _ in range(5)]
@@ -194,7 +195,7 @@ class SokobanView(discord.ui.View):
 			for col in row:
 				if col == 't' or col == 'tp':
 					return False
-		self.won = True
+		self.winner.append(True)
 		return True
 
 class Sokoban:

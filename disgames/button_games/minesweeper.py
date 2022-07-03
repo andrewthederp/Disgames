@@ -23,6 +23,8 @@ class MinesweeperModal(discord.ui.Modal, title='Minesweeper'):
 					if block == 'b':
 						view.reveal_all()
 						view.visible_board[x][y] = 'B'
+						view.winner = False
+						view.stop()
 						embed = discord.Embed(title='Minesweeper', description=view.format_board()+f'\n\nFlags: `{view.flags}`', color=lost_game_color)
 						return await interaction.response.edit_message(content='You lost!', embed=embed)
 					elif block == 0:
@@ -39,6 +41,8 @@ class MinesweeperModal(discord.ui.Modal, title='Minesweeper'):
 
 				if view.has_won():
 					view.reveal_all()
+					view.winner = True
+					view.stop()
 					embed = discord.Embed(title='Minesweeper', description=view.format_board()+f'\n\nFlags: `{view.flags}`', color=won_game_color)
 					return await interaction.response.edit_message(content='You won!', embed=embed)
 		embed = discord.Embed(title='Minesweeper', description=view.format_board()+f'\n\nFlags: `{view.flags}`', color=ongoing_game_color)
@@ -73,6 +77,7 @@ class MinesweeperView(discord.ui.View):
 		await interaction.response.send_message(content='This is not your game', ephemeral=True)
 
 	async def end_game(self, interaction):
+		self.winner = False
 		self.stop()
 		for child in self.children:
 			child.disabled = True
@@ -203,4 +208,6 @@ class Minesweeper:
 		view = MinesweeperView(self.ctx, end_game_option, self.chance, self.format_dict)
 		embed = discord.Embed(title='Minesweeper', description=view.format_board()+f'\n\nFlags: `{view.flags}`', color=ongoing_game_color)
 		view.msg = await self.ctx.send(embed=embed, view=view)
+		await view.wait()
+		return view.winner
 

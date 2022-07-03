@@ -13,6 +13,7 @@ class Akinator:
         self.aki = akinator.Akinator()
         self.language = language
         self.controls = controls or {'1️⃣':'0', '2️⃣':'1', '3️⃣':'2', '4️⃣':'3', '5️⃣':'4', '🏳':'end', '⬅':'back'}
+        self.winner = None
 
     async def start(self, *, remove_reaction=False):
         q = self.aki.start_game(child_mode=self.child_mode, language=self.language)
@@ -33,7 +34,8 @@ class Akinator:
 
             inp = self.controls[str(r)]
             if inp == 'end':
-                return await self.ctx.send("Ended the game")
+                await self.ctx.send("Ended the game")
+                break
             elif inp == 'back':
                 try:
                     q = self.aki.back()
@@ -48,3 +50,4 @@ class Akinator:
         em = discord.Embed(title=f"It's {self.aki.first_guess['name']}", description=f"{self.aki.first_guess['description']}!", color=won_game_color)
         em.set_thumbnail(url=self.aki.first_guess['absolute_picture_path'])
         await self.ctx.send(embed=em)
+        return self.winner

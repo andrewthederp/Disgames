@@ -31,6 +31,7 @@ class Sokoban:
 							'⬅':'l',
 							'➡':'r'
 							}
+		self.winner = []
 
 	def create_board(self):
 		board = [[' ' for _ in range(5)] for _ in range(5)]
@@ -137,7 +138,6 @@ class Sokoban:
 			for col in row:
 				if col == 't' or col == 'tp':
 					return False
-		self.won = True
 		return True
 
 
@@ -167,10 +167,10 @@ class Sokoban:
 				direction = self.controls[inp]
 				self.move(direction, 1)
 				if self.has_won():
+					self.winner.append(True)
 					if self.play_forever:
 						self.board = self.create_board()
 						self.original_board = copy.deepcopy(self.board)
-						self.won = False
 					else:
 						embed = discord.Embed(title='Sokoban', description=self.format_board(), color=won_game_color)
 						await self.msg.edit(content='You won!', embed=embed)
@@ -178,10 +178,10 @@ class Sokoban:
 
 			except KeyError:
 				if inp == 'stop':
-					self.won = False
+					self.winner.append(False)
 					embed = discord.Embed(title='Sokoban', description=self.format_board(), color=lost_game_color)
 					await self.msg.edit(content='Game ended!', embed=embed)
 					break
 			embed = discord.Embed(title='Sokoban', description=self.format_board(), color=ongoing_game_color)
 			await self.msg.edit(embed=embed)
-		return self.won
+		return self.winner

@@ -84,7 +84,9 @@ class Chess:
 			if end_game_option and inp.content.lower() in end_game_list:
 				embed = self.make_embed()
 				embed.color = lost_game_color
-				return await self.msg.edit(embed=embed)
+				await self.msg.edit(embed=embed)
+				self.winner = self.white if inp.author == self.black else self.black
+				break
 			elif resend_embed_option and inp.content.lower() in resend_embed_list:
 				embed = self.make_embed()
 				self.msg = await self.ctx.send(embed=embed)
@@ -96,10 +98,13 @@ class Chess:
 					embed = self.make_embed()
 					if self.status == 'win':
 						embed.color = won_game_color
+						self.winner = inp.author
 					elif self.status == 'draw':
 						embed.color = drawn_game_color
+						self.winner = None
 					await self.msg.edit(embed=embed)
 
 					if self.status:
-						return
+						break
 					self.turn = 'w' if self.turn == 'b' else 'b'
+		return self.winner

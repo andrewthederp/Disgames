@@ -115,6 +115,7 @@ class Snake(discord.ui.View):
 		return '\n'.join(lst)
 
 	async def end_game(self, interaction):
+		self.winner = False
 		self.stop()
 		for child in self.children:
 			child.disabled = True
@@ -130,12 +131,16 @@ class Snake(discord.ui.View):
 				embed.color = lost_game_color
 				await self.msg.edit(content='You lost', embed=embed)
 				self.run = False
+				self.winner = False
+				self.stop()
 				return
 
 			if self.snake_game.has_won_snake():
 				embed.color = won_game_color
 				await self.msg.edit(content='You won', embed=embed)
 				self.run = False
+				self.winner = True
+				self.stop()
 				return
 
 			await self.msg.edit(embed=embed)
@@ -155,3 +160,6 @@ class Snake(discord.ui.View):
 
 		self.run = True
 		self.ctx.bot.loop.create_task(self.snake_loop())
+
+		await self.wait()
+		return self.winner

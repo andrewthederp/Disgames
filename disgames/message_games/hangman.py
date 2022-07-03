@@ -43,22 +43,27 @@ class Hangman:
 			self.show_guesses(embed)
 			await self.msg.edit(embed=embed)
 			inp = await self.ctx.bot.wait_for('message', check=lambda m:m.author==self.ctx.author and m.channel==self.ctx.channel and (m.content.isalpha() or m.content.lower()=='re-send'))
+
 			if delete_input:
 				try:
 					await inp.delete()
 				except discord.Forbidden:
 					pass
+
 			if inp.content.lower() in self.guesses:
 				continue
 			if inp.content.lower() == self.word:
 				embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in self.word)}", color=won_game_color)
-				return await self.msg.edit(content='You won!', embed=embed)
+				await self.msg.edit(content='You won!', embed=embed)
+				return True
+
 			elif resend_embed_option and inp.content.lower() in resend_embed_list:
 				embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{self.revealed_word}", color=ongoing_game_color)
 				self.msg = await self.ctx.send(embed=embed)
 			elif end_game_option and inp.content.lower() in end_game_list:
 				embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in self.word)}", color=lost_game_color)
-				return await self.msg.edit(content='Game ended', embed=embed)
+				await self.msg.edit(content='Game ended', embed=embed)
+				return False
 			else:
 				if len(inp.content.lower()) == 1:
 					if inp.content.lower() in self.word:
@@ -69,7 +74,8 @@ class Hangman:
 						self.revealed_word = ''.join(self.revealed_word)
 						if '🟦' not in self.revealed_word:
 							embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{self.revealed_word}", color=won_game_color)
-							return await self.msg.edit(content='You won!', embed=embed)
+							await self.msg.edit(content='You won!', embed=embed)
+							return True
 					else:
 						self.errors += 1
 					self.guesses.append(inp.content.lower())
@@ -77,3 +83,4 @@ class Hangman:
 					self.errors += 1
 		embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in self.word)}", color=lost_game_color)
 		await self.msg.edit(content='You lost', embed=embed)
+		return False

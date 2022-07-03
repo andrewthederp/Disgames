@@ -95,12 +95,14 @@ class Snake:
 				embed.color = lost_game_color
 				await self.msg.edit(content='You lost', embed=embed)
 				self.run = False
+				self.winner = False
 				return
 
 			if self.snake_game.has_won_snake():
 				embed.color = won_game_color
 				await self.msg.edit(content='you won!!!', embed=embed)
 				self.run = False
+				self.winner = True
 				return
 
 			await self.msg.edit(embed=embed)
@@ -137,5 +139,7 @@ class Snake:
 				embed = discord.Embed(title='Snake', description=self.format_board(self.snake_game.get_board(), self.snake_game.get_head_position()), color=lost_game_color)
 				await self.msg.edit(content="You lost", embed=embed)
 				self.run = False
+				self.winner = False
 				break
 			self.snake_game.point(inp)
+		return self.winner

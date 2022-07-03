@@ -65,7 +65,9 @@ class TicTacToe:
 
 			if inp == 'stop':
 				embed = discord.Embed(title='Tic Tac Toe', description=f"Game ended by: {u.mention}\n{self.format_board()}", color=lost_game_color)
-				return await self.msg.edit(content=f'Game ended!', embed=embed)
+				await self.msg.edit(content=f'Game ended!', embed=embed)
+				self.winner = self.x if u == self.o else self.o
+				break
 
 			if u == self.turn:
 				x,y = inp
@@ -73,13 +75,18 @@ class TicTacToe:
 				won = self.has_won()
 				if won == True:
 					embed = discord.Embed(title='Tic Tac Toe', description=f"Turn: {self.turn.mention}\n{self.format_board()}", color=won_game_color)
-					return await self.msg.edit(content=f'{self.turn.mention} won!', embed=embed)
+					await self.msg.edit(content=f'{self.turn.mention} won!', embed=embed)
+					self.winner = self.turn
+					break
 				elif won == False:
 					embed = discord.Embed(title='Tic Tac Toe', description=f"Turn: {self.turn.mention}\n{self.format_board()}", color=drawn_game_color)
-					return await self.msg.edit(content=f'Draw', embed=embed)
+					await self.msg.edit(content=f'Draw', embed=embed)
+					self.winner = None
+					break
 				else:
 					self.turn = self.x if self.turn == self.o else self.o
 					embed = discord.Embed(title='Tic Tac Toe', description=f"Turn: {self.turn.mention}\n{self.format_board()}", color=ongoing_game_color)
 					await self.msg.edit(embed=embed)
 				self.controls.pop(r.emoji)
 				await r.message.remove_reaction(r.emoji,self.ctx.bot.user)
+		return self.winner

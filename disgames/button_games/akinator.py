@@ -43,6 +43,7 @@ class Akinator(discord.ui.View):
 		for label in ["Yes", "No", "I don't know", "Probably", "Probably not"]:
 			self.add_item(AkinatorButton(label))
 		self.add_item(AkinatorButton('\u200b', '⬅'))
+		self.winner = None
 
 	async def end_game(self, interaction):
 		self.stop()
@@ -63,3 +64,5 @@ class Akinator(discord.ui.View):
 
 		q = self.aki.start_game(child_mode=self.child_mode, language=self.language)
 		self.msg = await self.ctx.send(f"{self.ctx.author.mention}: **#{self.aki.step+1}.** {q}\nYes, No, I don't know, Probably, Probably not, Back", view=self)
+		await self.wait()
+		return self.winner

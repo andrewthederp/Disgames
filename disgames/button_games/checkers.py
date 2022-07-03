@@ -1,6 +1,6 @@
 import discord
 
-class CheckersModal(discord.ui.Modal, title='Chess'):
+class CheckersModal(discord.ui.Modal, title='Checkers'):
 	def __init__(self, button):
 		super().__init__()
 		self.button = button
@@ -40,6 +40,8 @@ class CheckersModal(discord.ui.Modal, title='Chess'):
 					embed = discord.Embed(title='Checkers', description=f"Winner: {view.turns[view.turn].mention} ({view.colors[view.turn]})\n{view.format_board()}", color=won_game_color)
 					embed.add_field(name='Moves:', value='No legal moves')
 					await interaction.response.edit_message(content='You won!', embed=embed)
+					view.winner = view.turns[view.turn]
+					view.stop()
 					return
 				else:
 					view.turn = view.other_turn
@@ -221,5 +223,6 @@ class Checkers(discord.ui.View):
 
 		embed = discord.Embed(title='Checkers', description=f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})\n{self.format_board()}", color=ongoing_game_color)
 		embed.add_field(name='Moves:', value=self.format_moves())
-
 		self.msg = await self.ctx.send(embed=embed, view=self)
+		await self.wait()
+		return self.winner

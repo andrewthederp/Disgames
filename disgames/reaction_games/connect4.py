@@ -92,7 +92,9 @@ class Connect4:
 
 			if inp == 'stop':
 				embed = discord.Embed(title='Connect4', description=f'Game ended by: {u.mention}\n'+self.format_board(), color=lost_game_color)
-				return await self.msg.edit(content='Game ended!', embed=embed)
+				await self.msg.edit(content='Game ended!', embed=embed)
+				self.winner = self.turns['r'] if u == self.turns['b'] else self.turns['b']
+				break
 
 			if u == self.turns[self.turn]:
 				done = self.move(inp)
@@ -103,9 +105,12 @@ class Connect4:
 					if won == False:
 						embed = discord.Embed(title='Connect4', description=f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=drawn_game_color)
 						await self.msg.edit(content='Tie!', embed=embed)
+						self.winner = None
 						break
 					else:
 						embed = discord.Embed(title='Connect4', description=f'Turn: {self.turns[self.turn].mention}\n'+self.format_board(), color=won_game_color)
 						await self.msg.edit(content=f'{self.turns[self.turn].mention} connected 4 {won[1]}', embed=embed)
+						self.winner = self.turns[self.turn]
 						break
 				self.turn = 'b' if self.turn == 'r' else 'r'
+		return self.winner

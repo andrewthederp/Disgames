@@ -23,11 +23,14 @@ class ChessModal(discord.ui.Modal, title='Chess'):
 			embed = view.make_embed()
 			if view.status == 'win':
 				embed.color = won_game_color
+				view.winner = interaction.user
 			elif view.status == 'draw':
 				embed.color = drawn_game_color
+				view.winner = None
 			await interaction.response.edit_message(embed=embed, view=view)
 
 			if view.status:
+				view.stop()
 				return
 			view.turn = 'w' if view.turn == 'b' else 'b'
 		else:
@@ -68,23 +71,18 @@ class Chess(discord.ui.View):
 		results = self.board.result()
 		if self.board.is_checkmate():
 			value = f"Checkmate, Winner: {self.turns[self.turn]} | Score: `{results}`"
-			self.stop()
 			self.status = 'win'
 		elif self.board.is_stalemate():
 			value = f"Stalemate | Score: `{results}`"
-			self.stop()
 			self.status = 'draw'
 		elif self.board.is_insufficient_material():
 			value = f"Insufficient material left to continue the game | Score: `{results}`"
-			self.stop()
 			self.status = 'draw'
 		elif self.board.is_seventyfive_moves():
 			value = f"75-moves rule | Score: `{results}`"
-			self.stop()
 			self.status = 'draw'
 		elif self.board.is_fivefold_repetition():
 			value = f"Five-fold repitition. | Score: `{results}`"
-			self.stop()
 			self.status = 'draw'
 		return value
 
@@ -126,6 +124,7 @@ class Chess(discord.ui.View):
 		embed = self.make_embed()
 		embed.description = f'Game ended by: {interaction.user.mention}'
 		embed.color = lost_game_color
+		self.winner = self.white if self.black == interaction.user else self.black
 		await interaction.response.edit_message(content='Game ended', embed=embed, view=self)
 
 	async def start(self, *, end_game_option=False):
@@ -136,3 +135,5 @@ class Chess(discord.ui.View):
 
 		embed = self.make_embed()
 		self.msg = await self.ctx.send(embed=embed, view=self)
+		await self.wait()
+		return self.winner

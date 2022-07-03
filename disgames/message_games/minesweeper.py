@@ -143,6 +143,8 @@ class Minesweeper:
 			elif end_game_option and inp.content.lower() in end_game_list:
 				embed = discord.Embed(title='Minesweeper', description=self.format_board()+f'\n\nMode: `{self.mode}`\nFlags: `{self.flags}`', color=lost_game_color)
 				await self.msg.edit(content='Game ended', embed=embed)
+				self.winner = False
+				break
 
 			for coor in inp.content.split(' '):
 				if coor.lower() in ['reveal','r']:
@@ -161,7 +163,9 @@ class Minesweeper:
 							self.reveal_all()
 							self.visible_board[x][y] = 'B'
 							embed = discord.Embed(title='Minesweeper', description=self.format_board()+f'\n\nMode: `{self.mode}`\nFlags: `{self.flags}`', color=lost_game_color)
-							return await self.msg.edit(content='You lost!', embed=embed)
+							await self.msg.edit(content='You lost!', embed=embed)
+							self.winner = False
+							break
 						elif block == 0:
 							self.reveal_zeros(x, y)
 						else:
@@ -177,4 +181,7 @@ class Minesweeper:
 					if self.has_won():
 						self.reveal_all()
 						embed = discord.Embed(title='Minesweeper', description=self.format_board()+f'\n\nMode: `{self.mode}`\nFlags: `{self.flags}`', color=won_game_color)
-						return await self.msg.edit(content='You won!', embed=embed)
+						await self.msg.edit(content='You won!', embed=embed)
+						self.winner = True
+						break
+		return self.winner

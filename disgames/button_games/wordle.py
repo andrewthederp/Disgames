@@ -28,9 +28,12 @@ class WordleModal(discord.ui.Modal, title='Wordle'):
         filter_word = view.filter_(inp)
         view.guesses.append({'guess':inp, 'filter_word':filter_word})
         await view.send_embed(interaction, view.has_won(filter_word), view.tries==6)
-        if view.has_won(filter_word) or view.tries == 6:
+        if view.has_won(filter_word):
+            view.winner = True
             view.stop()
-            return
+        elif view.tries == 6:
+            view.winner = False
+            view.stop()
 
 
 class Wordle(discord.ui.View):
@@ -162,6 +165,7 @@ class Wordle(discord.ui.View):
 
 
     async def end_game(self, interaction):
+        self.winner = False
         self.stop()
         for child in self.children:
             child.disabled = True
@@ -223,4 +227,6 @@ class Wordle(discord.ui.View):
             self.add_item(button)
 
         self.msg = await self.ctx.send(embed=embed, file=None if not self.image else f, view=self)
+        await self.wait()
+        return self.winner
 

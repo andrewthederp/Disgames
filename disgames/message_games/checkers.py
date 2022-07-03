@@ -146,8 +146,9 @@ class Checkers:
 					pass
 
 			if end_game_option and inp.content.lower() in end_game_list:
-				embed = discord.Embed(title='Checkers', description=f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})\n{self.format_board()}", color=lost_game_color)
+				embed = discord.Embed(title='Checkers', description=f"Game ended by: {inp.author.mention}\n{self.format_board()}", color=lost_game_color)
 				await self.msg.edit(content='Game ended', embed=embed)
+				self.winner = self.turns['r'] if self.turns['b'] == inp.author else self.turns['b']
 				break
 			elif resend_embed_option and inp.content.lower() in resend_embed_list:
 				embed = discord.Embed(title='Checkers', description=f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})\n{self.format_board()}", color=ongoing_game_color)
@@ -184,6 +185,7 @@ class Checkers:
 						embed = discord.Embed(title='Checkers', description=f"Winner: {self.turns[self.turn].mention} ({self.colors[self.turn]})\n{self.format_board()}", color=won_game_color)
 						embed.add_field(name='Moves:', value='No legal moves')
 						await self.msg.edit(content='You won!', embed=embed)
+						self.winner = self.turns[self.turn]
 						break
 					else:
 						self.turn = self.other_turn
@@ -191,3 +193,4 @@ class Checkers:
 						embed = discord.Embed(title='Checkers', description=f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})\n{self.format_board()}", color=ongoing_game_color)
 						embed.add_field(name='Moves:', value=self.format_moves())
 						await self.msg.edit(embed=embed)
+		return self.winner

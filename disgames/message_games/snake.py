@@ -95,12 +95,14 @@ class Snake:
 				embed.color = lost_game_color
 				await self.msg.edit(content='You lost', embed=embed)
 				self.run = False
+				self.winner = False
 				return
 
 			if self.snake_game.has_won_snake():
 				embed.color = won_game_color
 				await self.msg.edit(content='you won!!!', embed=embed)
 				self.run = False
+				self.winner = True
 				return
 
 			await self.msg.edit(embed=embed)
@@ -144,3 +146,4 @@ class Snake:
 				self.inp = await self.ctx.send(embed=embed)
 				continue
 			self.snake_game.point(self.conversion[inp.content.lower()[0]])
+		return self.winner

@@ -20,10 +20,12 @@ class TicTacToeButton(discord.ui.Button):
 			for child in view.children:
 				child.disabled = True
 			await interaction.response.edit_message(content=f'{view.turn.mention} won!', view=view)
+			view.winner = view.turn
 		elif won == False:
 			for child in view.children:
 				child.disabled = True
 			await interaction.response.edit_message(content='Draw', view=view)
+			view.winner = None
 		else:
 			view.turn = view.x if view.turn == view.o else view.o
 			await interaction.response.edit_message(content=f"Turn: {view.turn.mention}", view=view)
@@ -77,3 +79,5 @@ class TicTacToe:
 	async def start(self):
 		view = TicTacToeView(self.ctx, self.x, self.o)
 		await self.ctx.send(content=f"Turn: {view.turn.mention}", view=view)
+		await view.wait()
+		return self.winner
