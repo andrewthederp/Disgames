@@ -141,7 +141,7 @@ The Wordle class takes 1 arg and 2 kwargs
 	- word (A string which is expected to be 5 letters long that will be used as the wordle word. `None` by default)
 	- image (A bool which decides whether to display the game as an image or not. `False` by default)
 
-The start function of the Wordle class takes 0 args and 3 kwargs
+The start function of the Wordle class takes 0 args and 2 kwargs
 - Kwargs
 	- delete_input (If set to `True` then the bot will delete the input provided by the user if possible. `False` by default)
 	- end_game_option (If set to `True` then the bot will end the game if the player's message was inside `disgames.end_game_list`. `False` by default)
