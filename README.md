@@ -1,5 +1,4 @@
-# Disgames
-A python module that adds a bunch of mini-games to your discord python bot
+A python module made to make creating games easier and adds a bunch of game commands to your discord python bot
 
 ---
 ## Contents
@@ -9,6 +8,8 @@ A python module that adds a bunch of mini-games to your discord python bot
   - [Installation](#installation)
   - [Usage](#usage)
   - [Configuration](#configuration)
+  - [Winnings](#winnings)
+  - [Example](#example)
   - [Extra](#extra)
 
 ## Installation
@@ -41,11 +42,21 @@ You can configure some variables that are used throughout the module
 - `disgames.ongoing_game_color` The color of the embed while the game is still running
 - `disgames.lost_game_color` The color of the embed when the player looses (only used in singleplayer games)
 - `disgames.won_game_color` The color of the embed when the player wins
-- `disgames.drawn_game_color` The color of the embed when the game draws
+- `isgames.drawn_game_color` The color of the embed when the game draws
 - `disgames.resend_embed_list` A list of strings, if the player sends a message which is in the list. The game embed will be re-sent (only used in message games)
 - `disgames.end_game_list` A list of strings, if the player sends a message which is in the list. The game will end (only used in message games)
 
 Example of changing a variable: `disgames.drawn_game_color = 0x000000`
+
+## Winnings
+The start function will return any of `discord.Member`/`True`/`False`/`None`/`list`
+`True`/`False` will only be returned if the game is a single player game and it means the author has won/lost
+`None` means the game has ended in a draw
+`discord.Member` means that that person has won the game
+`list` would be a list of bools, this is only returned by `Soko`. A `True` will be added into the list for every game the user wins. And the last item in the list will always be `False` if `play_forever` is set to `True`
+
+## Examples
+Coming soon!
 
 ## Extra
 Note that this package only works with [discord.py](https://pypi.org/project/discord.py) and other modules that use the `discord` namespace
