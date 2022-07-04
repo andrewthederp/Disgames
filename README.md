@@ -49,11 +49,12 @@ You can configure some variables that are used throughout the module
 Example of changing a variable: `disgames.drawn_game_color = 0x000000`
 
 ## Winnings
-The start function will return any of `discord.Member`/`True`/`False`/`None`/`list`
+The start function will return any of `discord.Member`/`True`/`False`/`None`/`list`/`0`
 - `True`/`False` will only be returned if the game is a single player game and it means the author has won/lost
 - `None` means the game has ended in a draw
 - `discord.Member` means that that person has won the game
 - `list` would be a list of bools, this is only returned by `Soko`. A `True` will be added into the list for every game the user wins. And the last item in the list will always be `False` if `play_forever` is set to `True`
+- `0` means that the game timed out
 
 ## Examples
 Coming soon!
