@@ -63,6 +63,7 @@ class HangmanView(discord.ui.View):
 		self.errors = 0
 		self.word = word
 		self.revealed_word = '🟦'*len(self.word)
+		self.ctx = ctx
 		if end_game_option:
 			button = discord.ui.Button(emoji='⏹', style=discord.ButtonStyle.danger)
 			button.callback = self.end_game
