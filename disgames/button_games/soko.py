@@ -21,7 +21,6 @@ class SokobanButton(discord.ui.Button):
 			direction = view.controls[inp]
 			view.move(direction, 1)
 			if view.has_won():
-				view.winner.append(True)
 				if view.play_forever:
 					view.board = view.create_board()
 					view.original_board = copy.deepcopy(view.board)
@@ -214,4 +213,4 @@ class Sokoban:
 		embed = discord.Embed(title='Sokoban', description=view.format_board(), color=ongoing_game_color)
 		await self.ctx.send(embed=embed, view=view)
 		await view.wait()
-		return view.won
+		return view.winner
