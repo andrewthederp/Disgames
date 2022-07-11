@@ -15,6 +15,29 @@ __license__ = 'Apache License 2.0'
 __copyright__ = 'Copyright 2021-2022 Andrewthederp and MarzaElise'
 __version__ = '3.0.0'
 
+def enable_better_formatting():
+    import os
+    os.system('pip install git+https://github.com/andrewthederp/FormatGame')
+    try:
+        import format_game
+        return 1
+    except ImportError:
+        return 2
+
+class FormatType:
+    plain = 0
+    plain_codeblock = 1
+
+    listed = 2
+    listed_codeblock = 2
+
+    emojis = 3
+    emojis_codeblock = 4
+
+    image = 5
+
+    text = 6
+
 class VersionInfo(NamedTuple):
     major: int
     minor: int
