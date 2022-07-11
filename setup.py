@@ -11,6 +11,10 @@ setup(
     long_description=desc,
     long_description_content_type="text/markdown",
     author="andrew",
+    project_urls={
+        "Repository": "https://github.com/andrewthederp/Disgames",
+        "Issue tracker": "https://github.com/andrewthederp/Disgames/issues",
+    },
     maintainer="Marcus",
     url="https://github.com/andrewthederp/Disgames",
     license="Apache",
