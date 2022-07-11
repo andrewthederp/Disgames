@@ -2,11 +2,16 @@ import akinator
 import discord
 from discord.ext import commands
 
+from .. import FormatType
+
 class Akinator:
-	def __init__(self, ctx, *, child_mode=True, language=None):
+	def __init__(self, ctx, *, format_type=FormatType.text, child_mode=True, language=None):
 
 		from .. import resend_embed_list, end_game_list, won_game_color
 		global resend_embed_list, end_game_list, won_game_color
+
+		if format_type != FormatType.text:
+			raise
 
 		self.ctx = ctx
 		self.child_mode = child_mode
