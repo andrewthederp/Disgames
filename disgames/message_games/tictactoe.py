@@ -43,10 +43,10 @@ class TicTacToe:
 			if self.format_type in [FormatType.emojis, FormatType.emojis_codeblock]:
 				format_dict = {k:self.format_dict.get(k, v) for k, v in list(self.default_format_dict.items())}
 				format_dict.update({1:'1️⃣',2:'2️⃣',3:'3️⃣','a':':regional_indicator_a:','b':':regional_indicator_b:','c':':regional_indicator_c:'})
-				return format_game.format_tictactoe_board(self.board, filler_char="⏹", replacements=format_dict, codeblock=self.format_type == FormatType.emojis_codeblock)
+				return format_game.format_tictactoe_board(self.board, filler_char="⏹", replacements=format_dict, codeblock=self.format_type == FormatType.emojis_codeblock, mixed_coordinates=True)
 
 			is_listed = self.format_type in [FormatType.listed, FormatType.listed_codeblock]
-			filler_char = '    ' if is_listed else ''
+			filler_char = '    ' if is_listed else ' '
 
 			return format_game.format_tictactoe_board(self.board, codeblock=self.format_type in [FormatType.plain_codeblock, FormatType.listed_codeblock], mixed_coordinates=True, filler_char = filler_char, vertical_join=' | ' if is_listed else '', horizontal_join='\n  +---+---+---+' if is_listed else '', join_upper_coordinates='   ' if is_listed else '')
 		else:
