@@ -41,7 +41,7 @@ class TicTacToe:
 				return file
 			
 			if self.format_type in [FormatType.emojis, FormatType.emojis_codeblock]:
-				format_dict = {k:self.format_dict.get(k, v) for k, v in self.default_format_dict}
+				format_dict = {k:self.format_dict.get(k, v) for k, v in list(self.default_format_dict.items())}
 				format_dict.update({1:'1️⃣',2:'2️⃣',3:'3️⃣','a':':regional_indicator_a:','b':':regional_indicator_b:','c':':regional_indicator_c:'})
 				return format_game.format_tictactoe_board(self.board, filler_char="⏹", replacements=format_dict, codeblock=self.format_type == FormatType.emojis_codeblock)
 
