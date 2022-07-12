@@ -29,14 +29,14 @@ class FormatType:
     plain_codeblock = 1
 
     listed = 2
-    listed_codeblock = 2
+    listed_codeblock = 3
 
-    emojis = 3
-    emojis_codeblock = 4
+    emojis = 4
+    emojis_codeblock = 5
 
-    image = 5
+    image = 6
 
-    text = 6
+    text = 7
 
 class VersionInfo(NamedTuple):
     major: int
