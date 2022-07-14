@@ -39,7 +39,7 @@ class TicTacToe:
 				arr.seek(0)
 				file = discord.File(arr, filename='TicTacToe.png')
 				return file
-			
+
 			if self.format_type in [FormatType.emojis, FormatType.emojis_codeblock]:
 				format_dict = {k:self.format_dict.get(k, v) for k, v in list(self.default_format_dict.items())}
 				format_dict.update({1:'1️⃣',2:'2️⃣',3:'3️⃣','a':':regional_indicator_a:','b':':regional_indicator_b:','c':':regional_indicator_c:'})
@@ -116,7 +116,7 @@ class TicTacToe:
 			else:
 				await self.msg.edit(content=content, embed=embed, attachments=[formatted_board])
 
-	async def start(self, *, delete_input=False, resend_embed_option=False):
+	async def start(self, *, delete_input=False, resend_embed_option=False, end_game_option=False):
 		await self.handle_embed(ongoing_game_color, 'send')
 
 		while True:
@@ -132,7 +132,7 @@ class TicTacToe:
 				await self.handle_embed(ongoing_game_color, 'send')
 				continue
 
-			elif msg.content.lower() in end_game_list:
+			elif end_game_option and msg.content.lower() in end_game_list:
 				await self.handle_embed(lost_game_color, 'edit', 'Game ended!')
 				self.winner = self.x if msg.author == self.o else self.o
 				break

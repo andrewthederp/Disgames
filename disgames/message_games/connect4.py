@@ -18,6 +18,7 @@ class Connect4:
 								"R": "♦️",
 								"B": "🔷"
 		}
+		self.winner = 0
 
 	def format_board(self):
 		lst = []

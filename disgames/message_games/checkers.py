@@ -23,6 +23,7 @@ class Checkers:
 		self.other_turn = 'b'
 		self.turns = {'r':red,'b':blue}
 		self.colors = {'r':'Red','b':'Blue'}
+		self.winner = 0
 
 	def format_board(self):
 		lst = [':stop_button::regional_indicator_a::regional_indicator_b::regional_indicator_c::regional_indicator_d::regional_indicator_e::regional_indicator_f::regional_indicator_g::regional_indicator_h:']

@@ -23,7 +23,7 @@ class Sokoban:
 									}
 		self.play_forever        = play_forever
 		self.original_board      = copy.deepcopy(self.board)
-		self.winner = []
+		self.winner = 0
 
 	def create_board(self):
 		board = [[' ' for _ in range(5)] for _ in range(5)]
@@ -130,11 +130,13 @@ class Sokoban:
 			for col in row:
 				if col == 't' or col == 'tp':
 					return False
-		self.won = True
+		if self.winner == 0:
+			self.winner = []
+		self.winner.append(True)
 		return True
 
 
-	async def start(self, *, delete_input=False, resend_embed_option=False):
+	async def start(self, *, delete_input=False, end_game_option=False, resend_embed_option=False):
 		embed = discord.Embed(title='Sokoban', description=self.format_board(), color=ongoing_game_color)
 		self.msg = await self.ctx.send(embed=embed)
 		while True:
@@ -153,7 +155,7 @@ class Sokoban:
 				elif resend_embed_option and inp.content.lower() in resend_embed_list:
 					embed = discord.Embed(title='Sokoban', description=self.format_board(), color=ongoing_game_color)
 					self.msg = await self.ctx.send(embed=embed)
-				
+
 				direction = self.controls[inp.content[0]]
 				if inp.content[-1].isdigit():
 					amount = int(inp.content[-1])
@@ -161,7 +163,6 @@ class Sokoban:
 					amount = 1
 				self.move(direction, amount)
 				if self.has_won():
-					self.winner.append(True)
 					if self.play_forever:
 						self.board = self.create_board()
 						self.original_board = copy.deepcopy(self.board)
@@ -170,7 +171,9 @@ class Sokoban:
 						await self.msg.edit(content='You won!', embed=embed)
 						break
 			except KeyError:
-				if inp.content in end_game_list:
+				if end_game_option and inp.content in end_game_list:
+					if self.winner == 0:
+						self.winner = []
 					self.winner.append(False)
 					embed = discord.Embed(title='Sokoban', description=self.format_board(), color=lost_game_color)
 					await self.msg.edit(content='Game ended!', embed=embed)

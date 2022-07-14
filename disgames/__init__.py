@@ -22,7 +22,7 @@ def enable_better_formatting():
         import format_game
         return 1
     except ImportError:
-        return 2
+        return 0
 
 class FormatType:
     plain = 0

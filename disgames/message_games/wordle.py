@@ -25,6 +25,7 @@ class Wordle:
         self.guesses = []
         self.tries = 0
         self.image = image
+        self.winner = 0
 
 
     def remove(self, wrd, letter):

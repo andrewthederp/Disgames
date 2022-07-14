@@ -22,6 +22,7 @@ class Minesweeper:
 		self.board, self.visible_board = self.create_boards()
 		self.mode = 'reveal'
 		self.flags = len(list(self.get_bombs()))
+		self.winner = 0
 
 	def get_neighbours(self, x, y):
 		for x_ in [x - 1, x, x + 1]:

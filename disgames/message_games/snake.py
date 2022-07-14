@@ -79,6 +79,7 @@ class Snake:
 		self.conversion = {'u':UP, 'd':DOWN, 'l':LEFT, 'r':RIGHT}
 
 		self.msg = None
+		self.winner = 0
 
 	def format_board(self, board, snake_head):
 		lst = []

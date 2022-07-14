@@ -16,6 +16,8 @@ class Chess:
 		self.colors = {'w':'White','b':"Black"}
 		self.status = None
 
+		self.winner = 0
+
 		self.board = chess.Board(fen)
 
 		if chess960:
