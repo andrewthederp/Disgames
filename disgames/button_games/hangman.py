@@ -71,7 +71,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			# await interaction.response.edit_message(embed=embed, view=view)
 
 class HangmanView(discord.ui.View):
-	def __init__(self, ctx, word, end_game_option, self.format_type, self.dead_face):
+	def __init__(self, ctx, word, end_game_option, format_type, dead_face):
 		super().__init__()
 		self.guesses = []
 		self.errors = 0
