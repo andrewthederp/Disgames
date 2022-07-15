@@ -1,6 +1,8 @@
 import discord
 import chess
+import chess.pgn
 import itertools
+import datetime
 
 class ChessModal(discord.ui.Modal, title='Chess'):
 	def __init__(self, button):
@@ -20,6 +22,7 @@ class ChessModal(discord.ui.Modal, title='Chess'):
 
 		if move:
 			view.board.push(move)
+			view.node = view.node.add_variation(move)
 			embed = view.make_embed()
 			if view.status == 'win':
 				embed.color = won_game_color
@@ -62,6 +65,18 @@ class Chess(discord.ui.View):
 			self.board.castling_rights |= chess.BB_H8
 			self.board.castling_rights |= chess.BB_A8
 
+		now = datetime.datetime.utcnow()
+		self.game = chess.pgn.Game(
+			headers={
+				'Site':'discord.com',
+				'Date':f'{now:%Y-%m-%d}'
+				'White':white.display_name,
+				'Black':black.display_name, 
+			}
+		)
+		self.game.setup(self.board)
+		self.node = self.game
+
 	async def interaction_check(self, interaction):
 		if interaction.user not in [self.white, self.black]:
 			return await interaction.response.send_message(content="You're not playing in this game", ephemeral=True)
@@ -69,31 +84,39 @@ class Chess(discord.ui.View):
 
 	def has_won(self):
 		value = None
-		results = self.board.result()
+		result = self.board.result()
 		if self.board.is_checkmate():
-			value = f"Checkmate, Winner: {self.turns[self.turn]} | Score: `{results}`"
+			value = f"Checkmate, Winner: {self.turns[self.turn]} | Score: `{result}`"
 			self.status = 'win'
+			self.game.headers["Result"] = result
 		elif self.board.is_stalemate():
-			value = f"Stalemate | Score: `{results}`"
+			value = f"Stalemate | Score: `{result}`"
 			self.status = 'draw'
+			self.game.headers["Result"] = result
 		elif self.board.is_insufficient_material():
-			value = f"Insufficient material left to continue the game | Score: `{results}`"
+			value = f"Insufficient material left to continue the game | Score: `{result}`"
 			self.status = 'draw'
+			self.game.headers["Result"] = result
 		elif self.board.is_seventyfive_moves():
-			value = f"75-moves rule | Score: `{results}`"
+			value = f"75-moves rule | Score: `{result}`"
 			self.status = 'draw'
+			self.game.headers["Result"] = result
 		elif self.board.is_fivefold_repetition():
-			value = f"Five-fold repitition. | Score: `{results}`"
+			value = f"Five-fold repitition. | Score: `{result}`"
 			self.status = 'draw'
+			self.game.headers["Result"] = result
 		return value
 
 	def make_embed(self):
 		won = self.has_won()
+		won = self.has_won()
+		if won:
+			self.game.headers["Termination"] = won
 		embed = discord.Embed(title='Chess', description=won or f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})", color=ongoing_game_color)
 		url = f"http://www.fen-to-image.com/image/64/double/coords/{self.board.board_fen()}"
 		embed.set_image(url=url)
 		embed.add_field(name=f"Legal moves", value=", ".join([f"`{str(i)}`" for i in self.board.legal_moves]) or 'No legal moves', inline=False)
-		embed.add_field(name="Check", value=self.board.is_check(), inline=False)
+		embed.add_field(name="PGN", value=self.game, inline=False)
 		return embed
 
 	def convert_to_move(self, inp):
@@ -122,10 +145,14 @@ class Chess(discord.ui.View):
 		self.stop()
 		for child in self.children:
 			child.disabled = True
+
+		winner = self.white if interaction.user == self.black else self.black
+		self.game.headers['Result'] = '1-0' if winner == self.white else '0-1'
+		self.game.headers["Termination"] = f"{winner.display_name} won by resignation"
 		embed = self.make_embed()
 		embed.description = f'Game ended by: {interaction.user.mention}'
 		embed.color = lost_game_color
-		self.winner = self.white if self.black == interaction.user else self.black
+		self.winner = winner
 		await interaction.response.edit_message(content='Game ended', embed=embed, view=self)
 
 	async def start(self, *, end_game_option=False):
