@@ -56,7 +56,7 @@ class Hangman:
 		if self.format_type == FormatType.image:
 			embed = discord.Embed(title='Hangman', description=f"\n\n{self.revealed_word}", color=embed_color)
 			self.show_guesses(embed)
-			embed.set_image(url=url="attachment://Hangman.png")
+			embed.set_image(url="attachment://Hangman.png")
 
 			if send_or_edit == 'send':
 				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game)
