@@ -34,7 +34,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			view.winner = True
 			view.stop()
 			view.clear_items()
-			return await view.handle_embed(won_game_color, 'edit', 'You won!')
+			return await view.handle_embed(won_game_color, 'edit', 'You won!', ''.join(f':regional_indicator_{i}:' for i in view.word))
 			# embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=won_game_color)
 			# return await interaction.response.edit_message(content='You won!', embed=embed, view=view)
 		else:
@@ -44,13 +44,13 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 					print(view.revealed_word)
 					for num, letter in enumerate(view.word):
 						if letter == inp:
-							view.revealed_word[num] = f":regional_indicator_{letter}:"
+							view.revealed_word[num] = letter
 					view.revealed_word = ''.join(view.revealed_word)
-					if '🟦' not in view.revealed_word:
+					if ' ' not in view.revealed_word:
 						view.winner = True
 						view.stop()
 						view.clear_items()
-						return await view.handle_embed(won_game_color, 'edit', 'You won!')
+						return await view.handle_embed(won_game_color, 'edit', 'You won!', ''.join(f':regional_indicator_{i}:' for i in view.word))
 						# embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=won_game_color)
 						# return await interaction.response.edit_message(content='You won!', embed=embed, view=view)
 				else:
@@ -62,7 +62,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			view.winner = False
 			view.stop()
 			view.clear_items()
-			return await view.handle_embed(lost_game_color, 'edit', 'You lost!')
+			return await view.handle_embed(lost_game_color, 'edit', 'You lost!', ''.join(f':regional_indicator_{i}:' for i in view.word))
 			# embed = discord.Embed(title='Hangman', description=view.make_hangman()+f"\n\n{''.join(f':regional_indicator_{i}:' for i in view.word)}", color=lost_game_color)
 			# await interaction.response.edit_message(content='You lost', embed=embed, view=view)
 		else:
@@ -77,7 +77,7 @@ class HangmanView(discord.ui.View):
 		self.guesses = []
 		self.errors = 0
 		self.word = word
-		self.revealed_word = '🟦'*len(self.word)
+		self.revealed_word = ' '*len(self.word)
 		self.ctx = ctx
 		self.winner = 0
 
@@ -109,10 +109,10 @@ class HangmanView(discord.ui.View):
 			file = discord.File(arr, filename='Hangman.png')
 			return file
 
-	async def handle_embed(self, embed_color, send_or_edit='edit', content=''):
+	async def handle_embed(self, embed_color, send_or_edit='edit', content='', description=''):
 		formatted_game = self.make_hangman()
 		if self.format_type == FormatType.image:
-			embed = discord.Embed(title='Hangman', description=self.revealed_word, color=embed_color)
+			embed = discord.Embed(title='Hangman', description=description or ''.join(f':regional_indicator_{i}:' for i in self.revealed_word if i != ' ' else '🟦'), color=embed_color)
 			self.show_guesses(embed)
 			embed.set_image(url="attachment://Hangman.png")
 
@@ -122,7 +122,7 @@ class HangmanView(discord.ui.View):
 			else:
 				await self.msg.edit(content=content, embed=embed, attachments=[formatted_game], view=self)
 		else:
-			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{self.revealed_word}", color=embed_color)
+			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{description or ''.join(f':regional_indicator_{i}:' for i in self.revealed_word if i != ' ' else '🟦')}", color=embed_color)
 			self.show_guesses(embed)
 
 			if send_or_edit == 'send':
@@ -169,7 +169,6 @@ class Hangman:
 				words.append(word_)
 		self.word = word or random.choice(words)
 		self.word = self.word.lower()
-		self.revealed_word = '🟦'*len(self.word)
 
 		self.format_type = format_type
 		self.dead_face = dead_face
