@@ -34,7 +34,7 @@ class Chess:
 		self.game = chess.pgn.Game(
 			headers={
 				'Site':'discord.com',
-				'Date':f'{now:%Y-%m-%d}'
+				'Date':f'{now:%Y-%m-%d}',
 				'White':white.display_name,
 				'Black':black.display_name, 
 			}
