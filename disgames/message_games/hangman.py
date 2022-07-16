@@ -71,7 +71,6 @@ class Hangman:
 			else:
 				await self.msg.edit(content=content, embed=embed)
 
-
 	def show_guesses(self, embed):
 		if self.guesses:
 			embed.add_field(name="Guesses", value="".join(f":regional_indicator_{i}:" for i in self.guesses),inline=False)

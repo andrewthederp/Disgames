@@ -45,26 +45,25 @@ class Chess:
 	def has_won(self):
 		value = None
 		result = self.board.result()
+
+		if self.board.is_game_over():
+			self.game.headers["Result"] = result
+
 		if self.board.is_checkmate():
 			value = f"Checkmate, Winner: {self.turns[self.turn]} | Score: `{result}`"
 			self.status = 'win'
-			self.game.headers["Result"] = result
 		elif self.board.is_stalemate():
 			value = f"Stalemate | Score: `{result}`"
 			self.status = 'draw'
-			self.game.headers["Result"] = result
 		elif self.board.is_insufficient_material():
 			value = f"Insufficient material left to continue the game | Score: `{result}`"
 			self.status = 'draw'
-			self.game.headers["Result"] = result
 		elif self.board.is_seventyfive_moves():
 			value = f"75-moves rule | Score: `{result}`"
 			self.status = 'draw'
-			self.game.headers["Result"] = result
 		elif self.board.is_fivefold_repetition():
 			value = f"Five-fold repitition. | Score: `{result}`"
 			self.status = 'draw'
-			self.game.headers["Result"] = result
 		return value
 
 	def make_embed(self):
