@@ -41,6 +41,7 @@ class HangmanModal(discord.ui.Modal, title='Hangman'):
 			if len(inp) == 1:
 				if inp in view.word:
 					view.revealed_word = list(view.revealed_word)
+					print(view.revealed_word)
 					for num, letter in enumerate(view.word):
 						if letter == inp:
 							view.revealed_word[num] = f":regional_indicator_{letter}:"
@@ -111,10 +112,11 @@ class HangmanView(discord.ui.View):
 	async def handle_embed(self, embed_color, send_or_edit='edit', content=''):
 		formatted_game = self.make_hangman()
 		if self.format_type == FormatType.image:
-			embed = discord.Embed(title='Hangman', description=f"\n\n{self.revealed_word}", color=embed_color)
+			embed = discord.Embed(title='Hangman', description=self.revealed_word, color=embed_color)
 			self.show_guesses(embed)
 			embed.set_image(url="attachment://Hangman.png")
 
+			print(formatted_game)
 			if send_or_edit == 'send':
 				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game, view=self)
 			else:
@@ -137,6 +139,7 @@ class HangmanView(discord.ui.View):
 		await interaction.response.send_modal(HangmanModal(button))
 
 	async def end_game(self, interaction):
+		await interaction.response.defer()
 		self.winner = False
 		self.stop()
 		for child in self.children:
