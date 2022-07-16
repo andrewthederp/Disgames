@@ -114,7 +114,7 @@ class HangmanView(discord.ui.View):
 		if self.format_type == FormatType.image:
 			embed = discord.Embed(title='Hangman', description=description or ''.join(f':regional_indicator_{i}:' if i != ' ' else '🟦' for i in self.revealed_word), color=embed_color)
 			self.show_guesses(embed)
-			embed.set_image(url="attachment://Hangman.png")
+			# embed.set_image(url="attachment://Hangman.png")
 
 			if send_or_edit == 'send':
 				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game, view=self)
