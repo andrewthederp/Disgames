@@ -122,7 +122,8 @@ class HangmanView(discord.ui.View):
 			else:
 				await self.msg.edit(content=content, embed=embed, attachments=[formatted_game], view=self)
 		else:
-			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{description or ''.join(f':regional_indicator_{i}:' if i != ' ' else '🟦' for i in self.revealed_word}", color=embed_color)
+			formatted_revealed_word = ''.join(f':regional_indicator_{i}:' if i != ' ' else '🟦' for i in self.revealed_word)
+			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{description or formatted_revealed_word}", color=embed_color)
 			self.show_guesses(embed)
 
 			if send_or_edit == 'send':
