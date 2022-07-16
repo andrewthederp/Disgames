@@ -105,16 +105,16 @@ class HangmanView(discord.ui.View):
 			arr = io.BytesIO()
 			im = format_game.format_hangman_game(self.errors, image=True, dead_face=self.dead_face)
 			im.save(arr, format='PNG')
+			arr.seek(0)
 			file = discord.File(arr, filename='Hangman.png')
 			return file
 
 	async def handle_embed(self, embed_color, send_or_edit='edit', content='', description=''):
 		formatted_game = self.make_hangman()
-		print(formatted_game, self.format_type)
 		if self.format_type == FormatType.image:
 			embed = discord.Embed(title='Hangman', description=description or ''.join(f':regional_indicator_{i}:' if i != ' ' else '🟦' for i in self.revealed_word), color=embed_color)
 			self.show_guesses(embed)
-			# embed.set_image(url="attachment://Hangman.png")
+			embed.set_image(url="attachment://Hangman.png")
 
 			if send_or_edit == 'send':
 				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game, view=self)
@@ -122,7 +122,7 @@ class HangmanView(discord.ui.View):
 				await self.msg.edit(content=content, embed=embed, attachments=[formatted_game], view=self)
 		else:
 			formatted_revealed_word = ''.join(f':regional_indicator_{i}:' if i != ' ' else '🟦' for i in self.revealed_word)
-			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{description or formatted_revealed_word}", color=embed_color)
+			embed = discord.Embed(title='Hangman', description=formatted_game+f"\n\n{description or formatted_revealed_word}", color=embed_color)
 			self.show_guesses(embed)
 
 			if send_or_edit == 'send':
