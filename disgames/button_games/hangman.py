@@ -116,17 +116,17 @@ class HangmanView(discord.ui.View):
 			embed.set_image(url="attachment://Hangman.png")
 
 			if send_or_edit == 'send':
-				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game)
+				self.msg = await self.ctx.send(content=content, embed=embed, file=formatted_game, view=self)
 			else:
-				await self.msg.edit(content=content, embed=embed, attachments=[formatted_game])
+				await self.msg.edit(content=content, embed=embed, attachments=[formatted_game], view=self)
 		else:
 			embed = discord.Embed(title='Hangman', description=self.make_hangman()+f"\n\n{self.revealed_word}", color=embed_color)
 			self.show_guesses(embed)
 
 			if send_or_edit == 'send':
-				self.msg = await self.ctx.send(content=content, embed=embed)
+				self.msg = await self.ctx.send(content=content, embed=embed, view=self)
 			else:
-				await self.msg.edit(content=content, embed=embed)
+				await self.msg.edit(content=content, embed=embed, view=self)
 
 	def show_guesses(self, embed):
 		if self.guesses:
