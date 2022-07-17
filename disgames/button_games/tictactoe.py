@@ -42,7 +42,7 @@ class TicTacToeView(discord.ui.View):
 		self.board      = [[' ' for _ in range(3)] for _ in range(3)]
 		self.conversion = {x:'x',o:'o'}
 		self.turn       = x
-		self.winner = 0
+		self.winner     = 0
 		for x in range(3):
 			for y in range(3):
 				self.add_item(TicTacToeButton(str(x)+str(y)))
@@ -75,12 +75,12 @@ class TicTacToeView(discord.ui.View):
 
 class TicTacToe:
 	def __init__(self, ctx, *, x, o):
-		self.x           = x
-		self.o           = o
-		self.ctx         = ctx
+		self.x   = x
+		self.o   = o
+		self.ctx = ctx
 
 	async def start(self):
 		view = TicTacToeView(self.ctx, self.x, self.o)
 		await self.ctx.send(content=f"Turn: {view.turn.mention}", view=view)
 		await view.wait()
-		return self.winner
+		return view.winner
