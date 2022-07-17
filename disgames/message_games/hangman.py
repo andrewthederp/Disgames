@@ -48,6 +48,7 @@ class Hangman:
 			arr = io.BytesIO()
 			im = format_game.format_hangman_game(self.errors, image=True, dead_face=self.dead_face)
 			im.save(arr, format='PNG')
+			arr.seek(0)
 			file = discord.File(arr, filename='Hangman.png')
 			return file
 
