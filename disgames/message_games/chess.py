@@ -111,7 +111,7 @@ class Chess:
 		embed.add_field(name="PGN", value=self.game, inline=False)
 		return embed
 
-	async def handle_embed(self, send_or_edit='edit'):
+	def handle_embed(self, send_or_edit='edit'):
 		embed = self.make_embed()
 		formatted_board = self.format_board()
 
@@ -129,6 +129,8 @@ class Chess:
 
 		if better_formatting and self.format_type == FormatType.image:
 			embed.set_image(url='attachment://Chess.png')
+		elif better_formatting:
+			pass
 		else:
 			embed.set_image(url=formatted_board)
 
