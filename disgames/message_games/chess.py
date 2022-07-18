@@ -111,7 +111,7 @@ class Chess:
 		embed.add_field(name="PGN", value=self.game, inline=False)
 		return embed
 
-	def handle_embed(self, send_or_edit='edit'):
+	async def handle_embed(self, send_or_edit='edit'):
 		embed = self.make_embed()
 		formatted_board = self.format_board()
 
