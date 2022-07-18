@@ -53,7 +53,7 @@ class Chess:
 		self.game.setup(self.board)
 		self.node = self.game
 
-	def has_won(self):
+	async def has_won(self):
 		value = None
 		result = self.board.result()
 
