@@ -105,6 +105,7 @@ class Chess:
 	def make_embed(self):
 		won = self.has_won()
 		if won:
+			print(won)
 			self.game.headers["Termination"] = won
 		embed = discord.Embed(title='Chess', description=won or f"Turn: {self.turns[self.turn].mention} ({self.colors[self.turn]})", color=ongoing_game_color)
 		embed.add_field(name=f"Legal moves", value=", ".join([f"`{str(i)}`" for i in self.board.legal_moves]) or 'No legal moves', inline=False)
