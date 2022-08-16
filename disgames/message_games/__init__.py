@@ -7,4 +7,4 @@ from .wordle import Wordle
 from .chess import Chess
 from .snake import Snake
 from .checkers import Checkers
-from .akinator import Akinator
+# from .akinator import Akinator # akinator.py package got deleted :(
