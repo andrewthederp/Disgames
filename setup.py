@@ -35,7 +35,7 @@ setup(
             'assets/**'
         ]
     },
-    install_requires=["aiohttp", "chess"],
+    install_requires=["aiohttp", "chess","akinator"],
     python_requires=">=3.6",
     packages=find_packages(include=["disgames", "disgames.*"]),
 )
