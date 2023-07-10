@@ -37,7 +37,7 @@ class WordleModal(discord.ui.Modal, title='Wordle'):
 
 
 class Wordle(discord.ui.View):
-    def __init__(self, ctx, *, word=None, image=False):
+    def __init__(self, ctx, *, word, image=False):
         super().__init__()
 
         from .. import ongoing_game_color, lost_game_color, won_game_color
@@ -47,11 +47,12 @@ class Wordle(discord.ui.View):
         path = '/'.join(__file__.split('/')[:-2])
         self.ctx = ctx
         self.words = []
-        for word_ in open(f'{path}/assets/words.txt').readlines():
-            word_ = word_.replace('\r','').strip()
-            if len(word_) == 5 and word_.isalpha():
-                self.words.append(word_)
-        self.word = (word or random.choice(self.words)).lower()
+        #for word_ in open(f'{path}/assets/words.txt').readlines():
+        #    word_ = word_.replace('\r','').strip()
+        #    if len(word_) == 5 and word_.isalpha():
+        #        self.words.append(word_)
+        # self.word = (word or random.choice(self.words)).lower()
+        self.word = word
         self.guesses = []
         self.tries = 0
         self.image = image
